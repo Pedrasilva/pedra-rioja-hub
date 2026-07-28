@@ -200,54 +200,58 @@ Explicitly **not** on `properties`: purchase price, acquisition total, current v
 erDiagram
     COMPANIES ||--o{ PROPERTIES : owns
     COMPANIES ||--o{ BANK_ACCOUNTS : holds
-    COMPANIES ||--o{ SUPPLIERS : has
-    COMPANIES ||--o{ CLIENTS : has
     COMPANIES ||--o{ USER_ROLES : grants
+    COMPANIES ||--o{ DIMENSIONS : defines
 
     PROPERTIES ||--o{ PROPERTY_UNITS : contains
     PROPERTIES ||--o{ PROPERTY_ACQUISITION_COSTS : accumulates
     PROPERTIES ||--o{ PROPERTY_VALUATIONS : valued_by
+    PROPERTIES ||--o{ PROPERTY_INSURANCE_POLICIES : insured_by
     PROPERTIES ||--o{ TENANCY_AGREEMENTS : leased_via
     PROPERTIES ||--o{ FINANCING_AGREEMENTS : financed_by
     PROPERTIES ||--o{ CAPEX_PROJECTS : improved_by
     PROPERTIES ||--o{ DEPRECIATION_ASSETS : depreciates
+    PROPERTIES ||--o{ TENANT_FITOUT_LOANS : funds
+    PROPERTIES ||--o{ PROPERTY_EVENTS : timeline
+    PROPERTIES ||--o{ DRIVE_FOLDERS : mirrored_in
 
     PROPERTY_UNITS ||--o{ TENANCY_AGREEMENTS : rented_as
     TENANTS ||--o{ TENANCY_AGREEMENTS : signs
+    TENANTS ||--o{ TENANT_FITOUT_LOANS : owes
     TENANCY_AGREEMENTS ||--o{ RENT_SCHEDULES : generates
-    RENT_SCHEDULES ||--o| SALES_INVOICES : invoiced_as
+    TENANT_FITOUT_LOANS ||--o{ TENANT_FITOUT_LOAN_ROWS : repaid_by
 
     FINANCING_AGREEMENTS ||--o{ FINANCING_SCHEDULE_VERSIONS : versioned_by
     FINANCING_SCHEDULE_VERSIONS ||--o{ FINANCING_SCHEDULE_ROWS : contains
-    FINANCING_SCHEDULE_ROWS ||--o| BANK_TRANSACTIONS : settled_by
 
     CAPEX_PROJECTS ||--o{ CAPEX_PROJECT_COSTS : incurs
-    CAPEX_PROJECT_COSTS ||--o| PURCHASE_INVOICES : sourced_from
-    DEPRECIATION_ASSETS ||--o{ DEPRECIATION_SCHEDULES : plans
-    DEPRECIATION_SCHEDULES ||--o{ DEPRECIATION_POSTINGS : posts
+    CAPEX_PROJECTS ||--o{ DEPRECIATION_ASSETS : capitalises_into
+    DEPRECIATION_ASSETS ||--o{ DEPRECIATION_ENTRIES : charges
 
     SUPPLIERS ||--o{ PURCHASE_INVOICES : issues
     CLIENTS ||--o{ SALES_INVOICES : billed
     PURCHASE_INVOICES ||--o{ PURCHASE_INVOICE_LINES : has
     SALES_INVOICES ||--o{ SALES_INVOICE_LINES : has
-    VAT_RATES ||--o{ PURCHASE_INVOICE_LINES : rated
-    VAT_RATES ||--o{ SALES_INVOICE_LINES : rated
-    ACCOUNTS ||--o{ CLASSIFICATIONS : maps
-    CLASSIFICATIONS ||--o{ BANK_TRANSACTIONS : classifies
-
     BANK_ACCOUNTS ||--o{ BANK_TRANSACTIONS : records
-    BANK_STATEMENT_IMPORTS ||--o{ BANK_TRANSACTIONS : produces
     BANK_TRANSACTIONS ||--o{ RECONCILIATION_MATCHES : reconciled_by
-    PURCHASE_INVOICES ||--o{ RECONCILIATION_MATCHES : settled_by
-    SALES_INVOICES ||--o{ RECONCILIATION_MATCHES : settled_by
 
     DIMENSIONS ||--o{ DIMENSION_VALUES : defines
     DIMENSION_VALUES ||--o{ TRANSACTION_DIMENSIONS : tags
-    PROPERTIES ||--o{ DIMENSION_VALUES : exposed_as
+    PROPERTIES ||--o| DIMENSION_VALUES : exposed_as
+    CAPEX_PROJECTS ||--o| DIMENSION_VALUES : exposed_as
+    FINANCING_AGREEMENTS ||--o| DIMENSION_VALUES : exposed_as
+    TENANCY_AGREEMENTS ||--o| DIMENSION_VALUES : exposed_as
+    TENANTS ||--o| DIMENSION_VALUES : exposed_as
+    PURCHASE_INVOICES ||--o{ TRANSACTION_DIMENSIONS : tagged_by
+    BANK_TRANSACTIONS ||--o{ TRANSACTION_DIMENSIONS : tagged_by
 
     DOCUMENTS ||--o{ DOCUMENT_LINKS : attached_via
+    DRIVE_FOLDERS ||--o{ DOCUMENTS : stores
     PERIODS ||--o{ VAT_RETURNS : covers
 ```
+
+Read the diagram in three bands: **bookkeeping** (bottom left) never touches **real estate** (top); the only bridge is `DIMENSION_VALUES` / `TRANSACTION_DIMENSIONS` in the middle.
+
 
 ### 3.5 VAT structure (configurable, never inferred)
 
