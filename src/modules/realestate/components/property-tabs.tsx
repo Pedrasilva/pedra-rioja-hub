@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
+import { NewAgreementDialog } from "@/modules/realestate/components/financing-panel";
 import { DocumentsPanel, useDriveStatus } from "@/modules/realestate/components/drive-panel";
 import { syncDriveFolders } from "@/modules/realestate/drive.functions";
 
 import { toast } from "sonner";
 import {
   AlertTriangle,
+  ArrowUpRight,
   CalendarPlus,
   FileText,
   FolderTree,
