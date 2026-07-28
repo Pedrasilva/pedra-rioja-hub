@@ -250,6 +250,131 @@ export type Database = {
           },
         ]
       }
+      cash_flow_entries: {
+        Row: {
+          agreement_id: string | null
+          amount_total: number
+          category: string
+          commissions: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          description: string | null
+          direction: string
+          entry_date: string
+          id: string
+          insurance: number
+          interest: number
+          principal: number
+          property_id: string | null
+          source_id: string
+          source_type: string
+          state: string
+          updated_at: string
+          updated_by: string | null
+          vat: number
+        }
+        Insert: {
+          agreement_id?: string | null
+          amount_total?: number
+          category?: string
+          commissions?: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          direction?: string
+          entry_date: string
+          id?: string
+          insurance?: number
+          interest?: number
+          principal?: number
+          property_id?: string | null
+          source_id: string
+          source_type: string
+          state?: string
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Update: {
+          agreement_id?: string | null
+          amount_total?: number
+          category?: string
+          commissions?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          direction?: string
+          entry_date?: string
+          id?: string
+          insurance?: number
+          interest?: number
+          principal?: number
+          property_id?: string | null
+          source_id?: string
+          source_type?: string
+          state?: string
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           base_currency: string
@@ -963,74 +1088,297 @@ export type Database = {
           },
         ]
       }
+      financing_schedule_import_rows: {
+        Row: {
+          closing_balance: number | null
+          commissions: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          due_date: string | null
+          fees: number
+          id: string
+          import_id: string
+          include: boolean
+          insurance: number
+          interest: number
+          issues: string[]
+          line_no: number
+          opening_balance: number | null
+          period_no: number | null
+          principal: number
+          total_payment: number
+          updated_at: string
+          updated_by: string | null
+          vat: number
+        }
+        Insert: {
+          closing_balance?: number | null
+          commissions?: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          fees?: number
+          id?: string
+          import_id: string
+          include?: boolean
+          insurance?: number
+          interest?: number
+          issues?: string[]
+          line_no: number
+          opening_balance?: number | null
+          period_no?: number | null
+          principal?: number
+          total_payment?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Update: {
+          closing_balance?: number | null
+          commissions?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          fees?: number
+          id?: string
+          import_id?: string
+          include?: boolean
+          insurance?: number
+          interest?: number
+          issues?: string[]
+          line_no?: number
+          opening_balance?: number | null
+          period_no?: number | null
+          principal?: number
+          total_payment?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_schedule_import_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_import_rows_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "financing_schedule_imports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financing_schedule_imports: {
+        Row: {
+          agreement_id: string
+          committed_at: string | null
+          committed_version_id: string | null
+          company_id: string
+          content_hash: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          document_id: string | null
+          effective_from: string
+          error_count: number
+          file_name: string | null
+          id: string
+          index_rate_used: number | null
+          notes: string | null
+          rate_applied: number | null
+          reason: string
+          row_count: number
+          source: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          agreement_id: string
+          committed_at?: string | null
+          committed_version_id?: string | null
+          company_id: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          document_id?: string | null
+          effective_from: string
+          error_count?: number
+          file_name?: string | null
+          id?: string
+          index_rate_used?: number | null
+          notes?: string | null
+          rate_applied?: number | null
+          reason?: string
+          row_count?: number
+          source?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          agreement_id?: string
+          committed_at?: string | null
+          committed_version_id?: string | null
+          company_id?: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          document_id?: string | null
+          effective_from?: string
+          error_count?: number
+          file_name?: string | null
+          id?: string
+          index_rate_used?: number | null
+          notes?: string | null
+          rate_applied?: number | null
+          reason?: string
+          row_count?: number
+          source?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_schedule_imports_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_imports_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_imports_committed_version_id_fkey"
+            columns: ["committed_version_id"]
+            isOneToOne: false
+            referencedRelation: "financing_schedule_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_imports_committed_version_id_fkey"
+            columns: ["committed_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_schedule_current"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_imports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_imports_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       financing_schedule_rows: {
         Row: {
           closing_balance: number
+          commissions: number
           company_id: string
           created_at: string
           created_by: string | null
           due_date: string
           fees: number
           id: string
+          import_id: string | null
           insurance: number
           interest: number
           opening_balance: number
           period_no: number
           principal: number
+          reconciled_at: string | null
           settled_amount: number | null
           settled_on: string | null
           settled_source_id: string | null
           settled_source_type: string | null
           status: string
+          superseded_at: string | null
+          superseded_by_version_id: string | null
           total_payment: number
           updated_at: string
           updated_by: string | null
+          vat: number
           version_id: string
         }
         Insert: {
           closing_balance?: number
+          commissions?: number
           company_id: string
           created_at?: string
           created_by?: string | null
           due_date: string
           fees?: number
           id?: string
+          import_id?: string | null
           insurance?: number
           interest?: number
           opening_balance?: number
           period_no: number
           principal?: number
+          reconciled_at?: string | null
           settled_amount?: number | null
           settled_on?: string | null
           settled_source_id?: string | null
           settled_source_type?: string | null
           status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
           total_payment?: number
           updated_at?: string
           updated_by?: string | null
+          vat?: number
           version_id: string
         }
         Update: {
           closing_balance?: number
+          commissions?: number
           company_id?: string
           created_at?: string
           created_by?: string | null
           due_date?: string
           fees?: number
           id?: string
+          import_id?: string | null
           insurance?: number
           interest?: number
           opening_balance?: number
           period_no?: number
           principal?: number
+          reconciled_at?: string | null
           settled_amount?: number | null
           settled_on?: string | null
           settled_source_id?: string | null
           settled_source_type?: string | null
           status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
           total_payment?: number
           updated_at?: string
           updated_by?: string | null
+          vat?: number
           version_id?: string
         }
         Relationships: [
@@ -1042,11 +1390,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financing_schedule_rows_superseded_by_version_id_fkey"
+            columns: ["superseded_by_version_id"]
+            isOneToOne: false
+            referencedRelation: "financing_schedule_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_rows_superseded_by_version_id_fkey"
+            columns: ["superseded_by_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_schedule_current"
+            referencedColumns: ["version_id"]
+          },
+          {
             foreignKeyName: "financing_schedule_rows_version_id_fkey"
             columns: ["version_id"]
             isOneToOne: false
             referencedRelation: "financing_schedule_versions"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_rows_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_schedule_current"
+            referencedColumns: ["version_id"]
           },
         ]
       }
@@ -1112,6 +1481,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "financing_agreements"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_versions_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
           },
           {
             foreignKeyName: "financing_schedule_versions_company_id_fkey"
@@ -2370,6 +2746,214 @@ export type Database = {
       }
     }
     Views: {
+      v_cash_flow_projection: {
+        Row: {
+          agreement_id: string | null
+          amount_total: number | null
+          category: string | null
+          commissions: number | null
+          company_id: string | null
+          direction: string | null
+          insurance: number | null
+          interest: number | null
+          month: string | null
+          principal: number | null
+          property_id: string | null
+          state: string | null
+          vat: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_financing_agreement_summary: {
+        Row: {
+          agreement_id: string | null
+          company_id: string | null
+          currency: string | null
+          end_date: string | null
+          fixed_rate: number | null
+          index_name: string | null
+          instalment_count: number | null
+          interest_paid: number | null
+          lender: string | null
+          next_due_date: string | null
+          next_total_payment: number | null
+          original_principal: number | null
+          outstanding_principal: number | null
+          paid_principal: number | null
+          property_id: string | null
+          rate_type: string | null
+          remaining_total: number | null
+          spread: number | null
+          start_date: string | null
+          status: string | null
+          type: string | null
+          version_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_financing_schedule_current: {
+        Row: {
+          agreement_id: string | null
+          closing_balance: number | null
+          commissions: number | null
+          company_id: string | null
+          due_date: string | null
+          fees: number | null
+          id: string | null
+          insurance: number | null
+          interest: number | null
+          is_locked: boolean | null
+          opening_balance: number | null
+          period_no: number | null
+          principal: number | null
+          property_id: string | null
+          reconciled_at: string | null
+          settled_amount: number | null
+          settled_on: string | null
+          status: string | null
+          total_payment: number | null
+          vat: number | null
+          version_id: string | null
+          version_no: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_versions_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_versions_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+        ]
+      }
       v_portfolio_summary: {
         Row: {
           acquisition_total: number | null
@@ -2664,6 +3248,19 @@ export type Database = {
       }
     }
     Functions: {
+      apply_financing_schedule: {
+        Args: {
+          _agreement_id: string
+          _effective_from: string
+          _import_id?: string
+          _index_rate_used?: number
+          _notes?: string
+          _rate_applied?: number
+          _reason: string
+          _rows: Json
+        }
+        Returns: string
+      }
       can_manage_company: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
