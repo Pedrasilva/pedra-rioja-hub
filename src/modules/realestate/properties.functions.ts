@@ -115,17 +115,30 @@ export const planEntityDriveFolder = createServerFn({ method: "POST" })
     const planned = planChildFolder(data.entityType, data.entityId, data.propertyCode, data.label);
     if (!planned) return null;
 
-    const { error } = await context.supabase.from("drive_folders").upsert(
-      {
-        company_id: data.companyId,
-        entity_type: planned.entity_type,
-        entity_id: planned.entity_id,
-        folder_kind: planned.folder_kind,
-        path: planned.path,
-        sync_status: "pending",
-      },
-      { onConflict: "company_id,entity_type,entity_id,folder_kind" },
-    );
+    // drive_folders is uniquely indexed on an expression (COALESCE(entity_id, ...)),
+    // which PostgREST cannot target with on_conflict, so reconcile explicitly.
+    const { data: existing } = await context.supabase
+      .from("drive_folders")
+      .select("id")
+      .eq("company_id", data.companyId)
+      .eq("entity_type", planned.entity_type)
+      .eq("entity_id", planned.entity_id!)
+      .eq("folder_kind", planned.folder_kind)
+      .maybeSingle();
+
+    const row = {
+      company_id: data.companyId,
+      entity_type: planned.entity_type,
+      entity_id: planned.entity_id,
+      folder_kind: planned.folder_kind,
+      path: planned.path,
+      sync_status: "pending",
+    };
+
+    const { error } = existing
+      ? await context.supabase.from("drive_folders").update(row).eq("id", existing.id)
+      : await context.supabase.from("drive_folders").insert(row);
     if (error) throw new Error(error.message);
     return planned;
   });
+
