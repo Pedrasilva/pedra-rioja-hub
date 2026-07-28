@@ -180,24 +180,22 @@ function BankingPage() {
   }
 
   return (
-    <AppShell>
+    <AppShell
+      title="Banking"
+      description="Statement import, duplicate control and reconciliation against expected items from every module."
+      actions={
+        <div className="flex flex-wrap items-center gap-2">
+          {companyId && <BankAccountDialog companyId={companyId} currency={currency} />}
+          <StatementImportDialog
+            accounts={accounts}
+            defaultAccountId={accountId || undefined}
+            disabled={!accounts.length}
+          />
+        </div>
+      }
+    >
       <div className="space-y-6">
-        <header className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-display text-3xl">Banking</h1>
-            <p className="text-muted-foreground">
-              Statement import, duplicate control and reconciliation against expected items.
-            </p>
-          </div>
-          <div className="flex gap-2">
-            {companyId && <BankAccountDialog companyId={companyId} currency={currency} />}
-            <StatementImportDialog
-              accounts={accounts}
-              defaultAccountId={accountId || undefined}
-              disabled={!accounts.length}
-            />
-          </div>
-        </header>
+
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <SummaryCard label="System balance" value={formatMoney(totals.balance, currency)} />
