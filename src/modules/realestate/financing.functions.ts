@@ -51,25 +51,38 @@ export const createFinancingAgreement = createServerFn({ method: "POST" })
 
     // Drive folder plan, reusing the Phase 2.5 pending-folder pattern.
     try {
-      const planned = planChildFolder("financing_agreement", agreement.id, [
-        agreement.code ?? agreement.lender,
-      ]);
-      if (planned) {
-        await context.supabase.from("drive_folders").upsert(
-          {
-            company_id: data.companyId,
-            entity_type: "financing_agreement",
-            entity_id: agreement.id,
-            folder_kind: planned.folderKind,
-            path: planned.path,
-            sync_status: "pending",
-          },
-          { onConflict: "company_id,entity_type,entity_id,folder_kind", ignoreDuplicates: true },
-        );
+      if (agreement.property_id) {
+        const { data: property } = await context.supabase
+          .from("properties")
+          .select("code")
+          .eq("id", agreement.property_id)
+          .maybeSingle();
+        const planned = property?.code
+          ? planChildFolder(
+              "financing_agreements",
+              agreement.id,
+              property.code,
+              agreement.code ?? agreement.lender,
+            )
+          : null;
+        if (planned) {
+          await context.supabase.from("drive_folders").upsert(
+            {
+              company_id: data.companyId,
+              entity_type: planned.entity_type,
+              entity_id: planned.entity_id,
+              folder_kind: planned.folder_kind,
+              path: planned.path,
+              sync_status: "pending",
+            },
+            { onConflict: "company_id,entity_type,entity_id,folder_kind", ignoreDuplicates: true },
+          );
+        }
       }
     } catch {
       // folder planning never blocks agreement creation
     }
+
 
     return agreement;
   });
