@@ -1,0 +1,356 @@
+import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, CheckCircle2, FolderTree } from "lucide-react";
+import { toast } from "sonner";
+
+import { AppShell } from "@/components/app-shell";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { hasAnyRole, useWorkspace } from "@/hooks/use-workspace";
+import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/modules/realestate/constants";
+import { createProperty } from "@/modules/realestate/properties.functions";
+import { propertyFolderPath } from "@/modules/realestate/drive-template";
+
+export const Route = createFileRoute("/_authenticated/properties/new")({
+  head: () => ({
+    meta: [
+      { title: "Add a property — Pedra Rioja" },
+      {
+        name: "description",
+        content:
+          "Register a new asset: identity, areas and acquisition details. The property code and Drive folder plan are generated for you.",
+      },
+      { property: "og:title", content: "Add a property — Pedra Rioja" },
+      {
+        property: "og:description",
+        content:
+          "Register a new asset: identity, areas and acquisition details. The property code and Drive folder plan are generated for you.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: NewPropertyPage,
+});
+
+type Created = { id: string; code: string | null; name: string; plannedFolders: number };
+
+function NewPropertyPage() {
+  const { data: workspace } = useWorkspace();
+  const canCreate = hasAnyRole(workspace?.roles, ["owner", "manager"]);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const create = useServerFn(createProperty);
+
+  const [created, setCreated] = useState<Created | null>(null);
+  const [form, setForm] = useState({
+    name: "",
+    propertyType: "apartment",
+    status: "owned",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    postalCode: "",
+    district: "",
+    countryCode: "PT",
+    grossArea: "",
+    usableArea: "",
+    yearBuilt: "",
+    acquisitionDate: "",
+    purchasePrice: "",
+    notes: "",
+  });
+
+  const set = (key: keyof typeof form) => (value: string) =>
+    setForm((f) => ({ ...f, [key]: value }));
+
+  const num = (v: string) => (v.trim() === "" ? undefined : Number(v));
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const result = await create({
+        data: {
+          companyId: workspace!.company!.id,
+          name: form.name.trim(),
+          propertyType: form.propertyType,
+          status: form.status,
+          addressLine1: form.addressLine1 || undefined,
+          addressLine2: form.addressLine2 || undefined,
+          city: form.city || undefined,
+          postalCode: form.postalCode || undefined,
+          district: form.district || undefined,
+          countryCode: form.countryCode.toUpperCase(),
+          grossAreaM2: num(form.grossArea),
+          areaM2: num(form.usableArea),
+          yearBuilt: num(form.yearBuilt),
+          acquisitionDate: form.acquisitionDate || undefined,
+          purchasePrice: num(form.purchasePrice),
+          currency: workspace?.company?.base_currency ?? "EUR",
+          notes: form.notes || undefined,
+        },
+      });
+      return result as Created;
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["property-register"] });
+      setCreated(result);
+      toast.success(`${result.code ?? "Property"} created`);
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  if (!canCreate) {
+    return (
+      <AppShell title="Add a property" description="Owners and managers can add properties.">
+        <Card>
+          <CardContent className="py-12 text-center text-sm text-muted-foreground">
+            Your role is read-only for the property register. Ask an owner or manager to add the
+            asset.
+          </CardContent>
+        </Card>
+      </AppShell>
+    );
+  }
+
+  if (created) {
+    return (
+      <AppShell title="Property created" description="The register has been updated.">
+        <Card className="max-w-2xl">
+          <CardHeader>
+            <CheckCircle2 className="size-8 text-success" />
+            <CardTitle className="font-display text-2xl">
+              {created.code} · {created.name}
+            </CardTitle>
+            <CardDescription>
+              The property code was generated by the register and cannot be renamed.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <div className="rounded-md border border-border bg-muted/40 p-4">
+              <p className="flex items-center gap-2 text-sm font-medium">
+                <FolderTree className="size-4" /> Google Drive folder plan queued
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {created.plannedFolders} folders recorded as pending under{" "}
+                <code className="font-mono text-xs">
+                  {propertyFolderPath(created.code ?? created.id)}
+                </code>
+                . They are created in Drive once the integration is connected in Phase 2.5.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={() =>
+                  navigate({ to: "/properties/$propertyId", params: { propertyId: created.id } })
+                }
+              >
+                Open property workspace
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/properties">Back to register</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </AppShell>
+    );
+  }
+
+  return (
+    <AppShell
+      title="Add a property"
+      description="Capture identity and acquisition only. Valuation, debt, rent and equity are derived once the related records exist."
+      actions={
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/properties">
+            <ArrowLeft className="size-4" /> Register
+          </Link>
+        </Button>
+      }
+    >
+      <form
+        className="grid max-w-4xl gap-6"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!form.name.trim()) {
+            toast.error("A property name is required");
+            return;
+          }
+          mutation.mutate();
+        }}
+      >
+        <Section title="Identity" description="What the asset is and how it is held.">
+          <Field label="Property name" className="md:col-span-2">
+            <Input value={form.name} onChange={(e) => set("name")(e.target.value)} required />
+          </Field>
+          <Field label="Property type">
+            <Select value={form.propertyType} onValueChange={set("propertyType")}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PROPERTY_TYPES.map((t) => (
+                  <SelectItem key={t.value} value={t.value}>
+                    {t.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Ownership status">
+            <Select value={form.status} onValueChange={set("status")}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PROPERTY_STATUSES.filter((s) => s.value !== "archived").map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Address" className="md:col-span-2">
+            <Input value={form.addressLine1} onChange={(e) => set("addressLine1")(e.target.value)} />
+          </Field>
+          <Field label="Address line 2" className="md:col-span-2">
+            <Input value={form.addressLine2} onChange={(e) => set("addressLine2")(e.target.value)} />
+          </Field>
+          <Field label="City">
+            <Input value={form.city} onChange={(e) => set("city")(e.target.value)} />
+          </Field>
+          <Field label="Postal code">
+            <Input value={form.postalCode} onChange={(e) => set("postalCode")(e.target.value)} />
+          </Field>
+          <Field label="District">
+            <Input value={form.district} onChange={(e) => set("district")(e.target.value)} />
+          </Field>
+          <Field label="Country">
+            <Input
+              value={form.countryCode}
+              maxLength={2}
+              onChange={(e) => set("countryCode")(e.target.value.toUpperCase())}
+            />
+          </Field>
+        </Section>
+
+        <Section
+          title="Areas"
+          description="Units are added inside the property workspace — single-unit assets need none."
+        >
+          <Field label="Gross area (m²)">
+            <Input
+              type="number"
+              inputMode="decimal"
+              value={form.grossArea}
+              onChange={(e) => set("grossArea")(e.target.value)}
+            />
+          </Field>
+          <Field label="Usable area (m²)">
+            <Input
+              type="number"
+              inputMode="decimal"
+              value={form.usableArea}
+              onChange={(e) => set("usableArea")(e.target.value)}
+            />
+          </Field>
+          <Field label="Year built">
+            <Input
+              type="number"
+              value={form.yearBuilt}
+              onChange={(e) => set("yearBuilt")(e.target.value)}
+            />
+          </Field>
+        </Section>
+
+        <Section
+          title="Acquisition"
+          description="The purchase price is stored as an acquisition cost, never as a field on the property."
+        >
+          <Field label="Acquisition date">
+            <Input
+              type="date"
+              value={form.acquisitionDate}
+              onChange={(e) => set("acquisitionDate")(e.target.value)}
+            />
+          </Field>
+          <Field label={`Purchase price (${workspace?.company?.base_currency ?? "EUR"})`}>
+            <Input
+              type="number"
+              inputMode="decimal"
+              value={form.purchasePrice}
+              onChange={(e) => set("purchasePrice")(e.target.value)}
+            />
+          </Field>
+          <Field label="Notes" className="md:col-span-3">
+            <Textarea
+              rows={4}
+              value={form.notes}
+              onChange={(e) => set("notes")(e.target.value)}
+              placeholder="Anything the register should remember about this acquisition."
+            />
+          </Field>
+        </Section>
+
+        <div className="flex gap-2">
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? "Creating…" : "Create property"}
+          </Button>
+          <Button type="button" variant="ghost" asChild>
+            <Link to="/properties">Cancel</Link>
+          </Button>
+        </div>
+      </form>
+    </AppShell>
+  );
+}
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-display text-xl">{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-4 md:grid-cols-3">{children}</CardContent>
+    </Card>
+  );
+}
+
+function Field({
+  label,
+  className,
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <Label className="mb-1.5 block text-sm">{label}</Label>
+      {children}
+    </div>
+  );
+}
