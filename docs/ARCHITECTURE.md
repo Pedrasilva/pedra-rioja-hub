@@ -504,7 +504,26 @@ Future integration extension points prepared but not built: Drive change detecti
 | 6 | Accountant: user or exports? | Exports first; `Bookkeeper` role available if direct access is later wanted. |
 | 7 | Certified invoice issuance for rent? | **App does not issue** legal invoices/receipts in v1 — it prepares schedules and records externally-issued document numbers and PDFs. Lock before Phase 5. |
 
-**Decisions that are expensive to reverse after Phase 1**
+**Decisions that are expensive to reverse after Phase 1.5** (settle these now)
 
-`company_id` on every table · operational vs. double-entry · dimensions instead of `property_id` columns · money type and rounding (`numeric(14,2)`, EUR, half-up) · soft delete + audit log from day one · naming parity with PSA Hub · mortgage schedule versioning instead of in-place edits · document storage path convention · the per-line VAT field set.
+| Decision | Locked as | Why it is expensive later |
+| --- | --- | --- |
+| `company_id` on every table | Yes, everywhere | Retrofitting a tenant key means rewriting every RLS policy and backfilling every row |
+| Operational bookkeeping, not double-entry | Operational | A ledger changes the meaning of every financial table |
+| Dimensions instead of `property_id` columns on bookkeeping tables | Dimensions | Adding real-estate FKs to bookkeeping permanently breaks PSA Hub portability |
+| Polymorphic `source_type`/`source_id` on tags, links and settlements | Text + uuid, no FK | Enforced by convention and check constraints; converting to hard FKs later means table-per-relation rewrites |
+| Property table kept small; all figures derived in views | Views only | Once a KPI is stored on the row, two sources of truth exist and reconciliation bugs follow |
+| Money type and rounding | `numeric(14,2)`, EUR, half-up | Changing precision after data exists means re-deriving every schedule |
+| Schedule versioning instead of in-place edits | Versioned | Prior-period reports would change retroactively |
+| Drive as file source of truth, DB as metadata | Drive-first | Migrating an archive out of Cloud storage later is manual and error-prone |
+| Property code format (`PR001`) | Sequential per company | The code is the Drive folder name; renaming means moving folders and re-linking files |
+| Drive folder taxonomy | Config-driven template | Structure can evolve; the *mapping table* (`drive_folders`) must exist from day one, or existing files can never be re-located reliably |
+| Document links as a link table, not columns | Link table | Column-per-entity would need a migration for every new module |
+| Timeline as generated + manual events with idempotency key | `(source_type, source_id, event_type)` | Without the key, re-runs duplicate history |
+| Search as a view with a stable contract | `v_search_index` | Lets the implementation switch to a materialised index without touching callers |
+| Soft delete + audit log from day one | Yes | Retrofitting history is impossible |
+| Naming parity with PSA Hub for portable tables | Yes | Divergence turns a file copy into a merge |
+
+**Portability check.** Nothing in Phase 1.5 modifies a bookkeeping table. `dimensions`, `dimension_values` and `transaction_dimensions` are themselves portable and would be created identically in PSA Hub; real estate only inserts *rows*. `documents`/`document_links` stay generic (no property columns). Therefore the assisted port stays a file copy.
+
 
