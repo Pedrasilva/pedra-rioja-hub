@@ -88,9 +88,11 @@ export function AppShell({
             </Link>
           ))}
 
-          <p className="px-3 pt-6 pb-2 text-[11px] tracking-widest text-sidebar-foreground/40 uppercase">
-            Next phases
-          </p>
+          {UPCOMING.length > 0 ? (
+            <p className="px-3 pt-6 pb-2 text-[11px] tracking-widest text-sidebar-foreground/40 uppercase">
+              Next phases
+            </p>
+          ) : null}
           {UPCOMING.map(({ label, icon: Icon }) => (
             <div
               key={label}
@@ -100,6 +102,7 @@ export function AppShell({
               {label}
             </div>
           ))}
+
         </nav>
 
         <div className="border-t border-sidebar-border p-3">
