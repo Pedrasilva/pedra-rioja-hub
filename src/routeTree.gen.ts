@@ -16,6 +16,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCashFlowRouteImport } from './routes/_authenticated/cash-flow'
+import { Route as AuthenticatedBookkeepingRouteImport } from './routes/_authenticated/bookkeeping'
 import { Route as AuthenticatedBankingRouteImport } from './routes/_authenticated/banking'
 import { Route as AuthenticatedPropertiesIndexRouteImport } from './routes/_authenticated/properties/index'
 import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
@@ -56,6 +57,12 @@ const AuthenticatedCashFlowRoute = AuthenticatedCashFlowRouteImport.update({
   path: '/cash-flow',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBookkeepingRoute =
+  AuthenticatedBookkeepingRouteImport.update({
+    id: '/bookkeeping',
+    path: '/bookkeeping',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBankingRoute = AuthenticatedBankingRouteImport.update({
   id: '/banking',
   path: '/banking',
@@ -90,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/banking': typeof AuthenticatedBankingRoute
+  '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -103,6 +111,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/banking': typeof AuthenticatedBankingRoute
+  '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -118,6 +127,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/banking': typeof AuthenticatedBankingRoute
+  '/_authenticated/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/_authenticated/cash-flow': typeof AuthenticatedCashFlowRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/banking'
+    | '/bookkeeping'
     | '/cash-flow'
     | '/dashboard'
     | '/settings'
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/banking'
+    | '/bookkeeping'
     | '/cash-flow'
     | '/dashboard'
     | '/settings'
@@ -160,6 +172,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/banking'
+    | '/_authenticated/bookkeeping'
     | '/_authenticated/cash-flow'
     | '/_authenticated/dashboard'
     | '/_authenticated/settings'
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCashFlowRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/bookkeeping': {
+      id: '/_authenticated/bookkeeping'
+      path: '/bookkeeping'
+      fullPath: '/bookkeeping'
+      preLoaderRoute: typeof AuthenticatedBookkeepingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/banking': {
       id: '/_authenticated/banking'
       path: '/banking'
@@ -267,6 +287,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBankingRoute: typeof AuthenticatedBankingRoute
+  AuthenticatedBookkeepingRoute: typeof AuthenticatedBookkeepingRoute
   AuthenticatedCashFlowRoute: typeof AuthenticatedCashFlowRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -279,6 +300,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBankingRoute: AuthenticatedBankingRoute,
+  AuthenticatedBookkeepingRoute: AuthenticatedBookkeepingRoute,
   AuthenticatedCashFlowRoute: AuthenticatedCashFlowRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
