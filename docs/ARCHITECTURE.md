@@ -196,9 +196,34 @@ erDiagram
     PROPERTIES ||--o{ DIMENSION_VALUES : exposed_as
 
     DOCUMENTS ||--o{ DOCUMENT_LINKS : attached_via
-    PERIODS ||--o{ JOURNAL_ENTRIES : contains
-    JOURNAL_ENTRIES ||--o{ JOURNAL_LINES : has
+    PERIODS ||--o{ VAT_RETURNS : covers
 ```
+
+### 3.5 VAT structure (configurable, never inferred)
+
+No tax rules are hard-coded. Every invoice / expense line carries:
+
+| Field | Purpose |
+| --- | --- |
+| `net_amount` | Taxable base |
+| `vat_rate_id` + `vat_rate_pct` | Rate reference plus the snapshotted percentage in force at the document date |
+| `vat_amount` | Computed VAT |
+| `gross_amount` | Net + VAT |
+| `recoverable_vat_amount` | Deductible input VAT |
+| `non_recoverable_vat_amount` | VAT treated as cost (capitalised or expensed) |
+| `vat_treatment` | `standard` / `exempt` / `reverse_charge` / `not_subject` / `out_of_scope` |
+| `vat_exemption_reason_code` | Legal exemption reference where applicable |
+| `deduction_basis` + `pro_rata_pct` | `full` / `pro_rata` / `none` |
+| `tax_period` | YYYY-MM or quarter |
+| `vat_status` | `pending` / `included_in_return` / `settled` / `recovered` / `excluded` |
+| `vat_return_id` | Link to the return that reported the line |
+| `reviewed_by` / `reviewed_at` | Human confirmation of the treatment |
+
+- Defaults are **suggested** from `vat_treatment_defaults` (keyed by property, classification and activity) and always shown for review before a line is finalised. Nothing is silently inferred; every override is audited.
+- `vat_rates` is date-effective, so historical documents keep the rate in force at their date.
+- A property carries a `vat_exemption_waived` flag; it drives suggestions only.
+- `vat_returns` groups lines by tax period and freezes the reported figures at submission.
+
 
 ---
 
