@@ -13,11 +13,18 @@ const createPropertySchema = z.object({
   propertyType: z.string().default("apartment"),
   status: z.string().default("owned"),
   addressLine1: z.string().optional(),
+  addressLine2: z.string().optional(),
   postalCode: z.string().optional(),
   city: z.string().optional(),
   district: z.string().optional(),
+  parish: z.string().optional(),
+  countryCode: z.string().length(2).default("PT"),
   areaM2: z.number().optional(),
+  grossAreaM2: z.number().optional(),
+  yearBuilt: z.number().int().optional(),
   acquisitionDate: z.string().optional(),
+  purchasePrice: z.number().optional(),
+  currency: z.string().length(3).default("EUR"),
   notes: z.string().optional(),
 });
 
@@ -26,6 +33,9 @@ const createPropertySchema = z.object({
  *
  * Folder rows are written with sync_status = 'pending'; the Drive integration
  * (Phase 2.5) turns them into real folders and fills in drive_folder_id/url.
+ *
+ * A purchase price, when supplied, is stored as an acquisition cost row
+ * (cost_type = 'price') — never as a derived KPI on `properties`.
  */
 export const createProperty = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -39,10 +49,15 @@ export const createProperty = createServerFn({ method: "POST" })
         property_type: data.propertyType,
         status: data.status,
         address_line1: data.addressLine1 ?? null,
+        address_line2: data.addressLine2 ?? null,
         postal_code: data.postalCode ?? null,
         city: data.city ?? null,
         district: data.district ?? null,
+        parish: data.parish ?? null,
+        country_code: data.countryCode,
         area_m2: data.areaM2 ?? null,
+        gross_area_m2: data.grossAreaM2 ?? null,
+        year_built: data.yearBuilt ?? null,
         acquisition_date: data.acquisitionDate ?? null,
         notes: data.notes ?? null,
       })
@@ -50,6 +65,22 @@ export const createProperty = createServerFn({ method: "POST" })
       .single();
 
     if (error) throw new Error(error.message);
+
+    if (typeof data.purchasePrice === "number" && data.purchasePrice > 0) {
+      const { error: costError } = await context.supabase
+        .from("property_acquisition_costs")
+        .insert({
+          company_id: property.company_id,
+          property_id: property.id,
+          cost_type: "price",
+          description: "Purchase price",
+          amount: data.purchasePrice,
+          currency: data.currency,
+          incurred_on: data.acquisitionDate ?? null,
+          capitalisable: true,
+        });
+      if (costError) throw new Error(costError.message);
+    }
 
     const folders: PlannedFolder[] = planPropertyFolders(property.id, property.code ?? property.id);
     const { error: folderError } = await context.supabase.from("drive_folders").insert(
@@ -64,8 +95,9 @@ export const createProperty = createServerFn({ method: "POST" })
     );
     if (folderError) throw new Error(folderError.message);
 
-    return property;
+    return { ...property, plannedFolders: folders.length };
   });
+
 
 const childFolderSchema = z.object({
   companyId: z.string().uuid(),
