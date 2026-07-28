@@ -42,7 +42,7 @@ export const Route = createFileRoute("/_authenticated/financing/$agreementId")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: AgreementWorkspace;
+  component: AgreementWorkspace,
 });
 
 const LOCKED = new Set(["settled", "reconciled"]);
