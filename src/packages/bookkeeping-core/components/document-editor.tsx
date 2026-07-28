@@ -18,10 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatMoneyPrecise } from "@/lib/format";
 import { supabase } from "@/integrations/supabase/client";
 import { useCreateDocument, useUpdateDocument } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
 import {
-  useBookkeepingProjects,
-  useBookkeepingProperties,
   useClassifications,
   useCounterparties,
   useFinancialDocument,

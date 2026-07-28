@@ -24,13 +24,12 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useUpsertBankRule } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
 import {
   useBankClassificationRules,
-  useBookkeepingProperties,
   useClassifications,
   useCounterparties,
-  useRulePreviewTransactions,
+  useEligibleBankTransactions,
 } from "../queries";
 import { classificationLabel, OptionSelect } from "./selectors";
 
@@ -109,7 +108,7 @@ export function BankRulesPanel({
   const { data: classifications } = useClassifications(companyId);
   const { data: counterparties } = useCounterparties(companyId);
   const { data: properties } = useBookkeepingProperties(companyId);
-  const { data: transactions } = useRulePreviewTransactions(companyId);
+  const { data: transactions } = useEligibleBankTransactions(companyId);
   const upsert = useUpsertBankRule();
 
   const [open, setOpen] = useState(false);

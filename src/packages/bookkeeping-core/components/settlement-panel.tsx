@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useReversePayment, useSettleDocument } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
-import { useFinancialDocument, useRulePreviewTransactions } from "../queries";
+import type { BookkeepingCapabilities } from "../capabilities";
+import { useFinancialDocument, useEligibleBankTransactions } from "../queries";
 import { OptionSelect } from "./selectors";
 
 /**
@@ -35,7 +35,7 @@ export function SettlementPanel({
   capabilities: BookkeepingCapabilities;
 }) {
   const { data } = useFinancialDocument(documentId);
-  const { data: transactions } = useRulePreviewTransactions(companyId);
+  const { data: transactions } = useEligibleBankTransactions(companyId);
   const settle = useSettleDocument();
   const reverse = useReversePayment();
 

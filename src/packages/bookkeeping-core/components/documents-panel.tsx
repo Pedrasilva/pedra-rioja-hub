@@ -24,15 +24,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useCancelDocument, usePostDocument } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
 import {
-  useBookkeepingProperties,
   useClassifications,
   useCounterparties,
   useFinancialDocuments,
   useFinancialPeriods,
-  type DocumentRow,
 } from "../queries";
+import type { FinancialDocument as DocumentRow } from "../types";
 import { DOCUMENT_STATUSES, PAYMENT_STATES } from "../schemas";
 import { DocumentEditorDialog } from "./document-editor";
 import { SettlementPanel } from "./settlement-panel";
