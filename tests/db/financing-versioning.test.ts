@@ -190,7 +190,7 @@ describe("financing schedule versioning", () => {
     expect(error).toBeNull();
     expect((data ?? []).length).toBe(12);
     const first = data![0];
-    expect(first.direction).toBe("out");
+    expect(first.direction).toBe("outflow");
     expect(Number(first.amount_total)).toBeGreaterThan(0);
     expect(
       Math.abs(
@@ -261,12 +261,12 @@ describe("financing schedule versioning", () => {
   it("records a second version and marks the first as superseded", async () => {
     const { data } = await admin
       .from("financing_schedule_versions")
-      .select("version_no, superseded_at, reason")
+      .select("version_no, is_current, reason")
       .eq("agreement_id", agreementId)
       .order("version_no");
     expect(data).toHaveLength(2);
-    expect(data![0].superseded_at).not.toBeNull();
-    expect(data![1].superseded_at).toBeNull();
+    expect(data![0].is_current).toBe(false);
+    expect(data![1].is_current).toBe(true);
     expect(data![1].reason).toBe("rate_reset");
   });
 
@@ -280,7 +280,7 @@ describe("financing schedule versioning", () => {
       .from("financing_schedule_versions")
       .select("id")
       .eq("agreement_id", agreementId)
-      .is("superseded_at", null)
+      .eq("is_current", true)
       .single();
     expect(data!.current_version_id).toBe(current!.id);
   });
@@ -305,8 +305,8 @@ describe("duplicate import protection", () => {
       effective_from: "2027-02-10",
       reason: "rate_reset",
       row_count: rows.length,
-      fingerprint,
-      status: "staged",
+      content_hash: fingerprint,
+      status: "committed",
     };
     const first = await admin.from("financing_schedule_imports").insert(base);
     expect(first.error).toBeNull();

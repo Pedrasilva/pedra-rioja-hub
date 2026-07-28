@@ -290,7 +290,7 @@ function AgreementWorkspace() {
                       <TableHead>Effective from</TableHead>
                       <TableHead>Reason</TableHead>
                       <TableHead className="text-right">Rate applied</TableHead>
-                      <TableHead>Superseded</TableHead>
+                      <TableHead>State</TableHead>
                       <TableHead>Notes</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -303,7 +303,7 @@ function AgreementWorkspace() {
                         <TableCell className="text-right tabular-nums">
                           {formatPercent(v.rate_applied as number)}
                         </TableCell>
-                        <TableCell>{formatDate(v.superseded_at as string, "Current")}</TableCell>
+                        <TableCell>{v.is_current ? "Current" : "Superseded"}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">
                           {(v.notes as string) ?? "—"}
                         </TableCell>
