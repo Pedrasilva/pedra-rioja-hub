@@ -155,11 +155,11 @@ describe("related entities: creation, updates, dimensions and timeline", () => {
 
     const upd = await admin
       .from("rent_schedules")
-      .update({ status: "settled", settled_on: "2024-01-06" })
+      .update({ status: "paid", settled_on: "2024-01-06" })
       .eq("tenancy_id", tenancyId)
       .eq("period_start", "2024-01-01");
     expectNoError(upd, "settle rent schedule");
-    expect(await countRows("rent_schedules", { tenancy_id: tenancyId, status: "settled" })).toBe(1);
+    expect(await countRows("rent_schedules", { tenancy_id: tenancyId, status: "paid" })).toBe(1);
   });
 
   it("financing agreements and schedule versions: events, dimensions, versioning", async () => {
@@ -244,9 +244,9 @@ describe("related entities: creation, updates, dimensions and timeline", () => {
         period_no: 1,
         due_date: "2024-03-01",
         opening_balance: 290_000,
-        payment_amount: 1_400,
-        interest_amount: 900,
-        principal_amount: 500,
+        total_payment: 1_400,
+        interest: 900,
+        principal: 500,
         closing_balance: 289_500,
       },
     ]);
@@ -345,7 +345,7 @@ describe("related entities: creation, updates, dimensions and timeline", () => {
         property_id: propertyId,
         valuation_date: "2025-01-31",
         amount: 560_000,
-        method: "external",
+        method: "appraiser",
         valuer: "Prime Yield",
       })
       .select("id")
@@ -359,7 +359,7 @@ describe("related entities: creation, updates, dimensions and timeline", () => {
       .single();
     expect(Number(data!.current_valuation)).toBe(560_000);
     expect(data!.valuation_date).toBe("2025-01-31");
-    expect(data!.method).toBe("external");
+    expect(data!.method).toBe("appraiser");
   });
 
   it("insurance policies: renewal event created once", async () => {

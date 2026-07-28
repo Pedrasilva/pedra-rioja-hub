@@ -82,16 +82,16 @@ beforeAll(async () => {
       .select("id")
       .single();
     expectNoError(version, "create version");
-    await admin.from("financing_schedule_rows").insert([
+    const rowsRes = await admin.from("financing_schedule_rows").insert([
       {
         company_id: company.id,
         version_id: version.data!.id,
         period_no: 1,
         due_date: "2022-02-01",
         opening_balance: closing + 1_000,
-        payment_amount: 1_200,
-        interest_amount: 200,
-        principal_amount: 1_000,
+        total_payment: 1_200,
+        interest: 200,
+        principal: 1_000,
         closing_balance: closing,
       },
       {
@@ -100,12 +100,13 @@ beforeAll(async () => {
         period_no: 2,
         due_date: "2099-01-01",
         opening_balance: closing,
-        payment_amount: 1_200,
-        interest_amount: 200,
-        principal_amount: 1_000,
+        total_payment: 1_200,
+        interest: 200,
+        principal: 1_000,
         closing_balance: closing - 1_000,
       },
     ]);
+    expectNoError(rowsRes, "create schedule rows");
   }
 
   // 2. occupied, single unit, no financing

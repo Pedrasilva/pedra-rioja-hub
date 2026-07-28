@@ -61,10 +61,10 @@ describe("trigger / index conflict-target compatibility", () => {
 
     // PostgREST cannot target an expression index with on_conflict, so the
     // server function reconciles explicitly. Guard against a regression.
-    const fnSource = sqlRows(
-      "select 1 where exists (select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and pg_get_functiondef(p.oid) ilike '%drive_folders%on conflict%')",
+    const offenders = sqlRows(
+      "select proname from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and position('drive_folders' in lower(pg_get_functiondef(p.oid))) > 0 and position('on conflict' in lower(pg_get_functiondef(p.oid))) > 0",
     );
-    expect(fnSource).toHaveLength(0);
+    expect(offenders).toEqual([]);
   });
 
   it("runtime: creating and re-saving a property never trips a conflict target", async () => {
@@ -189,10 +189,18 @@ describe("trigger / index conflict-target compatibility", () => {
       .eq("entity_id", property.id)
       .single();
     const sourceId = crypto.randomUUID();
+    const dimensionId = (
+      await admin
+        .from("dimension_values")
+        .select("dimension_id")
+        .eq("id", dim.data!.id)
+        .single()
+    ).data!.dimension_id;
     const row = {
       company_id: company.id,
       source_type: "bank_transactions",
       source_id: sourceId,
+      dimension_id: dimensionId,
       dimension_value_id: dim.data!.id,
     };
     expectNoError(await admin.from("transaction_dimensions").insert(row), "link dimension");
