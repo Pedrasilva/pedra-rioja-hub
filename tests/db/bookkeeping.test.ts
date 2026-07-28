@@ -585,6 +585,7 @@ describe("bank classification rules", () => {
         company_id: company.id,
         name: "EDP low priority",
         priority: 50,
+        is_active: true,
         match_value: "EDP",
         classification_id: cls.data!.id,
         cash_flow_category: "utilities",
@@ -593,11 +594,12 @@ describe("bank classification rules", () => {
         company_id: company.id,
         name: "EDP high priority",
         priority: 10,
+        is_active: true,
         match_value: "EDP COMERCIAL",
         cash_flow_category: "energy",
       },
       { company_id: company.id, name: "Inactive", priority: 1, match_value: "EDP", is_active: false },
-      { company_id: other.id, name: "Foreign rule", priority: 1, match_value: "EDP" },
+      { company_id: other.id, name: "Foreign rule", priority: 1, match_value: "EDP", is_active: true },
     ]);
     expectNoError(rules, "insert rules");
 
