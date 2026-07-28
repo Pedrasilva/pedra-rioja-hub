@@ -64,8 +64,71 @@ export type Database = {
           },
         ]
       }
+      bank_account_documents: {
+        Row: {
+          bank_account_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          document_id: string
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bank_account_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          document_id: string
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bank_account_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          document_id?: string
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_account_documents_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_account_documents_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_account_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_account_documents_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bank_accounts: {
         Row: {
+          account_identifier: string | null
           account_type: string
           bank_name: string | null
           bic: string | null
@@ -74,6 +137,7 @@ export type Database = {
           created_by: string | null
           currency: string
           deleted_at: string | null
+          drive_folder_url: string | null
           iban: string | null
           id: string
           is_active: boolean
@@ -81,10 +145,12 @@ export type Database = {
           notes: string | null
           opening_balance: number
           opening_balance_date: string
+          status: string
           updated_at: string
           updated_by: string | null
         }
         Insert: {
+          account_identifier?: string | null
           account_type?: string
           bank_name?: string | null
           bic?: string | null
@@ -93,6 +159,7 @@ export type Database = {
           created_by?: string | null
           currency?: string
           deleted_at?: string | null
+          drive_folder_url?: string | null
           iban?: string | null
           id?: string
           is_active?: boolean
@@ -100,10 +167,12 @@ export type Database = {
           notes?: string | null
           opening_balance?: number
           opening_balance_date?: string
+          status?: string
           updated_at?: string
           updated_by?: string | null
         }
         Update: {
+          account_identifier?: string | null
           account_type?: string
           bank_name?: string | null
           bic?: string | null
@@ -112,6 +181,7 @@ export type Database = {
           created_by?: string | null
           currency?: string
           deleted_at?: string | null
+          drive_folder_url?: string | null
           iban?: string | null
           id?: string
           is_active?: boolean
@@ -119,6 +189,7 @@ export type Database = {
           notes?: string | null
           opening_balance?: number
           opening_balance_date?: string
+          status?: string
           updated_at?: string
           updated_by?: string | null
         }
@@ -128,6 +199,598 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_reconciliation_matches: {
+        Row: {
+          allocated_amount: number
+          bank_account_id: string | null
+          bank_transaction_id: string
+          company_id: string
+          confirmed_at: string
+          confirmed_by: string | null
+          created_at: string
+          created_by: string | null
+          entry_id: string
+          forecast_amount: number | null
+          id: string
+          match_type: string
+          notes: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          variance_amount: number
+          variance_reason: string | null
+        }
+        Insert: {
+          allocated_amount: number
+          bank_account_id?: string | null
+          bank_transaction_id: string
+          company_id: string
+          confirmed_at?: string
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          entry_id: string
+          forecast_amount?: number | null
+          id?: string
+          match_type?: string
+          notes?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          variance_amount?: number
+          variance_reason?: string | null
+        }
+        Update: {
+          allocated_amount?: number
+          bank_account_id?: string | null
+          bank_transaction_id?: string
+          company_id?: string
+          confirmed_at?: string
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          entry_id?: string
+          forecast_amount?: number | null
+          id?: string
+          match_type?: string
+          notes?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          variance_amount?: number
+          variance_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_expected_items"
+            referencedColumns: ["entry_id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_statement_import_rows: {
+        Row: {
+          amount: number
+          bank_reference: string | null
+          company_id: string
+          counterparty_account: string | null
+          counterparty_name: string | null
+          created_at: string
+          created_by: string | null
+          credit_amount: number
+          debit_amount: number
+          description: string | null
+          duplicate_of_transaction_id: string | null
+          fingerprint: string
+          id: string
+          import_id: string
+          include: boolean
+          is_duplicate: boolean
+          issues: Json
+          line_no: number
+          running_balance: number | null
+          source_row_id: string | null
+          transaction_date: string
+          updated_at: string
+          updated_by: string | null
+          value_date: string | null
+        }
+        Insert: {
+          amount?: number
+          bank_reference?: string | null
+          company_id: string
+          counterparty_account?: string | null
+          counterparty_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit_amount?: number
+          debit_amount?: number
+          description?: string | null
+          duplicate_of_transaction_id?: string | null
+          fingerprint: string
+          id?: string
+          import_id: string
+          include?: boolean
+          is_duplicate?: boolean
+          issues?: Json
+          line_no: number
+          running_balance?: number | null
+          source_row_id?: string | null
+          transaction_date: string
+          updated_at?: string
+          updated_by?: string | null
+          value_date?: string | null
+        }
+        Update: {
+          amount?: number
+          bank_reference?: string | null
+          company_id?: string
+          counterparty_account?: string | null
+          counterparty_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit_amount?: number
+          debit_amount?: number
+          description?: string | null
+          duplicate_of_transaction_id?: string | null
+          fingerprint?: string
+          id?: string
+          import_id?: string
+          include?: boolean
+          is_duplicate?: boolean
+          issues?: Json
+          line_no?: number
+          running_balance?: number | null
+          source_row_id?: string | null
+          transaction_date?: string
+          updated_at?: string
+          updated_by?: string | null
+          value_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_statement_import_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_import_rows_duplicate_of_transaction_id_fkey"
+            columns: ["duplicate_of_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_import_rows_duplicate_of_transaction_id_fkey"
+            columns: ["duplicate_of_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_import_rows_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "bank_statement_imports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_statement_imports: {
+        Row: {
+          balance_override_at: string | null
+          balance_override_by: string | null
+          balance_override_reason: string | null
+          bank_account_id: string
+          committed_at: string | null
+          committed_by: string | null
+          company_id: string
+          content_hash: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          document_id: string | null
+          duplicate_count: number
+          error_count: number
+          file_name: string | null
+          id: string
+          imported_count: number
+          notes: string | null
+          period_end: string | null
+          period_start: string | null
+          reconciled_at: string | null
+          reconciled_by: string | null
+          row_count: number
+          source: string
+          statement_closing_balance: number | null
+          statement_opening_balance: number | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          balance_override_at?: string | null
+          balance_override_by?: string | null
+          balance_override_reason?: string | null
+          bank_account_id: string
+          committed_at?: string | null
+          committed_by?: string | null
+          company_id: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          document_id?: string | null
+          duplicate_count?: number
+          error_count?: number
+          file_name?: string | null
+          id?: string
+          imported_count?: number
+          notes?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          row_count?: number
+          source?: string
+          statement_closing_balance?: number | null
+          statement_opening_balance?: number | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          balance_override_at?: string | null
+          balance_override_by?: string | null
+          balance_override_reason?: string | null
+          bank_account_id?: string
+          committed_at?: string | null
+          committed_by?: string | null
+          company_id?: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          document_id?: string | null
+          duplicate_count?: number
+          error_count?: number
+          file_name?: string | null
+          id?: string
+          imported_count?: number
+          notes?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          row_count?: number
+          source?: string
+          statement_closing_balance?: number | null
+          statement_opening_balance?: number | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_statement_imports_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_imports_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_statement_imports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_imports_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_transactions: {
+        Row: {
+          amount: number
+          bank_account_id: string
+          bank_reference: string | null
+          company_id: string
+          counterparty_account: string | null
+          counterparty_name: string | null
+          created_at: string
+          created_by: string | null
+          credit_amount: number
+          currency: string
+          debit_amount: number
+          deleted_at: string | null
+          description: string | null
+          fingerprint: string
+          id: string
+          import_id: string | null
+          is_internal_transfer: boolean
+          matched_amount: number
+          notes: string | null
+          reconciliation_status: string
+          running_balance: number | null
+          source_row_id: string | null
+          transaction_date: string
+          updated_at: string
+          updated_by: string | null
+          value_date: string | null
+        }
+        Insert: {
+          amount: number
+          bank_account_id: string
+          bank_reference?: string | null
+          company_id: string
+          counterparty_account?: string | null
+          counterparty_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit_amount?: number
+          currency?: string
+          debit_amount?: number
+          deleted_at?: string | null
+          description?: string | null
+          fingerprint: string
+          id?: string
+          import_id?: string | null
+          is_internal_transfer?: boolean
+          matched_amount?: number
+          notes?: string | null
+          reconciliation_status?: string
+          running_balance?: number | null
+          source_row_id?: string | null
+          transaction_date: string
+          updated_at?: string
+          updated_by?: string | null
+          value_date?: string | null
+        }
+        Update: {
+          amount?: number
+          bank_account_id?: string
+          bank_reference?: string | null
+          company_id?: string
+          counterparty_account?: string | null
+          counterparty_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit_amount?: number
+          currency?: string
+          debit_amount?: number
+          deleted_at?: string | null
+          description?: string | null
+          fingerprint?: string
+          id?: string
+          import_id?: string | null
+          is_internal_transfer?: boolean
+          matched_amount?: number
+          notes?: string | null
+          reconciliation_status?: string
+          running_balance?: number | null
+          source_row_id?: string | null
+          transaction_date?: string
+          updated_at?: string
+          updated_by?: string | null
+          value_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "bank_statement_imports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_transfers: {
+        Row: {
+          amount: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          from_account_id: string
+          from_transaction_id: string
+          id: string
+          notes: string | null
+          to_account_id: string
+          to_transaction_id: string
+          transfer_date: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          from_account_id: string
+          from_transaction_id: string
+          id?: string
+          notes?: string | null
+          to_account_id: string
+          to_transaction_id: string
+          transfer_date: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          from_account_id?: string
+          from_transaction_id?: string
+          id?: string
+          notes?: string | null
+          to_account_id?: string
+          to_transaction_id?: string
+          transfer_date?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transfers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_from_account_id_fkey"
+            columns: ["from_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_from_account_id_fkey"
+            columns: ["from_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_from_transaction_id_fkey"
+            columns: ["from_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_from_transaction_id_fkey"
+            columns: ["from_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_to_account_id_fkey"
+            columns: ["to_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_to_account_id_fkey"
+            columns: ["to_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_to_transaction_id_fkey"
+            columns: ["to_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_to_transaction_id_fkey"
+            columns: ["to_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
             referencedColumns: ["id"]
           },
         ]
@@ -320,6 +983,7 @@ export type Database = {
       }
       cash_flow_entries: {
         Row: {
+          actual_amount: number | null
           actual_date: string | null
           agreement_id: string | null
           amount_net: number
@@ -340,11 +1004,13 @@ export type Database = {
           document_id: string | null
           entry_date: string
           expected_date: string
+          forecast_amount: number | null
           id: string
           insurance: number
           interest: number
           is_included: boolean
           is_manual: boolean
+          matched_amount: number
           notes: string | null
           occurrence_key: string
           principal: number
@@ -360,9 +1026,11 @@ export type Database = {
           unit_id: string | null
           updated_at: string
           updated_by: string | null
+          variance_amount: number | null
           vat: number
         }
         Insert: {
+          actual_amount?: number | null
           actual_date?: string | null
           agreement_id?: string | null
           amount_net?: number
@@ -383,11 +1051,13 @@ export type Database = {
           document_id?: string | null
           entry_date: string
           expected_date: string
+          forecast_amount?: number | null
           id?: string
           insurance?: number
           interest?: number
           is_included?: boolean
           is_manual?: boolean
+          matched_amount?: number
           notes?: string | null
           occurrence_key?: string
           principal?: number
@@ -403,9 +1073,11 @@ export type Database = {
           unit_id?: string | null
           updated_at?: string
           updated_by?: string | null
+          variance_amount?: number | null
           vat?: number
         }
         Update: {
+          actual_amount?: number | null
           actual_date?: string | null
           agreement_id?: string | null
           amount_net?: number
@@ -426,11 +1098,13 @@ export type Database = {
           document_id?: string | null
           entry_date?: string
           expected_date?: string
+          forecast_amount?: number | null
           id?: string
           insurance?: number
           interest?: number
           is_included?: boolean
           is_manual?: boolean
+          matched_amount?: number
           notes?: string | null
           occurrence_key?: string
           principal?: number
@@ -446,6 +1120,7 @@ export type Database = {
           unit_id?: string | null
           updated_at?: string
           updated_by?: string | null
+          variance_amount?: number | null
           vat?: number
         }
         Relationships: [
@@ -469,6 +1144,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "bank_accounts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
           },
           {
             foreignKeyName: "cash_flow_entries_company_id_fkey"
@@ -675,6 +1357,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "bank_accounts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
           },
           {
             foreignKeyName: "cash_flow_recurring_rules_company_id_fkey"
@@ -3162,6 +3851,304 @@ export type Database = {
       }
     }
     Views: {
+      v_bank_account_balances: {
+        Row: {
+          account_identifier: string | null
+          account_type: string | null
+          bank_account_id: string | null
+          bank_name: string | null
+          company_id: string | null
+          currency: string | null
+          iban: string | null
+          inflows: number | null
+          last_transaction_date: string | null
+          movement: number | null
+          name: string | null
+          opening_balance: number | null
+          opening_balance_date: string | null
+          outflows: number | null
+          status: string | null
+          system_balance: number | null
+          unreconciled_count: number | null
+          unreconciled_value: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_bank_expected_items: {
+        Row: {
+          agreement_id: string | null
+          bank_account_id: string | null
+          category: string | null
+          company_id: string | null
+          counterparty_name: string | null
+          currency: string | null
+          description: string | null
+          direction: string | null
+          entry_id: string | null
+          expected_amount: number | null
+          expected_date: string | null
+          matched_amount: number | null
+          outstanding_amount: number | null
+          property_code: string | null
+          property_id: string | null
+          property_name: string | null
+          reconciliation_state: string | null
+          rule_id: string | null
+          source_type: string | null
+          state: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_recurring_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_bank_reconciliation_exceptions: {
+        Row: {
+          allocated_amount: number | null
+          bank_account_id: string | null
+          bank_transaction_id: string | null
+          category: string | null
+          company_id: string | null
+          entry_description: string | null
+          entry_id: string | null
+          forecast_amount: number | null
+          match_id: string | null
+          match_type: string | null
+          property_id: string | null
+          status: string | null
+          transaction_date: string | null
+          transaction_description: string | null
+          variance_amount: number | null
+          variance_reason: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_expected_items"
+            referencedColumns: ["entry_id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_bank_transactions: {
+        Row: {
+          account_currency: string | null
+          account_name: string | null
+          amount: number | null
+          bank_account_id: string | null
+          bank_name: string | null
+          bank_reference: string | null
+          company_id: string | null
+          counterparty_account: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          created_by: string | null
+          credit_amount: number | null
+          currency: string | null
+          debit_amount: number | null
+          deleted_at: string | null
+          description: string | null
+          fingerprint: string | null
+          id: string | null
+          import_id: string | null
+          is_internal_transfer: boolean | null
+          match_count: number | null
+          matched_amount: number | null
+          notes: string | null
+          outstanding_amount: number | null
+          reconciliation_status: string | null
+          running_balance: number | null
+          source_row_id: string | null
+          transaction_date: string | null
+          updated_at: string | null
+          updated_by: string | null
+          value_date: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "bank_statement_imports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_cash_flow_entries: {
         Row: {
           actual_date: string | null
@@ -3237,6 +4224,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "bank_accounts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
           },
           {
             foreignKeyName: "cash_flow_entries_company_id_fkey"
@@ -3825,9 +4819,31 @@ export type Database = {
         }
         Returns: string
       }
+      bank_statement_balance_check: {
+        Args: { _import_id: string }
+        Returns: {
+          difference: number
+          statement_closing: number
+          system_closing: number
+          unreconciled_count: number
+          unreconciled_value: number
+        }[]
+      }
       can_manage_company: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
+      cash_flow_entry_from_transaction: {
+        Args: {
+          _bank_transaction_id: string
+          _category?: string
+          _counterparty_name?: string
+          _description?: string
+          _notes?: string
+          _property_id?: string
+          _vat?: number
+        }
+        Returns: string
+      }
       cash_flow_monthly: {
         Args: {
           _bank_account_id?: string
@@ -3859,6 +4875,18 @@ export type Database = {
           variance: number
         }[]
       }
+      commit_bank_statement_import: {
+        Args: { _import_id: string }
+        Returns: Json
+      }
+      confirm_bank_match: {
+        Args: {
+          _allocations: Json
+          _bank_transaction_id: string
+          _notes?: string
+        }
+        Returns: Json
+      }
       current_company_id: { Args: never; Returns: string }
       generate_company_cash_flow: {
         Args: { _company_id: string; _through: string }
@@ -3887,6 +4915,26 @@ export type Database = {
         Args: { _company_id: string; _user_id: string }
         Returns: boolean
       }
+      mark_internal_transfer: {
+        Args: {
+          _from_transaction_id: string
+          _notes?: string
+          _to_transaction_id: string
+        }
+        Returns: string
+      }
+      mark_statement_batch_reconciled: {
+        Args: { _import_id: string; _override_reason?: string }
+        Returns: Json
+      }
+      recompute_entry_reconciliation: {
+        Args: { _entry_id: string }
+        Returns: undefined
+      }
+      recompute_transaction_reconciliation: {
+        Args: { _tx_id: string }
+        Returns: undefined
+      }
       record_property_event: {
         Args: {
           _amount: number
@@ -3901,6 +4949,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      reverse_bank_match: {
+        Args: { _match_id: string; _reason: string }
+        Returns: Json
+      }
       seed_company_dimensions: {
         Args: { _company_id: string }
         Returns: undefined
@@ -3912,6 +4964,31 @@ export type Database = {
       shares_company_with: {
         Args: { _target: string; _viewer: string }
         Returns: boolean
+      }
+      suggest_bank_matches: {
+        Args: {
+          _amount_tolerance?: number
+          _bank_transaction_id: string
+          _date_tolerance?: number
+          _limit?: number
+        }
+        Returns: {
+          amount_total: number
+          category: string
+          counterparty_name: string
+          description: string
+          entry_id: string
+          expected_date: string
+          outstanding: number
+          property_id: string
+          reasons: string[]
+          score: number
+          source_type: string
+        }[]
+      }
+      sync_source_settlement: {
+        Args: { _entry_id: string }
+        Returns: undefined
       }
     }
     Enums: {
