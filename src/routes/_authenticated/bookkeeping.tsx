@@ -41,18 +41,12 @@ function BookkeepingPage() {
   const capabilities = capabilitiesFor(workspace?.roles);
 
   return (
-    <AppShell>
+    <AppShell
+      title="Bookkeeping"
+      description="Operational bookkeeping: documents, settlement and VAT periods. Amounts stay owned by their source module."
+    >
       <div className="space-y-6">
-        <header className="flex items-center gap-3">
-          <BookOpenCheck className="size-6 text-primary" />
-          <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight">Bookkeeping</h1>
-            <p className="text-sm text-muted-foreground">
-              Operational bookkeeping: documents, settlement and VAT periods. Amounts stay owned by
-              their source module.
-            </p>
-          </div>
-        </header>
+
 
         {!companyId ? (
           <Card>
