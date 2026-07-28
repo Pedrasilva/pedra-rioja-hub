@@ -160,7 +160,8 @@ describe("Zod / TS contracts", () => {
 
   it("validates Portuguese NIF checksums", () => {
     expect(isValidNif("501442600")).toBe(true);
-    expect(isValidNif("123456789")).toBe(false);
+    expect(isValidNif("501442601")).toBe(false);
+    expect(isValidNif("12345")).toBe(false);
   });
 });
 
@@ -579,7 +580,7 @@ describe("bank classification rules", () => {
       .single();
     expectNoError(cls, "insert classification");
 
-    await admin.from("bank_classification_rules").insert([
+    const rules = await admin.from("bank_classification_rules").insert([
       {
         company_id: company.id,
         name: "EDP low priority",
@@ -598,6 +599,7 @@ describe("bank classification rules", () => {
       { company_id: company.id, name: "Inactive", priority: 1, match_value: "EDP", is_active: false },
       { company_id: other.id, name: "Foreign rule", priority: 1, match_value: "EDP" },
     ]);
+    expectNoError(rules, "insert rules");
 
     const tx = await admin
       .from("bank_transactions")
