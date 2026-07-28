@@ -24,12 +24,13 @@ const NAV: NavItem[] = [
   { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
   { to: "/banking", label: "Banking", icon: Landmark },
+  { to: "/bookkeeping", label: "Bookkeeping", icon: Receipt },
 
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
-const UPCOMING = [{ label: "Bookkeeping", icon: Receipt }];
+const UPCOMING: { label: string; icon: typeof LayoutDashboard }[] = [];
 
 
 
