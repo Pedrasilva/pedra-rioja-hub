@@ -534,12 +534,13 @@ export function UnitsPanel({ property, canEdit }: { property: PropertyRow; canEd
 
 /* ----------------------------------------------------------------- financing */
 
-export function FinancingTab({ property, currency }: Ctx) {
+export function FinancingTab({ property, currency, canEdit }: Ctx) {
   const financing = usePropertyFinancing(property.id);
   return (
     <Panel
       title="Financing agreements"
-      description="Read-only in Phase 2 — schedule generation and versioning arrive with the financing workflow."
+      description="Mortgages and leasing with versioned repayment schedules. Open an agreement to build, import or revise its instalments."
+      action={canEdit ? <NewAgreementDialog propertyId={property.id} /> : undefined}
     >
       {financing.data?.length ? (
         <Table>
@@ -553,6 +554,7 @@ export function FinancingTab({ property, currency }: Ctx) {
               <TableHead className="text-right">Outstanding</TableHead>
               <TableHead>Schedule</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -578,6 +580,13 @@ export function FinancingTab({ property, currency }: Ctx) {
                 <TableCell>
                   <Badge variant="secondary">{titleCase(a.status)}</Badge>
                 </TableCell>
+                <TableCell className="text-right">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/financing/$agreementId" params={{ agreementId: a.id }}>
+                      Open <ArrowUpRight className="size-4" />
+                    </Link>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -585,12 +594,13 @@ export function FinancingTab({ property, currency }: Ctx) {
       ) : (
         <Empty
           title="No financing recorded"
-          hint="Mortgages, leasing and loans will be captured in the financing module."
+          hint="Add a mortgage or leasing agreement, then build or import its repayment schedule."
         />
       )}
     </Panel>
   );
 }
+
 
 /* ----------------------------------------------------------------- tenancies */
 
