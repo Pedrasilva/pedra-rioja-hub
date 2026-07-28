@@ -14,8 +14,8 @@ vi.mock("sonner", async () => ({ toast: (await import("./harness")).toastMock })
 import {
   CounterpartiesPanel,
   CounterpartyDialog,
-} from "@/modules/bookkeeping/components/counterparties-panel";
-import { capabilitiesFor } from "@/modules/bookkeeping/permissions";
+} from "@/packages/bookkeeping-core/components/counterparties-panel";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 
 import {
   CLASSIFICATIONS,

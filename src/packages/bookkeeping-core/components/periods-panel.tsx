@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useCreatePeriod, useRecomputePeriodTotals } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
 import { useFinancialPeriods, usePeriodDocuments, usePeriodTotals } from "../queries";
 import { OptionSelect } from "./selectors";
 

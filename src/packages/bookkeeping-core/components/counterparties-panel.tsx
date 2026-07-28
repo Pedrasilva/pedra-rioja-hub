@@ -28,8 +28,9 @@ import {
   useCreateCounterparty,
   useUpdateCounterparty,
 } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
-import { useClassifications, useCounterparties, type CounterpartyRow } from "../queries";
+import type { BookkeepingCapabilities } from "../capabilities";
+import { useClassifications, useCounterparties} from "../queries";
+import type { Counterparty as CounterpartyRow } from "../types";
 import { COUNTERPARTY_TYPES, isValidNif } from "../schemas";
 import { classificationLabel, OptionSelect } from "./selectors";
 

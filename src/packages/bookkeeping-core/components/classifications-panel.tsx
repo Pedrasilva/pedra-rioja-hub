@@ -24,8 +24,9 @@ import {
 } from "@/components/ui/table";
 import { titleCase } from "@/lib/format";
 import { useCreateClassification } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
-import { useClassifications, type ClassificationRow } from "../queries";
+import type { BookkeepingCapabilities } from "../capabilities";
+import { useClassifications} from "../queries";
+import type { Classification as ClassificationRow } from "../types";
 import { classificationLabel, OptionSelect } from "./selectors";
 
 const NATURES = ["income", "expense", "asset", "liability", "equity", "transfer"] as const;

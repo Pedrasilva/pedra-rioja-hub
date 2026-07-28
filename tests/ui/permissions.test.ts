@@ -6,7 +6,7 @@ import {
   RECORD_ROLES,
   VIEW_ROLES,
   type BookkeepingRole,
-} from "@/modules/bookkeeping/permissions";
+} from "@/modules/bookkeeping/host/roles";
 
 const ALL_ROLES: BookkeepingRole[] = [
   "owner",

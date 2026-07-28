@@ -24,15 +24,15 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useCancelDocument, usePostDocument } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
+import { useDimensionOptions } from "../host";
 import {
-  useBookkeepingProperties,
   useClassifications,
   useCounterparties,
   useFinancialDocuments,
   useFinancialPeriods,
-  type DocumentRow,
 } from "../queries";
+import type { FinancialDocument as DocumentRow } from "../types";
 import { DOCUMENT_STATUSES, PAYMENT_STATES } from "../schemas";
 import { DocumentEditorDialog } from "./document-editor";
 import { SettlementPanel } from "./settlement-panel";
@@ -98,7 +98,7 @@ export function DocumentsPanel({
     type: direction === "inbound" ? "supplier" : "client",
   });
   const { data: classifications } = useClassifications(companyId);
-  const { data: properties } = useBookkeepingProperties(companyId);
+  const { options: properties } = useDimensionOptions("property");
   const { data: periods } = useFinancialPeriods(companyId);
 
   const post = usePostDocument();
@@ -177,7 +177,7 @@ export function DocumentsPanel({
               value={propertyId}
               onChange={setPropertyId}
               noneLabel="All properties"
-              options={(properties ?? []).map((p) => ({ value: p.id, label: p.name }))}
+              options={properties.map((p) => ({ value: p.id, label: p.label }))}
             />
           </div>
           <div>

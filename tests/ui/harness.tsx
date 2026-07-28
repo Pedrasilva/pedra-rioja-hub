@@ -12,6 +12,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, type RenderOptions } from "@testing-library/react";
 import { vi } from "vitest";
 
+import {
+  createBankingAdapter,
+  createCashFlowAdapter,
+  createDimensionAdapter,
+  createDocumentsAdapter,
+} from "@/modules/bookkeeping/host/adapters";
+import { pedraRiojaData } from "@/modules/bookkeeping/host/data";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
+import { usePedraRiojaServerContract } from "@/modules/bookkeeping/host/server";
+import { fiscalConfig, type BookkeepingHost } from "@/packages/bookkeeping-core/adapters";
+import { BookkeepingHostProvider } from "@/packages/bookkeeping-core/host";
+
 /* ------------------------------------------------------------- data store */
 
 export type Row = Record<string, unknown>;
@@ -141,6 +153,26 @@ export const toastMock = {
 
 /* -------------------------------------------------------------- renderer */
 
+/**
+ * The tests render the shared core through the real Pedra Rioja host, so the
+ * adapter boundary itself is exercised on every component test.
+ */
+function TestHost({ children }: { children: ReactElement | ReactElement[] }) {
+  const server = usePedraRiojaServerContract();
+  const host: BookkeepingHost = {
+    tenant: { companyId: COMPANY, companyLabel: "Pedra Rioja", isLoading: false },
+    capabilities: capabilitiesFor(["owner"]),
+    dimensions: createDimensionAdapter(COMPANY),
+    documents: createDocumentsAdapter(COMPANY, true),
+    banking: createBankingAdapter(COMPANY),
+    cashFlow: createCashFlowAdapter(COMPANY),
+    fiscal: fiscalConfig(),
+    data: pedraRiojaData,
+    server,
+  };
+  return <BookkeepingHostProvider host={host}>{children}</BookkeepingHostProvider>;
+}
+
 export function renderWithProviders(ui: ReactElement, options?: RenderOptions) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -150,7 +182,9 @@ export function renderWithProviders(ui: ReactElement, options?: RenderOptions) {
   });
   const result = render(ui, {
     wrapper: ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <TestHost>{children as ReactElement}</TestHost>
+      </QueryClientProvider>
     ),
     ...options,
   });

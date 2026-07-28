@@ -11,10 +11,10 @@ vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
 );
 vi.mock("sonner", async () => ({ toast: (await import("./harness")).toastMock }));
 
-import { ClassificationsPanel } from "@/modules/bookkeeping/components/classifications-panel";
-import { PeriodsPanel } from "@/modules/bookkeeping/components/periods-panel";
-import { BankRulesPanel } from "@/modules/bookkeeping/components/rules-panel";
-import { capabilitiesFor } from "@/modules/bookkeeping/permissions";
+import { ClassificationsPanel } from "@/packages/bookkeeping-core/components/classifications-panel";
+import { PeriodsPanel } from "@/packages/bookkeeping-core/components/periods-panel";
+import { BankRulesPanel } from "@/packages/bookkeeping-core/components/rules-panel";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 
 import {
   BANK_TRANSACTIONS,

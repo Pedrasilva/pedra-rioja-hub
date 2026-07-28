@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useUpsertBankRule } from "../mutations";
-import type { BookkeepingCapabilities } from "../permissions";
+import type { BookkeepingCapabilities } from "../capabilities";
+import { useDimensionOptions } from "../host";
 import {
   useBankClassificationRules,
-  useBookkeepingProperties,
   useClassifications,
   useCounterparties,
-  useRulePreviewTransactions,
+  useEligibleBankTransactions,
 } from "../queries";
 import { classificationLabel, OptionSelect } from "./selectors";
 
@@ -108,8 +108,8 @@ export function BankRulesPanel({
   const { data: rules } = useBankClassificationRules(companyId);
   const { data: classifications } = useClassifications(companyId);
   const { data: counterparties } = useCounterparties(companyId);
-  const { data: properties } = useBookkeepingProperties(companyId);
-  const { data: transactions } = useRulePreviewTransactions(companyId);
+  const { options: properties } = useDimensionOptions("property");
+  const { transactions } = useEligibleBankTransactions(companyId);
   const upsert = useUpsertBankRule();
 
   const [open, setOpen] = useState(false);
@@ -117,7 +117,7 @@ export function BankRulesPanel({
 
   const preview = useMemo(
     () =>
-      (transactions ?? [])
+      transactions
         .map((t) => ({ ...t, amount: Number(t.amount) }))
         .filter((t) => matches(draft, t))
         .slice(0, 10),
@@ -303,7 +303,7 @@ export function BankRulesPanel({
                 aria-label="Rule property"
                 value={draft.propertyId}
                 onChange={(v) => setDraft({ ...draft, propertyId: v })}
-                options={(properties ?? []).map((p) => ({ value: p.id, label: p.name }))}
+                options={properties.map((p) => ({ value: p.id, label: p.label }))}
               />
             </div>
             <label className="flex items-center gap-2 self-end text-sm">
