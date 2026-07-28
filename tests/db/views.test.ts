@@ -187,6 +187,8 @@ describe("derived views", () => {
     const bare = await summary(ids.bare);
     expect(bare.current_valuation).toBeNull();
     expect(bare.valuation_date).toBeNull();
+    expect(bare.purchase_price).toBeNull();
+    expect(bare.acquisition_total).toBeNull();
   });
 
   it("v_property_debt_outstanding aggregates multiple agreements from current schedule versions", async () => {
@@ -269,11 +271,12 @@ describe("derived views", () => {
       .select("*")
       .eq("company_id", company.id)
       .single();
-    expect(Number(data!.property_count)).toBe(4);
+    // archived and sold properties are excluded from portfolio headline totals
+    expect(Number(data!.property_count)).toBe(3);
     expect(Number(data!.outstanding_debt)).toBe(190_000);
     expect(Number(data!.monthly_rent)).toBe(1_250);
-    expect(Number(data!.portfolio_value)).toBe(450_000);
-    expect(Number(data!.acquisition_total)).toBe(426_000 + 200_000 + 90_000);
+    expect(Number(data!.portfolio_value)).toBe(450_000 + 200_000);
+    expect(Number(data!.acquisition_total)).toBe(426_000 + 200_000);
   });
 
   it("v_property_timeline exposes automatic and manual events in one chronological spine", async () => {

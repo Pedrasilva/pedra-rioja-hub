@@ -221,7 +221,7 @@ describe("related entities: creation, updates, dimensions and timeline", () => {
         agreement_id: agreementId,
         version_no: 2,
         effective_from: "2024-02-01",
-        reason: "rate_revision",
+        reason: "rate_reset",
         rate_applied: 4.2,
         is_current: true,
       })
