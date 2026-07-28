@@ -115,7 +115,10 @@ Lovable has no monorepo, no private npm packages, and no shared database across 
 `companies`, `profiles`, `user_roles`, `audit_log`, `settings`, `bookkeeping_config`, `bookkeeping_module_version`, `documents`, `document_links`
 
 **Bookkeeping (portable)**
-`accounts` (chart of accounts), `classifications`, `classification_rules`, `vat_rates`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `journal_entries` + `journal_lines`, `periods`, `vat_returns`, `approvals`
+`accounts` (classification mapping for accountant exports — *not* a posting ledger), `classifications`, `classification_rules`, `vat_rates`, `vat_treatment_defaults`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `periods` (period locking only), `vat_returns`, `approvals`
+
+> **Model confirmed: operational bookkeeping, not double-entry.** Verified against PSA Hub, which has no journal/debit/credit tables — it runs on `financial_documents`, `financial_document_payments`, `bank_transactions`, `bank_transaction_classifications`, `financial_classifications`, `bank_classification_rules`, `bank_statement_imports`. `journal_entries` / `journal_lines` are therefore **removed** from this plan. A general ledger can be layered later as a derived posting engine without touching the operational tables.
+
 
 **Dimensions (the shared extension point)**
 `dimensions` (definition: e.g. `property`, `unit`, `project`), `dimension_values` (rows pointing at an app-specific entity), `transaction_dimensions` (transaction ↔ dimension value, with allocation percentage). This is how a purchase invoice gets attributed to a property here and to a client project in PSA Hub — with zero divergence in the bookkeeping schema.
