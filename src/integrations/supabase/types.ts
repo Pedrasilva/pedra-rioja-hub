@@ -203,6 +203,158 @@ export type Database = {
           },
         ]
       }
+      bank_classification_rules: {
+        Row: {
+          bank_account_id: string | null
+          cash_flow_category: string | null
+          classification_id: string | null
+          company_id: string
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          direction: string | null
+          id: string
+          is_active: boolean
+          is_internal_transfer: boolean
+          match_field: string
+          match_type: string
+          match_value: string
+          max_amount: number | null
+          min_amount: number | null
+          name: string
+          notes: string | null
+          priority: number
+          project_id: string | null
+          property_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bank_account_id?: string | null
+          cash_flow_category?: string | null
+          classification_id?: string | null
+          company_id: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          direction?: string | null
+          id?: string
+          is_active?: boolean
+          is_internal_transfer?: boolean
+          match_field?: string
+          match_type?: string
+          match_value: string
+          max_amount?: number | null
+          min_amount?: number | null
+          name: string
+          notes?: string | null
+          priority?: number
+          project_id?: string | null
+          property_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bank_account_id?: string | null
+          cash_flow_category?: string | null
+          classification_id?: string | null
+          company_id?: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          direction?: string | null
+          id?: string
+          is_active?: boolean
+          is_internal_transfer?: boolean
+          match_field?: string
+          match_type?: string
+          match_value?: string
+          max_amount?: number | null
+          min_amount?: number | null
+          name?: string
+          notes?: string | null
+          priority?: number
+          project_id?: string | null
+          property_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_classification_rules_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_classification_id_fkey"
+            columns: ["classification_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       bank_reconciliation_matches: {
         Row: {
           allocated_amount: number
@@ -1525,6 +1677,126 @@ export type Database = {
         }
         Relationships: []
       }
+      counterparties: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          bic: string | null
+          city: string | null
+          code: string | null
+          company_id: string
+          contact_name: string | null
+          counterparty_type: string
+          country_code: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          default_classification_id: string | null
+          deleted_at: string | null
+          email: string | null
+          iban: string | null
+          id: string
+          is_client: boolean
+          is_supplier: boolean
+          legal_name: string | null
+          name: string
+          nif: string | null
+          notes: string | null
+          payment_method: string | null
+          payment_terms_days: number | null
+          phone: string | null
+          postal_code: string | null
+          status: string
+          trading_name: string | null
+          updated_at: string
+          updated_by: string | null
+          website: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          bic?: string | null
+          city?: string | null
+          code?: string | null
+          company_id: string
+          contact_name?: string | null
+          counterparty_type?: string
+          country_code?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          default_classification_id?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          iban?: string | null
+          id?: string
+          is_client?: boolean
+          is_supplier?: boolean
+          legal_name?: string | null
+          name: string
+          nif?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_terms_days?: number | null
+          phone?: string | null
+          postal_code?: string | null
+          status?: string
+          trading_name?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          website?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          bic?: string | null
+          city?: string | null
+          code?: string | null
+          company_id?: string
+          contact_name?: string | null
+          counterparty_type?: string
+          country_code?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          default_classification_id?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          iban?: string | null
+          id?: string
+          is_client?: boolean
+          is_supplier?: boolean
+          legal_name?: string | null
+          name?: string
+          nif?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_terms_days?: number | null
+          phone?: string | null
+          postal_code?: string | null
+          status?: string
+          trading_name?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "counterparties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "counterparties_default_classification_fk"
+            columns: ["default_classification_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       depreciation_assets: {
         Row: {
           capex_project_id: string | null
@@ -2051,6 +2323,765 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "drive_folders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_classifications: {
+        Row: {
+          affects_cash_flow: boolean
+          affects_profit: boolean
+          cash_flow_category: string | null
+          code: string
+          company_id: string | null
+          counterparty_required: boolean
+          created_at: string
+          created_by: string | null
+          default_vat_code: string | null
+          default_vat_rate: number | null
+          id: string
+          is_active: boolean
+          level: number
+          name_en: string
+          name_pt: string | null
+          nature: string
+          parent_id: string | null
+          project_link_allowed: boolean
+          property_link_allowed: boolean
+          sort_order: number
+          updated_at: string
+          updated_by: string | null
+          vat_recoverable: boolean
+        }
+        Insert: {
+          affects_cash_flow?: boolean
+          affects_profit?: boolean
+          cash_flow_category?: string | null
+          code: string
+          company_id?: string | null
+          counterparty_required?: boolean
+          created_at?: string
+          created_by?: string | null
+          default_vat_code?: string | null
+          default_vat_rate?: number | null
+          id?: string
+          is_active?: boolean
+          level?: number
+          name_en: string
+          name_pt?: string | null
+          nature?: string
+          parent_id?: string | null
+          project_link_allowed?: boolean
+          property_link_allowed?: boolean
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat_recoverable?: boolean
+        }
+        Update: {
+          affects_cash_flow?: boolean
+          affects_profit?: boolean
+          cash_flow_category?: string | null
+          code?: string
+          company_id?: string | null
+          counterparty_required?: boolean
+          created_at?: string
+          created_by?: string | null
+          default_vat_code?: string | null
+          default_vat_rate?: number | null
+          id?: string
+          is_active?: boolean
+          level?: number
+          name_en?: string
+          name_pt?: string | null
+          nature?: string
+          parent_id?: string | null
+          project_link_allowed?: boolean
+          property_link_allowed?: boolean
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat_recoverable?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_classifications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_classifications_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_document_lines: {
+        Row: {
+          classification_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          discount_pct: number
+          document_id: string
+          gross_amount: number
+          id: string
+          line_no: number
+          net_amount: number
+          notes: string | null
+          project_id: string | null
+          property_id: string | null
+          quantity: number
+          unit_id: string | null
+          unit_price: number
+          updated_at: string
+          updated_by: string | null
+          vat_amount: number
+          vat_code: string | null
+          vat_rate: number
+          vat_recoverable: boolean
+        }
+        Insert: {
+          classification_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount_pct?: number
+          document_id: string
+          gross_amount?: number
+          id?: string
+          line_no?: number
+          net_amount?: number
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          quantity?: number
+          unit_id?: string | null
+          unit_price?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          vat_code?: string | null
+          vat_rate?: number
+          vat_recoverable?: boolean
+        }
+        Update: {
+          classification_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discount_pct?: number
+          document_id?: string
+          gross_amount?: number
+          id?: string
+          line_no?: number
+          net_amount?: number
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          quantity?: number
+          unit_id?: string | null
+          unit_price?: number
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          vat_code?: string | null
+          vat_rate?: number
+          vat_recoverable?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_document_lines_classification_id_fkey"
+            columns: ["classification_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_documents: {
+        Row: {
+          atcud: string | null
+          bank_account_id: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          classification_id: string | null
+          company_id: string
+          corrects_document_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          counterparty_nif: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          direction: string
+          doc_type: string
+          document_id: string | null
+          document_number: string | null
+          due_date: string | null
+          gross_amount: number
+          id: string
+          issue_date: string
+          net_amount: number
+          notes: string | null
+          outstanding_amount: number
+          paid_amount: number
+          payable_amount: number
+          payment_state: string
+          period_id: string | null
+          posted_at: string | null
+          posted_by: string | null
+          project_id: string | null
+          property_id: string | null
+          series: string | null
+          source_id: string | null
+          source_type: string | null
+          status: string
+          tax_period: string | null
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+          vat_amount: number
+          withholding_amount: number
+          withholding_rate: number | null
+        }
+        Insert: {
+          atcud?: string | null
+          bank_account_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          classification_id?: string | null
+          company_id: string
+          corrects_document_id?: string | null
+          counterparty_id?: string | null
+          counterparty_name?: string | null
+          counterparty_nif?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          direction: string
+          doc_type?: string
+          document_id?: string | null
+          document_number?: string | null
+          due_date?: string | null
+          gross_amount?: number
+          id?: string
+          issue_date?: string
+          net_amount?: number
+          notes?: string | null
+          outstanding_amount?: number
+          paid_amount?: number
+          payable_amount?: number
+          payment_state?: string
+          period_id?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          series?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          tax_period?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          withholding_amount?: number
+          withholding_rate?: number | null
+        }
+        Update: {
+          atcud?: string | null
+          bank_account_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          classification_id?: string | null
+          company_id?: string
+          corrects_document_id?: string | null
+          counterparty_id?: string | null
+          counterparty_name?: string | null
+          counterparty_nif?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          direction?: string
+          doc_type?: string
+          document_id?: string | null
+          document_number?: string | null
+          due_date?: string | null
+          gross_amount?: number
+          id?: string
+          issue_date?: string
+          net_amount?: number
+          notes?: string | null
+          outstanding_amount?: number
+          paid_amount?: number
+          payable_amount?: number
+          payment_state?: string
+          period_id?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          series?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          tax_period?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          withholding_amount?: number
+          withholding_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_documents_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_classification_id_fkey"
+            columns: ["classification_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_corrects_document_id_fkey"
+            columns: ["corrects_document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_period_id_fkey"
+            columns: ["period_id"]
+            isOneToOne: false
+            referencedRelation: "financial_periods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_payments: {
+        Row: {
+          amount: number
+          bank_account_id: string | null
+          bank_transaction_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          document_id: string
+          entry_id: string | null
+          id: string
+          match_id: string | null
+          method: string | null
+          notes: string | null
+          payment_date: string
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          source_id: string | null
+          source_type: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount: number
+          bank_account_id?: string | null
+          bank_transaction_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          document_id: string
+          entry_id?: string | null
+          id?: string
+          match_id?: string | null
+          method?: string | null
+          notes?: string | null
+          payment_date?: string
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount?: number
+          bank_account_id?: string | null
+          bank_transaction_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          document_id?: string
+          entry_id?: string | null
+          id?: string
+          match_id?: string | null
+          method?: string | null
+          notes?: string | null
+          payment_date?: string
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_payments_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "financial_payments_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_bank_transaction_id_fkey"
+            columns: ["bank_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_expected_items"
+            referencedColumns: ["entry_id"]
+          },
+          {
+            foreignKeyName: "financial_payments_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "v_cash_flow_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "bank_reconciliation_matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_reconciliation_exceptions"
+            referencedColumns: ["match_id"]
+          },
+        ]
+      }
+      financial_period_totals: {
+        Row: {
+          bucket: string
+          company_id: string
+          computed_at: string
+          created_at: string
+          created_by: string | null
+          direction: string | null
+          gross_amount: number
+          id: string
+          net_amount: number
+          period_id: string
+          updated_at: string
+          updated_by: string | null
+          vat_amount: number
+          vat_code: string | null
+          vat_rate: number | null
+        }
+        Insert: {
+          bucket: string
+          company_id: string
+          computed_at?: string
+          created_at?: string
+          created_by?: string | null
+          direction?: string | null
+          gross_amount?: number
+          id?: string
+          net_amount?: number
+          period_id: string
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          vat_code?: string | null
+          vat_rate?: number | null
+        }
+        Update: {
+          bucket?: string
+          company_id?: string
+          computed_at?: string
+          created_at?: string
+          created_by?: string | null
+          direction?: string | null
+          gross_amount?: number
+          id?: string
+          net_amount?: number
+          period_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount?: number
+          vat_code?: string | null
+          vat_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_period_totals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_period_totals_period_id_fkey"
+            columns: ["period_id"]
+            isOneToOne: false
+            referencedRelation: "financial_periods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_periods: {
+        Row: {
+          closed_at: string | null
+          closed_by: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          period_type: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          closed_at?: string | null
+          closed_by?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          period_end: string
+          period_start: string
+          period_type?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          closed_at?: string | null
+          closed_by?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          period_end?: string
+          period_start?: string
+          period_type?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_periods_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -4927,10 +5958,19 @@ export type Database = {
         Args: { _import_id: string; _override_reason?: string }
         Returns: Json
       }
+      recompute_document_payment_state: {
+        Args: { _document_id: string }
+        Returns: undefined
+      }
+      recompute_document_totals: {
+        Args: { _document_id: string }
+        Returns: undefined
+      }
       recompute_entry_reconciliation: {
         Args: { _entry_id: string }
         Returns: undefined
       }
+      recompute_period_totals: { Args: { _period_id: string }; Returns: number }
       recompute_transaction_reconciliation: {
         Args: { _tx_id: string }
         Returns: undefined
@@ -4953,6 +5993,10 @@ export type Database = {
         Args: { _match_id: string; _reason: string }
         Returns: Json
       }
+      reverse_financial_payment: {
+        Args: { _payment_id: string; _reason: string }
+        Returns: string
+      }
       seed_company_dimensions: {
         Args: { _company_id: string }
         Returns: undefined
@@ -4961,9 +6005,34 @@ export type Database = {
         Args: { _company_id: string }
         Returns: undefined
       }
+      settle_financial_document: {
+        Args: {
+          _amount: number
+          _bank_transaction_id?: string
+          _document_id: string
+          _method?: string
+          _notes?: string
+          _payment_date?: string
+        }
+        Returns: string
+      }
       shares_company_with: {
         Args: { _target: string; _viewer: string }
         Returns: boolean
+      }
+      suggest_bank_classification: {
+        Args: { _bank_transaction_id: string }
+        Returns: {
+          cash_flow_category: string
+          classification_id: string
+          counterparty_id: string
+          is_internal_transfer: boolean
+          priority: number
+          project_id: string
+          property_id: string
+          rule_id: string
+          rule_name: string
+        }[]
       }
       suggest_bank_matches: {
         Args: {
@@ -4985,6 +6054,10 @@ export type Database = {
           score: number
           source_type: string
         }[]
+      }
+      sync_document_cash_flow: {
+        Args: { _document_id: string }
+        Returns: string
       }
       sync_source_settlement: {
         Args: { _entry_id: string }
