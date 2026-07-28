@@ -11,9 +11,9 @@ vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
 );
 vi.mock("sonner", async () => ({ toast: (await import("./harness")).toastMock }));
 
-import { DocumentEditorDialog } from "@/modules/bookkeeping/components/document-editor";
-import { DocumentsPanel } from "@/modules/bookkeeping/components/documents-panel";
-import { capabilitiesFor } from "@/modules/bookkeeping/permissions";
+import { DocumentEditorDialog } from "@/packages/bookkeeping-core/components/document-editor";
+import { DocumentsPanel } from "@/packages/bookkeeping-core/components/documents-panel";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 
 import {
   CLASSIFICATIONS,

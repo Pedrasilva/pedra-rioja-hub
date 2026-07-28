@@ -13,7 +13,7 @@ import {
   settlementSchema,
   updateCounterpartySchema,
   updateFinancialDocumentSchema,
-} from "@/modules/bookkeeping/schemas";
+} from "@/packages/bookkeeping-core/schemas";
 
 const nn = <T,>(v: T | null | undefined) => (v === undefined || v === "" ? null : v);
 

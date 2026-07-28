@@ -11,8 +11,8 @@ vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
 );
 vi.mock("sonner", async () => ({ toast: (await import("./harness")).toastMock }));
 
-import { SettlementPanel } from "@/modules/bookkeeping/components/settlement-panel";
-import { capabilitiesFor } from "@/modules/bookkeeping/permissions";
+import { SettlementPanel } from "@/packages/bookkeeping-core/components/settlement-panel";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 
 import {
   BANK_TRANSACTIONS,

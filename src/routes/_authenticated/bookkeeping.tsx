@@ -5,12 +5,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
-import { BankRulesPanel } from "@/modules/bookkeeping/components/rules-panel";
-import { ClassificationsPanel } from "@/modules/bookkeeping/components/classifications-panel";
-import { CounterpartiesPanel } from "@/modules/bookkeeping/components/counterparties-panel";
-import { DocumentsPanel } from "@/modules/bookkeeping/components/documents-panel";
-import { PeriodsPanel } from "@/modules/bookkeeping/components/periods-panel";
-import { capabilitiesFor } from "@/modules/bookkeeping/permissions";
+import { PedraRiojaBookkeepingProvider } from "@/modules/bookkeeping/host/provider";
+import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
+import {
+  BankRulesPanel,
+  ClassificationsPanel,
+  CounterpartiesPanel,
+  DocumentsPanel,
+  PeriodsPanel,
+} from "@/packages/bookkeeping-core";
 
 export const Route = createFileRoute("/_authenticated/bookkeeping")({
   head: () => ({
@@ -35,6 +38,14 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
 });
 
 function BookkeepingPage() {
+  return (
+    <PedraRiojaBookkeepingProvider>
+      <BookkeepingWorkspace />
+    </PedraRiojaBookkeepingProvider>
+  );
+}
+
+function BookkeepingWorkspace() {
   const { data: workspace, isLoading } = useWorkspace();
   const companyId = workspace?.company?.id;
   const capabilities = capabilitiesFor(workspace?.roles);

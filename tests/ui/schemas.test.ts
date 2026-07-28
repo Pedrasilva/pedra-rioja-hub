@@ -16,7 +16,7 @@ import {
   round2,
   settlementSchema,
   SOURCE_TYPES,
-} from "@/modules/bookkeeping/schemas";
+} from "@/packages/bookkeeping-core/schemas";
 
 const COMPANY = "11111111-1111-4111-8111-111111111111";
 
