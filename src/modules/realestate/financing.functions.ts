@@ -119,7 +119,7 @@ export const updateFinancingAgreement = createServerFn({ method: "POST" })
     }
     const { error } = await context.supabase
       .from("financing_agreements")
-      .update(patch)
+      .update(patch as never)
       .eq("id", agreementId);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -258,10 +258,10 @@ export const commitScheduleImport = createServerFn({ method: "POST" })
         _effective_from: imp.effective_from,
         _reason: imp.reason,
         _rows: payload,
-        _notes: imp.notes,
+        _notes: imp.notes ?? undefined,
         _import_id: imp.id,
-        _index_rate_used: imp.index_rate_used,
-        _rate_applied: imp.rate_applied,
+        _index_rate_used: imp.index_rate_used ?? undefined,
+        _rate_applied: imp.rate_applied ?? undefined,
       },
     );
     if (fnErr) throw new Error(fnErr.message);
