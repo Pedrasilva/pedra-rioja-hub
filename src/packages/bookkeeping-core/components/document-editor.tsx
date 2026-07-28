@@ -19,6 +19,7 @@ import { formatMoneyPrecise } from "@/lib/format";
 import { supabase } from "@/integrations/supabase/client";
 import { useCreateDocument, useUpdateDocument } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
+import { useDimensionOptions } from "../host";
 import {
   useClassifications,
   useCounterparties,
@@ -84,8 +85,8 @@ export function DocumentEditorDialog({
     type: direction === "inbound" ? "supplier" : "client",
   });
   const { data: classifications } = useClassifications(companyId);
-  const { data: properties } = useBookkeepingProperties(companyId);
-  const { data: projects } = useBookkeepingProjects(companyId);
+  const { options: properties } = useDimensionOptions("property");
+  const { options: projects } = useDimensionOptions("project");
   const { data: periods } = useFinancialPeriods(companyId);
 
   const create = useCreateDocument();
@@ -244,11 +245,8 @@ export function DocumentEditorDialog({
     value: c.id,
     label: classificationLabel(c),
   }));
-  const propOptions = (properties ?? []).map((p) => ({
-    value: p.id,
-    label: `${p.code ? `${p.code} · ` : ""}${p.name}`,
-  }));
-  const projOptions = (projects ?? []).map((p) => ({ value: p.id, label: p.name }));
+  const propOptions = properties.map((p) => ({ value: p.id, label: p.label }));
+  const projOptions = projects.map((p) => ({ value: p.id, label: p.label }));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

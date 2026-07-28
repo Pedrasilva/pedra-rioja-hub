@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
 import { useCancelDocument, usePostDocument } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
+import { useDimensionOptions } from "../host";
 import {
   useClassifications,
   useCounterparties,
@@ -97,7 +98,7 @@ export function DocumentsPanel({
     type: direction === "inbound" ? "supplier" : "client",
   });
   const { data: classifications } = useClassifications(companyId);
-  const { data: properties } = useBookkeepingProperties(companyId);
+  const { options: properties } = useDimensionOptions("property");
   const { data: periods } = useFinancialPeriods(companyId);
 
   const post = usePostDocument();
@@ -176,7 +177,7 @@ export function DocumentsPanel({
               value={propertyId}
               onChange={setPropertyId}
               noneLabel="All properties"
-              options={(properties ?? []).map((p) => ({ value: p.id, label: p.name }))}
+              options={properties.map((p) => ({ value: p.id, label: p.label }))}
             />
           </div>
           <div>

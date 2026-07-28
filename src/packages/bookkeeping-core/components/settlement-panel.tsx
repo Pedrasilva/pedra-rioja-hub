@@ -35,7 +35,7 @@ export function SettlementPanel({
   capabilities: BookkeepingCapabilities;
 }) {
   const { data } = useFinancialDocument(documentId);
-  const { data: transactions } = useEligibleBankTransactions(companyId);
+  const { transactions } = useEligibleBankTransactions(companyId);
   const settle = useSettleDocument();
   const reverse = useReversePayment();
 
@@ -94,7 +94,7 @@ export function SettlementPanel({
                 value={bankTransactionId}
                 onChange={setBankTransactionId}
                 noneLabel="Not linked"
-                options={(transactions ?? []).map((t) => ({
+                options={transactions.map((t) => ({
                   value: t.id,
                   label: `${formatDate(t.transaction_date)} · ${formatMoneyPrecise(Number(t.amount))} · ${
                     t.description ?? t.counterparty_name ?? ""
