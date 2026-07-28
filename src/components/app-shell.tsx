@@ -21,6 +21,8 @@ const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
+  { to: "/banking", label: "Banking", icon: Landmark },
+
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
