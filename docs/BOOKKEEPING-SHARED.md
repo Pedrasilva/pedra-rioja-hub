@@ -218,3 +218,46 @@ Adopt PSA Hub's finance *shape* and Pedra Rioja's *tenancy, RLS, documents and r
 single canon; build it greenfield here first (6b/6c), extract shared code (6d), and only then perform the
 additive PSA Hub migration (6e). No destructive migration is proposed or executed until that plan is
 approved.
+
+---
+
+## 4. Phase 6b — implemented (Pedra Rioja, greenfield)
+
+Tables created, all `company_id`-scoped with GRANTs, RLS via `can_view/record/manage_company`,
+`tg_touch_row` and (where stated) `tg_audit_row`:
+
+`counterparties`, `financial_classifications`, `financial_periods`, `financial_documents`,
+`financial_document_lines`, `financial_payments`, `financial_period_totals`,
+`bank_classification_rules`.
+
+Functions: `recompute_document_totals`, `recompute_document_payment_state`,
+`sync_document_cash_flow`, `settle_financial_document`, `reverse_financial_payment`,
+`suggest_bank_classification`, `recompute_period_totals`, plus guard triggers
+`tg_guard_financial_document`, `tg_guard_financial_line`, `tg_financial_line_math`,
+`tg_counterparty_flags`, `tg_no_delete_financial_payments`.
+
+### Frozen decisions (binding for 6c and the PSA migration)
+
+1. **Link contract.** Every cross-module link is `source_type` (text, from `SOURCE_TYPES` in
+   `src/modules/bookkeeping/schemas.ts`) + `source_id` (uuid), with a partial unique index per table.
+   No polymorphic FKs, no per-module link columns.
+2. **Amount ownership.** Lines own the numbers; the document header is derived
+   (`recompute_document_totals`). Payments only move settlement state. Posted documents reject any
+   change to amounts, currency, direction, type, series, number, ATCUD, issue date or counterparty.
+3. **Lifecycle.** `draft → posted → cancelled`, one-way. No deletes after posting; cancellation needs
+   a reason; corrections use `corrects_document_id`. Payments are reversed, never deleted.
+4. **Cash flow.** A posted document upserts exactly one `cash_flow_entries` row with
+   `source_type = 'financial_document'`; cancelling removes it. The entry is never manually owned.
+5. **Classification chart.** `company_id NULL` = shared default chart (read-only to tenants);
+   non-null = tenant chart, manage-level write.
+6. **Permission split preserved.** Manage roles create/amend/post/cancel; recording roles settle and
+   reverse (via the SECURITY DEFINER settlement functions, which fail closed).
+
+### Deviations from §1 of this document
+
+- The settlement table is named **`financial_payments`**, not `financial_document_payments`
+  (per the Phase 6b instruction). PSA Hub will rename accordingly in 6e.
+- `financial_income_items` / `financial_expense_items` / `company_expenses` were **not** ported —
+  they are PSA-specific projections over the same documents and are deferred to 6d.
+- `counterparties` is greenfield here; the PSA compatibility view over its legacy `companies` name is
+  part of 6e, not 6b.
