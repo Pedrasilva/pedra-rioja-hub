@@ -387,13 +387,19 @@ Future integration extension points prepared but not built: Google Drive backup,
 - Small user count (under ~10), all trusted internal users.
 - PSA Hub's finance module is production-quality and worth porting rather than rewriting.
 
-**Open questions**
+**Open questions — status after the Phase 0 review**
 
-1. Does Pedra Rioja file its own VAT, and is the exemption waived on any property?
-2. Is the bookkeeping here full double-entry, or transaction-and-classification like PSA Hub's current model?
-3. Are properties held directly by Pedra Rioja or through SPVs (drives how soon multi-entity matters)?
-4. Which bank(s), and what statement formats are available (CSV vs CAMT.053 materially affects import quality)?
-5. Do leasing agreements need IFRS 16 treatment, or is a simple amortisation schedule enough?
-6. Should the accountant be a user of the system, or receive exports?
-7. Is rent invoicing legally required to issue certified invoices (Portuguese certified software rules), or are recibos de renda issued elsewhere?
-```
+| # | Question | Working position (confirm when you can; none of these block Phase 1) |
+| --- | --- | --- |
+| 1 | Own VAT filing? Exemption waived on any property? | Model VAT as configurable data per property and per line (§3.5). No rule hard-coded. Still to confirm with the accountant. |
+| 2 | Double-entry or transaction-and-classification? | **Resolved: operational bookkeeping**, matching PSA Hub. Journal tables removed. |
+| 3 | Direct ownership or SPVs? | `company_id` everywhere from day one; ship one company, no entity switcher. |
+| 4 | Banks and statement formats? | Parser adapter interface; CSV adapter first, CAMT.053 when a sample file exists. One real export per bank needed before Phase 4. |
+| 5 | IFRS 16 for leasing? | Simple versioned amortisation schedule for v1. |
+| 6 | Accountant: user or exports? | Exports first; `Bookkeeper` role available if direct access is later wanted. |
+| 7 | Certified invoice issuance for rent? | **App does not issue** legal invoices/receipts in v1 — it prepares schedules and records externally-issued document numbers and PDFs. Lock before Phase 5. |
+
+**Decisions that are expensive to reverse after Phase 1**
+
+`company_id` on every table · operational vs. double-entry · dimensions instead of `property_id` columns · money type and rounding (`numeric(14,2)`, EUR, half-up) · soft delete + audit log from day one · naming parity with PSA Hub · mortgage schedule versioning instead of in-place edits · document storage path convention · the per-line VAT field set.
+
