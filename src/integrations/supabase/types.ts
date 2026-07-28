@@ -64,6 +64,74 @@ export type Database = {
           },
         ]
       }
+      bank_accounts: {
+        Row: {
+          account_type: string
+          bank_name: string | null
+          bic: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          iban: string | null
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          opening_balance: number
+          opening_balance_date: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          account_type?: string
+          bank_name?: string | null
+          bic?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          iban?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          opening_balance?: number
+          opening_balance_date?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          account_type?: string
+          bank_name?: string | null
+          bic?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          iban?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
+          opening_balance?: number
+          opening_balance_date?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capex_project_costs: {
         Row: {
           amount: number
@@ -252,73 +320,130 @@ export type Database = {
       }
       cash_flow_entries: {
         Row: {
+          actual_date: string | null
           agreement_id: string | null
+          amount_net: number
           amount_total: number
+          bank_account_id: string | null
           category: string
           commissions: number
           company_id: string
+          confidence: string
+          counterparty_name: string | null
+          counterparty_type: string | null
           created_at: string
           created_by: string | null
           currency: string
+          deleted_at: string | null
           description: string | null
           direction: string
+          document_id: string | null
           entry_date: string
+          expected_date: string
           id: string
           insurance: number
           interest: number
+          is_included: boolean
+          is_manual: boolean
+          notes: string | null
+          occurrence_key: string
           principal: number
+          project_id: string | null
           property_id: string | null
-          source_id: string
+          reconciliation_state: string
+          rule_id: string | null
+          scenario_code: string | null
+          source_id: string | null
           source_type: string
           state: string
+          tenancy_id: string | null
+          unit_id: string | null
           updated_at: string
           updated_by: string | null
           vat: number
         }
         Insert: {
+          actual_date?: string | null
           agreement_id?: string | null
+          amount_net?: number
           amount_total?: number
+          bank_account_id?: string | null
           category?: string
           commissions?: number
           company_id: string
+          confidence?: string
+          counterparty_name?: string | null
+          counterparty_type?: string | null
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           description?: string | null
           direction?: string
+          document_id?: string | null
           entry_date: string
+          expected_date: string
           id?: string
           insurance?: number
           interest?: number
+          is_included?: boolean
+          is_manual?: boolean
+          notes?: string | null
+          occurrence_key?: string
           principal?: number
+          project_id?: string | null
           property_id?: string | null
-          source_id: string
+          reconciliation_state?: string
+          rule_id?: string | null
+          scenario_code?: string | null
+          source_id?: string | null
           source_type: string
           state?: string
+          tenancy_id?: string | null
+          unit_id?: string | null
           updated_at?: string
           updated_by?: string | null
           vat?: number
         }
         Update: {
+          actual_date?: string | null
           agreement_id?: string | null
+          amount_net?: number
           amount_total?: number
+          bank_account_id?: string | null
           category?: string
           commissions?: number
           company_id?: string
+          confidence?: string
+          counterparty_name?: string | null
+          counterparty_type?: string | null
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           description?: string | null
           direction?: string
+          document_id?: string | null
           entry_date?: string
+          expected_date?: string
           id?: string
           insurance?: number
           interest?: number
+          is_included?: boolean
+          is_manual?: boolean
+          notes?: string | null
+          occurrence_key?: string
           principal?: number
+          project_id?: string | null
           property_id?: string | null
-          source_id?: string
+          reconciliation_state?: string
+          rule_id?: string | null
+          scenario_code?: string | null
+          source_id?: string | null
           source_type?: string
           state?: string
+          tenancy_id?: string | null
+          unit_id?: string | null
           updated_at?: string
           updated_by?: string | null
           vat?: number
@@ -339,10 +464,31 @@ export type Database = {
             referencedColumns: ["agreement_id"]
           },
           {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "cash_flow_entries_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
             referencedColumns: ["id"]
           },
           {
@@ -372,6 +518,276 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_property_summary"
             referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_recurring_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancy_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cash_flow_recurring_rules: {
+        Row: {
+          agreement_id: string | null
+          amount_net: number
+          amount_total: number
+          bank_account_id: string | null
+          category: string
+          company_id: string
+          confidence: string
+          counterparty_name: string | null
+          counterparty_type: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          day_of_month: number | null
+          deleted_at: string | null
+          direction: string
+          document_id: string | null
+          end_date: string | null
+          frequency: string
+          id: string
+          interval_count: number
+          is_active: boolean
+          last_generated_through: string | null
+          max_occurrences: number | null
+          name: string
+          notes: string | null
+          project_id: string | null
+          property_id: string | null
+          scenario_code: string | null
+          start_date: string
+          state: string
+          tenancy_id: string | null
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+          vat: number
+        }
+        Insert: {
+          agreement_id?: string | null
+          amount_net?: number
+          amount_total?: number
+          bank_account_id?: string | null
+          category?: string
+          company_id: string
+          confidence?: string
+          counterparty_name?: string | null
+          counterparty_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          day_of_month?: number | null
+          deleted_at?: string | null
+          direction?: string
+          document_id?: string | null
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          interval_count?: number
+          is_active?: boolean
+          last_generated_through?: string | null
+          max_occurrences?: number | null
+          name: string
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          scenario_code?: string | null
+          start_date: string
+          state?: string
+          tenancy_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Update: {
+          agreement_id?: string | null
+          amount_net?: number
+          amount_total?: number
+          bank_account_id?: string | null
+          category?: string
+          company_id?: string
+          confidence?: string
+          counterparty_name?: string | null
+          counterparty_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          day_of_month?: number | null
+          deleted_at?: string | null
+          direction?: string
+          document_id?: string | null
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          interval_count?: number
+          is_active?: boolean
+          last_generated_through?: string | null
+          max_occurrences?: number | null
+          name?: string
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          scenario_code?: string | null
+          start_date?: string
+          state?: string
+          tenancy_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_recurring_rules_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancy_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cash_flow_scenarios: {
+        Row: {
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_default: boolean
+          label: string
+          sort_order: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          label: string
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_scenarios_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2746,6 +3162,154 @@ export type Database = {
       }
     }
     Views: {
+      v_cash_flow_entries: {
+        Row: {
+          actual_date: string | null
+          agreement_id: string | null
+          amount_net: number | null
+          amount_total: number | null
+          bank_account_id: string | null
+          bank_account_name: string | null
+          category: string | null
+          commissions: number | null
+          company_id: string | null
+          confidence: string | null
+          counterparty_name: string | null
+          counterparty_type: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          deleted_at: string | null
+          description: string | null
+          direction: string | null
+          document_id: string | null
+          entry_date: string | null
+          expected_date: string | null
+          id: string | null
+          insurance: number | null
+          interest: number | null
+          is_actual: boolean | null
+          is_included: boolean | null
+          is_manual: boolean | null
+          lender: string | null
+          notes: string | null
+          occurrence_key: string | null
+          principal: number | null
+          project_id: string | null
+          project_name: string | null
+          property_code: string | null
+          property_id: string | null
+          property_inactive: boolean | null
+          property_name: string | null
+          property_status: string | null
+          reconciliation_state: string | null
+          rule_id: string | null
+          scenario_code: string | null
+          signed_amount: number | null
+          source_id: string | null
+          source_type: string | null
+          state: string | null
+          tenancy_id: string | null
+          unit_id: string | null
+          unit_name: string | null
+          updated_at: string | null
+          updated_by: string | null
+          vat: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "financing_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "v_financing_agreement_summary"
+            referencedColumns: ["agreement_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "cash_flow_recurring_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancy_agreements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_cash_flow_projection: {
         Row: {
           agreement_id: string | null
@@ -3264,7 +3828,46 @@ export type Database = {
       can_manage_company: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
+      cash_flow_monthly: {
+        Args: {
+          _bank_account_id?: string
+          _category?: string
+          _company_id: string
+          _from: string
+          _include_inactive?: boolean
+          _months?: number
+          _project_id?: string
+          _property_id?: string
+          _scenario?: string
+          _states?: string[]
+        }
+        Returns: {
+          actual_net: number
+          closing_balance: number
+          cumulative_liquidity: number
+          financing: number
+          forecast_net: number
+          inflows: number
+          month: string
+          net_movement: number
+          opening_balance: number
+          other_outflows: number
+          outflows: number
+          projects: number
+          recurring: number
+          taxes: number
+          variance: number
+        }[]
+      }
       current_company_id: { Args: never; Returns: string }
+      generate_company_cash_flow: {
+        Args: { _company_id: string; _through: string }
+        Returns: number
+      }
+      generate_recurring_cash_flow: {
+        Args: { _rule_id: string; _through: string }
+        Returns: number
+      }
       has_company_role: {
         Args: {
           _company_id: string
@@ -3299,6 +3902,10 @@ export type Database = {
         Returns: undefined
       }
       seed_company_dimensions: {
+        Args: { _company_id: string }
+        Returns: undefined
+      }
+      seed_company_scenarios: {
         Args: { _company_id: string }
         Returns: undefined
       }
