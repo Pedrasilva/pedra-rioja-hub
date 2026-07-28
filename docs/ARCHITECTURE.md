@@ -115,7 +115,10 @@ Lovable has no monorepo, no private npm packages, and no shared database across 
 `companies`, `profiles`, `user_roles`, `audit_log`, `settings`, `bookkeeping_config`, `bookkeeping_module_version`, `documents`, `document_links`
 
 **Bookkeeping (portable)**
-`accounts` (chart of accounts), `classifications`, `classification_rules`, `vat_rates`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `journal_entries` + `journal_lines`, `periods`, `vat_returns`, `approvals`
+`accounts` (classification mapping for accountant exports — *not* a posting ledger), `classifications`, `classification_rules`, `vat_rates`, `vat_treatment_defaults`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `periods` (period locking only), `vat_returns`, `approvals`
+
+> **Model confirmed: operational bookkeeping, not double-entry.** Verified against PSA Hub, which has no journal/debit/credit tables — it runs on `financial_documents`, `financial_document_payments`, `bank_transactions`, `bank_transaction_classifications`, `financial_classifications`, `bank_classification_rules`, `bank_statement_imports`. `journal_entries` / `journal_lines` are therefore **removed** from this plan. A general ledger can be layered later as a derived posting engine without touching the operational tables.
+
 
 **Dimensions (the shared extension point)**
 `dimensions` (definition: e.g. `property`, `unit`, `project`), `dimension_values` (rows pointing at an app-specific entity), `transaction_dimensions` (transaction ↔ dimension value, with allocation percentage). This is how a purchase invoice gets attributed to a property here and to a client project in PSA Hub — with zero divergence in the bookkeeping schema.
@@ -193,9 +196,34 @@ erDiagram
     PROPERTIES ||--o{ DIMENSION_VALUES : exposed_as
 
     DOCUMENTS ||--o{ DOCUMENT_LINKS : attached_via
-    PERIODS ||--o{ JOURNAL_ENTRIES : contains
-    JOURNAL_ENTRIES ||--o{ JOURNAL_LINES : has
+    PERIODS ||--o{ VAT_RETURNS : covers
 ```
+
+### 3.5 VAT structure (configurable, never inferred)
+
+No tax rules are hard-coded. Every invoice / expense line carries:
+
+| Field | Purpose |
+| --- | --- |
+| `net_amount` | Taxable base |
+| `vat_rate_id` + `vat_rate_pct` | Rate reference plus the snapshotted percentage in force at the document date |
+| `vat_amount` | Computed VAT |
+| `gross_amount` | Net + VAT |
+| `recoverable_vat_amount` | Deductible input VAT |
+| `non_recoverable_vat_amount` | VAT treated as cost (capitalised or expensed) |
+| `vat_treatment` | `standard` / `exempt` / `reverse_charge` / `not_subject` / `out_of_scope` |
+| `vat_exemption_reason_code` | Legal exemption reference where applicable |
+| `deduction_basis` + `pro_rata_pct` | `full` / `pro_rata` / `none` |
+| `tax_period` | YYYY-MM or quarter |
+| `vat_status` | `pending` / `included_in_return` / `settled` / `recovered` / `excluded` |
+| `vat_return_id` | Link to the return that reported the line |
+| `reviewed_by` / `reviewed_at` | Human confirmation of the treatment |
+
+- Defaults are **suggested** from `vat_treatment_defaults` (keyed by property, classification and activity) and always shown for review before a line is finalised. Nothing is silently inferred; every override is audited.
+- `vat_rates` is date-effective, so historical documents keep the rate in force at their date.
+- A property carries a `vat_exemption_waived` flag; it drives suggestions only.
+- `vat_returns` groups lines by tax period and freezes the reported figures at submission.
+
 
 ---
 
@@ -359,13 +387,19 @@ Future integration extension points prepared but not built: Google Drive backup,
 - Small user count (under ~10), all trusted internal users.
 - PSA Hub's finance module is production-quality and worth porting rather than rewriting.
 
-**Open questions**
+**Open questions — status after the Phase 0 review**
 
-1. Does Pedra Rioja file its own VAT, and is the exemption waived on any property?
-2. Is the bookkeeping here full double-entry, or transaction-and-classification like PSA Hub's current model?
-3. Are properties held directly by Pedra Rioja or through SPVs (drives how soon multi-entity matters)?
-4. Which bank(s), and what statement formats are available (CSV vs CAMT.053 materially affects import quality)?
-5. Do leasing agreements need IFRS 16 treatment, or is a simple amortisation schedule enough?
-6. Should the accountant be a user of the system, or receive exports?
-7. Is rent invoicing legally required to issue certified invoices (Portuguese certified software rules), or are recibos de renda issued elsewhere?
-```
+| # | Question | Working position (confirm when you can; none of these block Phase 1) |
+| --- | --- | --- |
+| 1 | Own VAT filing? Exemption waived on any property? | Model VAT as configurable data per property and per line (§3.5). No rule hard-coded. Still to confirm with the accountant. |
+| 2 | Double-entry or transaction-and-classification? | **Resolved: operational bookkeeping**, matching PSA Hub. Journal tables removed. |
+| 3 | Direct ownership or SPVs? | `company_id` everywhere from day one; ship one company, no entity switcher. |
+| 4 | Banks and statement formats? | Parser adapter interface; CSV adapter first, CAMT.053 when a sample file exists. One real export per bank needed before Phase 4. |
+| 5 | IFRS 16 for leasing? | Simple versioned amortisation schedule for v1. |
+| 6 | Accountant: user or exports? | Exports first; `Bookkeeper` role available if direct access is later wanted. |
+| 7 | Certified invoice issuance for rent? | **App does not issue** legal invoices/receipts in v1 — it prepares schedules and records externally-issued document numbers and PDFs. Lock before Phase 5. |
+
+**Decisions that are expensive to reverse after Phase 1**
+
+`company_id` on every table · operational vs. double-entry · dimensions instead of `property_id` columns · money type and rounding (`numeric(14,2)`, EUR, half-up) · soft delete + audit log from day one · naming parity with PSA Hub · mortgage schedule versioning instead of in-place edits · document storage path convention · the per-line VAT field set.
+
