@@ -19,15 +19,16 @@ type NavItem = { to: LinkProps["to"]; label: string; icon: typeof LayoutDashboar
 
 const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
 const UPCOMING = [
-  { label: "Properties", icon: Building2 },
   { label: "Bookkeeping", icon: Receipt },
   { label: "Financing", icon: Wallet },
 ];
+
 
 export function AppShell({
   title,
