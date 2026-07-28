@@ -112,37 +112,87 @@ Lovable has no monorepo, no private npm packages, and no shared database across 
 ### 3.2 Modules and tables
 
 **Core / platform**
-`companies`, `profiles`, `user_roles`, `audit_log`, `settings`, `bookkeeping_config`, `bookkeeping_module_version`, `documents`, `document_links`
+`companies`, `profiles`, `user_roles`, `audit_log`, `settings`, `bookkeeping_config`, `bookkeeping_module_version`, `documents`, `document_links`, `drive_folders`
 
-**Bookkeeping (portable)**
-`accounts` (classification mapping for accountant exports — *not* a posting ledger), `classifications`, `classification_rules`, `vat_rates`, `vat_treatment_defaults`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `periods` (period locking only), `vat_returns`, `approvals`
+**Bookkeeping (portable — knows nothing about real estate)**
+`accounts` (classification mapping for accountant exports — *not* a posting ledger), `classifications`, `classification_rules`, `vat_rates`, `vat_treatment_defaults`, `suppliers`, `clients`, `purchase_invoices` + `purchase_invoice_lines`, `sales_invoices` + `sales_invoice_lines`, `receipts`, `payments`, `expenses`, `credit_notes`, `bank_accounts`, `bank_transactions`, `bank_statement_imports`, `import_staging_rows`, `reconciliation_matches`, `periods`, `vat_returns`, `approvals`
 
-> **Model confirmed: operational bookkeeping, not double-entry.** Verified against PSA Hub, which has no journal/debit/credit tables — it runs on `financial_documents`, `financial_document_payments`, `bank_transactions`, `bank_transaction_classifications`, `financial_classifications`, `bank_classification_rules`, `bank_statement_imports`. `journal_entries` / `journal_lines` are therefore **removed** from this plan. A general ledger can be layered later as a derived posting engine without touching the operational tables.
+> **Model confirmed: operational bookkeeping, not double-entry.** Verified against PSA Hub, which has no journal/debit/credit tables. A general ledger can be layered later as a derived posting engine without touching the operational tables.
 
+**Dimensions (the one and only extension point) — Phase 1.5, built now**
 
-**Dimensions (the shared extension point)**
-`dimensions` (definition: e.g. `property`, `unit`, `project`), `dimension_values` (rows pointing at an app-specific entity), `transaction_dimensions` (transaction ↔ dimension value, with allocation percentage). This is how a purchase invoice gets attributed to a property here and to a client project in PSA Hub — with zero divergence in the bookkeeping schema.
+| Table | Purpose |
+| --- | --- |
+| `dimensions` | Definition of a dimension type: `property`, `unit`, `project`, `financing`, `tenancy`, `tenant`, `supplier`, `client`, `cost_centre`, `vat_category`. Carries `code`, `label`, `target_table` (nullable), `is_system`, `is_active`. |
+| `dimension_values` | One row per taggable thing: `dimension_id`, `code`, `label`, `entity_table`, `entity_id` (nullable — free-text values such as cost centres need no entity), `is_active`. Kept in sync with real-estate rows by trigger. |
+| `transaction_dimensions` | The tag itself: `source_type` (`purchase_invoice`, `purchase_invoice_line`, `sales_invoice`, `bank_transaction`, `expense`, `payment`, `financing_schedule_row`…), `source_id`, `dimension_id`, `dimension_value_id`, `allocation_pct` (default 100), `amount` (nullable, for absolute splits), `is_primary`. |
 
-**Real estate (app-specific)**
-`properties`, `property_units`, `property_acquisition_costs`, `property_valuations`, `tenants`, `tenancy_agreements`, `rent_schedules`, `rent_charges`, `financing_agreements`, `financing_schedule_versions`, `financing_schedule_rows`, `capex_projects`, `capex_project_costs`, `depreciation_assets`, `depreciation_schedules`, `depreciation_postings`, `cashflow_forecast_scenarios`, `cashflow_forecast_lines`
+Rules that keep bookkeeping generic and portable:
+
+1. No bookkeeping table ever gains a `property_id`, `tenancy_id` or `project_id` column. Attribution is *always* a `transaction_dimensions` row.
+2. Bookkeeping code may read `transaction_dimensions` generically (group, filter, allocate) but may never join to `properties` or any real-estate table.
+3. Real estate registers its entities as `dimension_values`; PSA Hub registers client projects the same way. Identical schema, different rows.
+4. Allocations across one `(source_type, source_id, dimension_id)` are validated to ≤ 100 % (or to the document total when absolute amounts are used).
+
+Worked examples:
+
+| Business event | Bookkeeping record | Dimension tags |
+| --- | --- | --- |
+| Mortgage payment | `bank_transaction` | `financing` → agreement, `property` → PR001 |
+| Construction invoice | `purchase_invoice` (+ per line) | `project` → PRJ-004, `property` → PR001, `supplier` → builder |
+| Rent received | `sales_invoice` / `bank_transaction` | `property`, `tenancy`, `tenant` |
+| Fit-out loan repayment | `bank_transaction` | `property`, `tenant_loan` (dimension value pointing at `tenant_fitout_loans`) |
+| Insurance invoice | `purchase_invoice` | `property`, `cost_centre` → insurance |
+| Invoice split over two properties | one `purchase_invoice` | two `transaction_dimensions` rows, 60 % / 40 % |
+
+**Real estate (app-specific, Phase 1.5 — the full domain, built before any UI)**
+
+| Table | Role |
+| --- | --- |
+| `properties` | **Deliberately small.** Identity + core metadata only. |
+| `property_units` | Fractions/units inside a property |
+| `property_acquisition_costs` | Purchase price, IMT, stamp duty, notary, registration, agency, legal — capitalisable flag |
+| `property_valuations` | Date-stamped valuations by method and source |
+| `property_insurance_policies` | Insurer, policy no., cover, premium, renewal date |
+| `financing_agreements` | Mortgage / leasing / shareholder loan / credit line |
+| `financing_schedule_versions` + `financing_schedule_rows` | Versioned amortisation, never edited in place |
+| `tenants` | Counterparty master for lettings |
+| `tenancy_agreements` | Lease terms, indexation, deposit, status |
+| `rent_schedules` | Expected rent per period, invoicing/payment status |
+| `tenant_fitout_loans` + `tenant_fitout_loan_rows` | Fit-out advances to a tenant and their repayment plan |
+| `capex_projects` + `capex_project_costs` | Construction and maintenance projects, budget vs. committed vs. actual |
+| `depreciation_assets` + `depreciation_entries` | Depreciable components and periodic charges |
+| `property_events` | Unified chronological timeline (§6.4) |
+
+#### `properties` stays small — the columns it may hold
+
+`id`, `company_id`, `code` (PR001…, unique per company), `name`, `property_type`, `status`, address fields (`address_line1`, `address_line2`, `postal_code`, `city`, `district`, `country_code`), registry identifiers (`matrix_article`, `land_registry_ref`, `conservatoria`, `parish`), `area_m2`, `gross_area_m2`, `year_built`, `acquisition_date`, `disposal_date`, `main_image_document_id`, `drive_folder_id`, `drive_folder_url`, `notes`, audit columns.
+
+Explicitly **not** on `properties`: purchase price, acquisition total, current valuation, outstanding debt, occupancy, rent, insurance, depreciation. Every one of those is a related table or a derived view (§6.5). A number that can be recomputed is never stored on the property row.
 
 ### 3.3 Key fields
 
 | Table | Important fields |
 | --- | --- |
-| `properties` | company_id, code, name, address fields, typology, area_m2, purchase_date, purchase_price, acquisition_cost_total (derived), current_valuation, valuation_date, status (`prospect`/`owned`/`under_works`/`for_rent`/`rented`/`for_sale`/`sold`), main_image_document_id |
-| `property_acquisition_costs` | property_id, cost_type (`price`/`imt`/`stamp_duty`/`notary`/`registration`/`agency`/`legal`/`survey`/`other`), amount, capitalisable, source_transaction_id |
-| `property_valuations` | property_id, valuation_date, amount, method (`purchase`/`bank`/`appraiser`/`internal`/`market`), source_document_id |
-| `tenancy_agreements` | property_id, unit_id, tenant_id, start_date, end_date, notice_period_days, base_rent, payment_day, deposit_amount, indexation_type (`none`/`ipc`/`fixed_pct`), indexation_month, vat_applicable, status |
-| `rent_schedules` | tenancy_id, period_start, period_end, due_date, amount, vat_amount, status (`scheduled`/`invoiced`/`paid`/`overdue`/`written_off`), sales_invoice_id |
-| `financing_agreements` | company_id, property_id (nullable — some facilities are portfolio-level), type (`mortgage`/`leasing`/`shareholder_loan`/`credit_line`), lender, principal, start_date, term_months, rate_type (`fixed`/`euribor_spread`), fixed_rate, index_name, index_tenor, spread, repayment_type, grace_months, current_schedule_version_id |
-| `financing_schedule_versions` | agreement_id, version_no, effective_from, reason (`origination`/`rate_reset`/`early_repayment`/`restructure`/`correction`), index_rate_used, generated_at, generated_by, is_current |
-| `financing_schedule_rows` | version_id, period_no, due_date, opening_balance, interest, principal, insurance, fees, total_payment, closing_balance, actual_transaction_id |
-| `bank_transactions` | company_id, bank_account_id, value_date, booking_date, amount, description, counterparty_name, counterparty_iban, external_ref, import_id, hash_key (dedupe), status (`unmatched`/`suggested`/`matched`/`ignored`), classification_id |
-| `reconciliation_matches` | bank_transaction_id, matched_type (`purchase_invoice`/`sales_invoice`/`expense`/`financing_row`/`manual`), matched_id, amount_matched, confidence, rule_id, matched_by, matched_at, status |
-| `depreciation_assets` | company_id, property_id, capex_project_id, description, category, capitalised_amount, in_service_date, useful_life_years, method (`straight_line`), residual_value |
-| `documents` | company_id, storage_path, filename, mime_type, size_bytes, doc_type, issue_date, uploaded_by, checksum |
-| `document_links` | document_id, entity_type, entity_id (polymorphic link, so any record can carry documents) |
+| `property_acquisition_costs` | property_id, cost_type (`price`/`imt`/`stamp_duty`/`notary`/`registration`/`agency`/`legal`/`survey`/`other`), amount, capitalisable, incurred_on, source_type/source_id |
+| `property_valuations` | property_id, valuation_date, amount, method (`purchase`/`bank`/`appraiser`/`internal`/`market`/`tax`), valuer, document_id |
+| `property_insurance_policies` | property_id, insurer, policy_number, cover_type, insured_amount, premium, start_date, renewal_date, status |
+| `tenancy_agreements` | property_id, unit_id, tenant_id, start_date, end_date, notice_period_days, base_rent, payment_day, deposit_amount, indexation_type, indexation_month, vat_applicable, status |
+| `rent_schedules` | tenancy_id, period_start, period_end, due_date, amount, vat_amount, status, invoice_ref |
+| `tenant_fitout_loans` | property_id, tenancy_id, tenant_id, principal, start_date, term_months, interest_rate, repayment_type, status |
+| `tenant_fitout_loan_rows` | loan_id, period_no, due_date, opening_balance, principal, interest, total_payment, closing_balance, settled_source_type/settled_source_id |
+| `financing_agreements` | company_id, property_id (nullable), type, lender, reference, principal, start_date, term_months, rate_type, fixed_rate, index_name, index_tenor, spread, repayment_type, grace_months, current_version_id, status |
+| `financing_schedule_versions` | agreement_id, version_no, effective_from, reason, index_rate_used, is_current |
+| `financing_schedule_rows` | version_id, period_no, due_date, opening_balance, interest, principal, insurance, fees, total_payment, closing_balance, settled_source_type/settled_source_id |
+| `capex_projects` | property_id, code, name, project_type (`construction`/`renovation`/`maintenance`/`fitout`/`other`), status, start_date, target_end_date, actual_end_date, budget_amount, is_capitalisable, contractor_supplier_ref, drive_folder_id |
+| `capex_project_costs` | project_id, description, cost_type, amount, incurred_on, is_capitalised, source_type/source_id |
+| `depreciation_assets` | property_id, capex_project_id, description, category, capitalised_amount, in_service_date, useful_life_years, method, residual_value, status |
+| `depreciation_entries` | asset_id, period_start, period_end, amount, accumulated_amount, status (`draft`/`posted`/`reversed`) |
+| `property_events` | property_id, event_date, event_type, title, description, amount, source_type, source_id, is_manual |
+| `documents` | see §6 — Drive-first, richly linked |
+| `document_links` | document_id, entity_type, entity_id, relation (polymorphic, many links per document) |
+| `drive_folders` | entity_type, entity_id, folder_kind, drive_folder_id, drive_url, path, synced_at |
+
 
 ### 3.4 Entity relationship diagram
 
