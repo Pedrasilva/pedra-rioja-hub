@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BookOpenCheck } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
