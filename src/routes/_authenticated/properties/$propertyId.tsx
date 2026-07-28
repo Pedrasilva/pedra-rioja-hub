@@ -31,7 +31,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { hasAnyRole, useWorkspace } from "@/hooks/use-workspace";
 import { formatMoney, formatPercent, titleCase } from "@/lib/format";
 import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/modules/realestate/constants";
-import { fullAddress, useProperty, usePropertyProjects } from "@/modules/realestate/queries";
+import {
+  fullAddress,
+  useProperty,
+  usePropertyProjects,
+  type PropertyRow,
+} from "@/modules/realestate/queries";
 import {
   DepreciationTab,
   DetailsTab,
@@ -42,6 +47,7 @@ import {
   ProjectsTab,
   TenanciesTab,
   TimelineTab,
+  ValuationsTab,
 } from "@/modules/realestate/components/property-tabs";
 
 export const Route = createFileRoute("/_authenticated/properties/$propertyId")({
@@ -227,7 +233,7 @@ function PropertyWorkspace() {
           <ProjectsTab {...ctx} />
         </TabsContent>
         <TabsContent value="valuations">
-          <ValuationsTabWrapper {...ctx} />
+          <ValuationsTab {...ctx} />
         </TabsContent>
         <TabsContent value="insurance">
           <InsuranceTab {...ctx} />
@@ -272,13 +278,7 @@ function SummaryCard({
   );
 }
 
-/* Re-exported here so the valuations tab keeps the same props contract. */
-function ValuationsTabWrapper(props: Parameters<typeof DetailsTab>[0]) {
-  const { ValuationsTab } = require("@/modules/realestate/components/property-tabs");
-  return <ValuationsTab {...props} />;
-}
-
-function EditPropertyDialog({ property }: { property: ReturnType<typeof useProperty>["data"] extends infer T ? NonNullable<T extends { property: infer P } ? P : never> : never }) {
+function EditPropertyDialog({ property }: { property: PropertyRow }) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const [form, setForm] = useState({
