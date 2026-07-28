@@ -178,7 +178,7 @@ export function usePropertyFinancing(propertyId: string) {
             .in("version_id", currentIds)
             .lte("due_date", new Date().toISOString().slice(0, 10))
             .order("due_date", { ascending: false })
-        : { data: [] as Array<{ version_id: string; closing_balance: number }> };
+        : { data: [] as Array<{ version_id: string; due_date: string; period_no: number; closing_balance: number }> };
 
       return (data ?? []).map((a) => {
         const current = (versions ?? []).find((v) => v.agreement_id === a.id && v.is_current);
@@ -212,7 +212,7 @@ export function usePropertyProjects(propertyId: string) {
             .select("project_id, amount, is_capitalised")
             .in("project_id", ids)
             .is("deleted_at", null)
-        : { data: [] as Array<{ project_id: string; amount: number }> };
+        : { data: [] as Array<{ project_id: string; amount: number; is_capitalised: boolean }> };
 
       return (data ?? []).map((p) => {
         const actual = (costs ?? [])
@@ -275,7 +275,7 @@ export function usePropertyDepreciation(propertyId: string) {
             .select("asset_id, period_start, period_end, amount, accumulated_amount, status")
             .in("asset_id", ids)
             .order("period_start", { ascending: false })
-        : { data: [] as Array<{ asset_id: string }> };
+        : { data: [] as Array<{ asset_id: string; period_start: string; period_end: string; amount: number; accumulated_amount: number; status: string }> };
 
       return { assets: data ?? [], entries: entries ?? [] };
     },
