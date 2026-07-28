@@ -130,7 +130,13 @@ function SettingsPage() {
             ) : null}
           </CardContent>
         </Card>
+
+        <DriveSettingsCard
+          companyId={workspace?.company?.id}
+          canManage={hasAnyRole(workspace?.roles, ["owner", "manager"])}
+        />
       </div>
+
     </AppShell>
   );
 }
