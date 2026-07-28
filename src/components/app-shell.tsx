@@ -24,12 +24,13 @@ const NAV: NavItem[] = [
   { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
   { to: "/banking", label: "Banking", icon: Landmark },
+  { to: "/bookkeeping", label: "Bookkeeping", icon: Receipt },
 
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
-const UPCOMING = [{ label: "Bookkeeping", icon: Receipt }];
+const UPCOMING: { label: string; icon: typeof LayoutDashboard }[] = [];
 
 
 
@@ -87,9 +88,11 @@ export function AppShell({
             </Link>
           ))}
 
-          <p className="px-3 pt-6 pb-2 text-[11px] tracking-widest text-sidebar-foreground/40 uppercase">
-            Next phases
-          </p>
+          {UPCOMING.length > 0 ? (
+            <p className="px-3 pt-6 pb-2 text-[11px] tracking-widest text-sidebar-foreground/40 uppercase">
+              Next phases
+            </p>
+          ) : null}
           {UPCOMING.map(({ label, icon: Icon }) => (
             <div
               key={label}
@@ -99,6 +102,7 @@ export function AppShell({
               {label}
             </div>
           ))}
+
         </nav>
 
         <div className="border-t border-sidebar-border p-3">
