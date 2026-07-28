@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { hasAnyRole, useWorkspace } from "@/hooks/use-workspace";
+import { DriveSettingsCard } from "@/modules/realestate/components/drive-panel";
+
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/settings")({
@@ -130,7 +132,13 @@ function SettingsPage() {
             ) : null}
           </CardContent>
         </Card>
+
+        <DriveSettingsCard
+          companyId={workspace?.company?.id}
+          canManage={hasAnyRole(workspace?.roles, ["owner", "manager"])}
+        />
       </div>
+
     </AppShell>
   );
 }

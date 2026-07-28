@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { DocumentsPanel, useDriveStatus } from "@/modules/realestate/components/drive-panel";
+import { syncDriveFolders } from "@/modules/realestate/drive.functions";
+
 import { toast } from "sonner";
 import {
   AlertTriangle,
@@ -848,62 +852,52 @@ export function DepreciationTab({ property, currency }: Ctx) {
 
 /* ----------------------------------------------------------------- documents */
 
-export function DocumentsTab({ property }: Ctx) {
-  const documents = usePropertyDocuments(property.id);
+export function DocumentsTab({ property, currency, canEdit, canRecord }: Ctx) {
   const folders = usePropertyDriveFolders(property.id);
+  const queryClient = useQueryClient();
+  const syncFn = useServerFn(syncDriveFolders);
+  const driveStatus = useDriveStatus(property.company_id);
+
+  const sync = useMutation({
+    mutationFn: () => syncFn({ data: { companyId: property.company_id, propertyId: property.id } }),
+    onSuccess: (r) => {
+      toast.success(r.created ? `${r.created} folder(s) created in Drive` : "Folders already in sync");
+      queryClient.invalidateQueries({ queryKey: ["property-drive-folders", property.id] });
+      queryClient.invalidateQueries({ queryKey: ["drive-status", property.company_id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const driveReady = Boolean(driveStatus.data?.connected && driveStatus.data?.rootFolderId);
 
   return (
     <div className="grid gap-5">
-      <Panel
-        title="Documents"
-        description="Metadata lives here; the files themselves live in Google Drive."
-        action={
-          <Button size="sm" variant="outline" disabled title="Available once Drive is connected">
-            Upload to Drive
-          </Button>
-        }
-      >
-        {documents.data?.length ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Filename</TableHead>
-                <TableHead>Issued</TableHead>
-                <TableHead>Expires</TableHead>
-                <TableHead>Version</TableHead>
-                <TableHead>Sync</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {documents.data.map((d) => (
-                <TableRow key={d.id}>
-                  <TableCell className="font-medium">{d.title}</TableCell>
-                  <TableCell>{titleCase(d.category)}</TableCell>
-                  <TableCell className="text-xs">{d.original_filename ?? "—"}</TableCell>
-                  <TableCell>{formatDate(d.issue_date)}</TableCell>
-                  <TableCell>{formatDate(d.expiry_date)}</TableCell>
-                  <TableCell>v{d.version}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{titleCase(d.sync_status)}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <Empty
-            title="No documents linked"
-            hint="Drive upload and linking go live with the Drive integration in Phase 2.5."
-          />
-        )}
-      </Panel>
+      <DocumentsPanel
+        companyId={property.company_id}
+        entityType="properties"
+        entityId={property.id}
+        currency={currency}
+        canEdit={canEdit || canRecord}
+      />
 
       <Panel
-        title="Planned Drive structure"
-        description="Queued folder plan for this property. Nothing is created in Drive yet."
+        title="Drive structure"
+        description="Folder plan for this property, reconciled against Google Drive."
+        action={
+          canEdit ? (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={!driveReady || sync.isPending}
+              title={driveReady ? undefined : "Connect a Drive root folder in Settings first"}
+              onClick={() => sync.mutate()}
+            >
+              {sync.isPending ? "Creating…" : "Create folders in Drive"}
+            </Button>
+          ) : undefined
+        }
       >
+
         <ul className="grid gap-2 sm:grid-cols-2">
           {(folders.data?.length
             ? folders.data.map((f) => ({ path: f.path, status: f.sync_status }))
