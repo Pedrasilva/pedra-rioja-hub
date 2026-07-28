@@ -459,17 +459,20 @@ Main image, address, purchase price, total acquisition cost, current valuation, 
 
 | Phase | Scope | Exit criteria |
 | --- | --- | --- |
-| **1. Foundation** | Cloud enabled, design system, auth, `companies`/`profiles`/`user_roles`/`audit_log`, app shell + navigation, RLS baseline | A user can log in and see an empty, secured shell |
-| **2. Properties core** | Properties, units, acquisition costs, valuations, documents + storage, property dashboard (static figures) | Three real properties entered with full cost build-up |
-| **3. Bookkeeping port** | Port PSA Hub's bookkeeping module: suppliers, clients, invoices, expenses, classifications, VAT, bank accounts/transactions, `dimensions` extension point | Invoices recorded and attributed to a property |
-| **4. Banking & reconciliation** | Statement import, dedupe, rules engine, matching queue, actual cash-flow reporting | A month's statement imported and fully reconciled |
-| **5. Tenancies** | Tenants, agreements, rent schedules, indexation, rent invoicing, arrears | Rent roll generating invoices automatically |
-| **6. Financing** | Agreements, schedule generation, versioning, payment matching, debt/equity on the property dashboard | Live mortgage reproduces the bank's amortisation table |
-| **7. Projects & depreciation** | Capex projects, capitalisation into assets, depreciation schedules and postings | Depreciation run produces auditable postings |
-| **8. Forecasting & reports** | Forecast scenarios, variance, portfolio reports, exports | 12-month forecast reviewed against actuals |
-| **9. Hardening** | Period close, approvals workflow, audit review, security scan, backups | Ready for the accountant |
+| **1. Foundation** ✅ | Cloud, design system, auth, `companies`/`profiles`/`user_roles`/`settings`/`audit_log`, app shell, RLS baseline | Done |
+| **1.5 Domain model (no UI)** | Full real-estate schema (properties → units, acquisition costs, valuations, insurance, financing + versioned schedules, tenancies + rent schedules, fit-out loans, capex projects, depreciation, events), generic `dimensions` layer, Drive-first `documents`/`document_links`/`drive_folders`, dashboard views, `v_search_index` | Schema, RLS, triggers and views exist and are stable; nothing left for the UI to reshape |
+| **2. Property register UI** | Property list, property page with tabs generated from §6.5 views, timeline, documents panel, Open in Google Drive | Three real properties entered end-to-end |
+| **2.5 Google Drive integration** | Connect Drive, root folder, automatic folder provisioning, direct upload, metadata capture | Uploading in the app puts the file in the right Drive folder |
+| **3. Bookkeeping port** | Port PSA Hub's bookkeeping module unchanged + wire the dimension tagger | Invoices recorded and attributed to a property via dimensions |
+| **4. Banking & reconciliation** | Statement import, dedupe, rules engine, matching queue, actual cash flow | A month reconciled |
+| **5. Tenancies UI** | Tenants, agreements, rent roll, indexation, arrears, fit-out loans | Rent roll live |
+| **6. Financing UI** | Schedule generation, versioning, payment matching, debt/equity | Live mortgage matches the bank to the cent |
+| **7. Projects & depreciation UI** | Capex, capitalisation, depreciation runs | Auditable depreciation |
+| **8. Forecasting & reports** | Forecast scenarios, variance, portfolio reports, global search UI, exports | 12-month forecast vs. actuals |
+| **9. Hardening** | Period close, approvals, audit review, security scan, Drive sync detection, backups | Ready for the accountant |
 
-Future integration extension points prepared but not built: Google Drive backup, Gmail ingestion, Portuguese e-fatura, Open Banking, accountant exports, spreadsheet import/export. Each gets an adapter interface in `modules/bookkeeping/integrations/` with a null implementation.
+Future integration extension points prepared but not built: Drive change detection/sync, Gmail ingestion, OCR + AI summary of documents, Portuguese e-fatura, Open Banking, accountant exports. Each gets an adapter interface with a null implementation.
+
 
 ---
 
