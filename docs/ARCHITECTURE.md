@@ -319,13 +319,61 @@ Every write to financial, tenancy, financing and permission tables writes an `au
 
 ---
 
-## 6. Document storage architecture
+## 6. Documents, Google Drive, timeline, dashboards, search
 
-- One private Cloud Storage bucket, path `company/{company_id}/{entity_type}/{entity_id}/{uuid}-{filename}`.
-- `documents` holds metadata + checksum (dedupe); `document_links` attaches one document to many entities (an invoice PDF can link to a purchase invoice, a capex project and a property).
-- Upload flow: client requests a signed upload URL from a server function (role-checked) → uploads → server function records the `documents` row and links.
-- Document types: deed, IMT/stamp receipt, tenancy contract, invoice, receipt, bank statement, valuation report, insurance policy, licence, plan, photo.
-- Retention/versioning: new upload of the same doc_type for an entity supersedes rather than overwrites (`superseded_by_document_id`).
+### 6.1 Documents are first-class objects
+
+`documents` is a full business record, not a file pointer. Fields:
+
+`company_id`, `title`, `category`, `subcategory`, `doc_type`, `status` (`draft`/`active`/`superseded`/`expired`/`archived`), `issue_date`, `expiry_date`, `period`, `amount` (nullable), `currency`, `tags text[]`, `version`, `supersedes_document_id`, `uploaded_by`, `uploaded_at`, `checksum`, plus the Drive block below, plus `ocr_text` and `ai_summary` (columns created now, populated later) and `search_tsv` (generated).
+
+Direct business links are **not** columns. A document reaches property, financing, project, tenancy, tenant, supplier, client and transaction through `document_links (document_id, entity_type, entity_id, relation)` — one document, many objects, exactly as an invoice PDF belongs to a purchase invoice *and* a project *and* a property. A convenience view `v_document_links_flat` pivots the common entity types back into columns for filtering, so UI queries stay simple without denormalising the table.
+
+### 6.2 Google Drive is the repository; the app is the interface
+
+Lovable Cloud storage is **not** the long-term archive. Google Drive is the file source of truth; PostgreSQL holds metadata and relationships.
+
+Per document: `drive_file_id`, `drive_folder_id`, `drive_url`, `drive_web_view_link`, `original_filename`, `mime_type`, `size_bytes`, `drive_modified_at`, `drive_checksum`, `sync_status` (`linked`/`pending`/`missing`/`renamed`/`moved`/`deleted`/`conflict`), `last_synced_at`. `storage_path` remains nullable for the rare local fallback (a file uploaded before Drive is connected) and is reconciled later.
+
+Folder structure created and maintained beneath a user-supplied root, and fully usable outside the app:
+
+```text
+Pedra Rioja/
+  00 Company
+  01 Properties/PR001/{Acquisition, Legal, Tax, Plans, Insurance, Valuations,
+                       Financing, Tenancies, Projects, Invoices, Photos}
+  02 Suppliers   03 Tenants   04 Bank Statements   05 VAT   06 Accounting   99 Archive
+```
+
+`drive_folders` maps `(entity_type, entity_id, folder_kind)` → `drive_folder_id`, `drive_url`, `path`. Creating a property provisions `01 Properties/PR001` plus all standard subfolders; creating a financing agreement, tenancy or project provisions its subfolder *inside* that property. The property page exposes **Open in Google Drive** from `properties.drive_folder_url`. Folder templates live in a config table/constant, so the structure can evolve without a migration.
+
+Upload flow: user uploads → app resolves the destination folder from the linked entities → uploads straight to Drive → writes `documents` metadata → writes `document_links` → stores the Drive IDs → renders in-app. No duplicate long-term copy.
+
+### 6.3 Future Drive synchronisation (architecture only, not implemented)
+
+The columns above (`drive_modified_at`, `drive_checksum`, `sync_status`, `last_synced_at`) plus a `drive_sync_runs` job table and Drive `startPageToken` stored in `settings` are enough to later add: rename/move/delete detection, manual sync, linking pre-existing Drive files, and checksum-based duplicate detection. Nothing is built in Phase 1.5 beyond the schema and the folder-path planner.
+
+### 6.4 Timeline
+
+`property_events` is the chronological spine of a property: `event_date`, `event_type` (purchase, mortgage_signed, mortgage_revised, mortgage_settled, tenant_moved_in, tenant_moved_out, rent_review, insurance_renewal, tax_payment, project_started, project_completed, valuation, document_added, sold, custom), `title`, `description`, `amount`, `source_type`/`source_id`, `is_manual`.
+
+Events are generated automatically by triggers on the related modules (financing agreement created/versioned, tenancy started/ended, project started/completed, valuation recorded, document added) and can also be entered manually. Automatic events are idempotent on `(source_type, source_id, event_type)` so re-running never duplicates. The same pattern is reusable for other objects later (`entity_type` is already on the row).
+
+### 6.5 Dashboards are generated, never hardcoded
+
+`Database → views → dashboards.` No KPI is stored on a business row and no figure is computed in the UI. Phase 1.5 ships the view layer with the schema:
+
+- `v_property_acquisition_totals`, `v_property_current_valuation`, `v_property_debt_outstanding`, `v_property_occupancy`, `v_property_rent_roll`
+- `v_property_summary` — one row per property joining the above (equity = latest valuation − outstanding debt)
+- `v_portfolio_summary` — company-level aggregation
+- `v_property_timeline` — merged automatic + manual events
+
+All views are `security_invoker = on`, so RLS on the underlying tables governs them; no view can leak another company's rows.
+
+### 6.6 Global search
+
+A single `v_search_index` view unions the searchable entities (properties, documents, tenants, suppliers/clients, financing agreements, projects, tenancies, bank transactions when they exist) into `company_id, entity_type, entity_id, title, subtitle, search_text, occurred_at, url_path`, with a `tsvector`. Searching "Millennium" hits the lender field on financing agreements, its documents, schedules and transactions; "Abelheira" hits the property and everything linked to it. If the view gets slow, it is replaced by a materialised table refreshed by trigger — the query contract stays identical, so nothing above it changes.
+
 
 ---
 
