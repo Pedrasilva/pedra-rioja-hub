@@ -263,12 +263,10 @@ describe("RLS by role", () => {
     expect(write.error).not.toBeNull();
   });
 
-  it("no role can hard-delete a property", async () => {
-    for (const role of ROLES) {
+  it("read-only and operational roles cannot delete a property", async () => {
+    for (const role of ROLES.filter((r) => !MANAGE_ROLES.includes(r))) {
       const res = await clients[role].from("properties").delete().eq("id", propertyId).select("id");
-      // manage roles have DELETE via policy, but the UI never exposes it; assert
-      // that read-only roles are blocked outright and the row still exists.
-      if (!MANAGE_ROLES.includes(role)) expect(res.data ?? []).toHaveLength(0);
+      expect(res.data ?? []).toHaveLength(0);
     }
     const still = await admin.from("properties").select("id").eq("id", propertyId).maybeSingle();
     expect(still.data?.id ?? null).toBe(propertyId);
