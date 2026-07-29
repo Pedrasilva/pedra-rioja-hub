@@ -10,19 +10,44 @@ import { useServerFn } from "@tanstack/react-start";
 import type { BookkeepingServerContract } from "@/packages/bookkeeping-core/adapters";
 import {
   archiveCounterparty,
+  attachDocumentToSource,
   cancelFinancialDocument,
+  closeFinancialPeriod,
+  detachDocumentFromSource,
   createClassification,
   createCounterparty,
   createFinancialDocument,
   createFinancialPeriod,
   postFinancialDocument,
   recomputePeriodTotals,
+  reopenFinancialPeriod,
   reverseFinancialPayment,
   settleFinancialDocument,
   updateCounterparty,
   updateFinancialDocument,
   upsertBankClassificationRule,
 } from "../bookkeeping.functions";
+
+/** Evidence-linking calls, used by the host documents adapter. */
+export function usePedraRiojaAttachmentActions() {
+  const attach = useServerFn(attachDocumentToSource);
+  const detach = useServerFn(detachDocumentFromSource);
+  return {
+    attach: (data: {
+      companyId: string;
+      sourceType: string;
+      sourceId: string;
+      documentId: string;
+      relation: string;
+    }) => attach({ data: data as never }),
+    detach: (data: {
+      companyId: string;
+      sourceType: string;
+      sourceId: string;
+      documentId: string;
+    }) => detach({ data: data as never }),
+  };
+}
 
 /** Builds the contract from the host's server functions. */
 export function usePedraRiojaServerContract(): BookkeepingServerContract {
@@ -40,6 +65,10 @@ export function usePedraRiojaServerContract(): BookkeepingServerContract {
     upsertBankRule: useServerFn(upsertBankClassificationRule),
     createPeriod: useServerFn(createFinancialPeriod),
     recomputePeriodTotals: useServerFn(recomputePeriodTotals),
+    closePeriod: useServerFn(closeFinancialPeriod),
+    reopenPeriod: useServerFn(reopenFinancialPeriod),
+    attachDocument: useServerFn(attachDocumentToSource),
+    detachDocument: useServerFn(detachDocumentFromSource),
   };
 
   const run =
@@ -61,5 +90,7 @@ export function usePedraRiojaServerContract(): BookkeepingServerContract {
     upsertBankRule: run(call.upsertBankRule),
     createPeriod: run(call.createPeriod),
     recomputePeriodTotals: run(call.recomputePeriodTotals),
+    closePeriod: run(call.closePeriod),
+    reopenPeriod: run(call.reopenPeriod),
   };
 }

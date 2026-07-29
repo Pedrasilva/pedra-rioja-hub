@@ -94,10 +94,21 @@ export type DocumentsAdapter = {
     sourceType: SourceType;
     sourceId: string | undefined;
   }) => { files: LinkedFile[]; isLoading: boolean };
+  /**
+   * Evidence the host is willing to offer for linking. The core renders the
+   * picker; the host decides what is visible and how it is stored.
+   */
+  useAvailableFiles?: (search: string) => { files: LinkedFile[]; isLoading: boolean };
   linkExisting?: (params: {
     sourceType: SourceType;
     sourceId: string;
+    documentId: string;
     kind: LinkedFile["kind"];
+  }) => void | Promise<void>;
+  unlink?: (params: {
+    sourceType: SourceType;
+    sourceId: string;
+    documentId: string;
   }) => void | Promise<void>;
   upload?: (params: {
     sourceType: SourceType;
@@ -241,6 +252,8 @@ export type BookkeepingServerContract = {
   upsertBankRule: (input: unknown) => Promise<unknown>;
   createPeriod: (input: unknown) => Promise<unknown>;
   recomputePeriodTotals: (input: unknown) => Promise<unknown>;
+  closePeriod: (input: unknown) => Promise<unknown>;
+  reopenPeriod: (input: unknown) => Promise<unknown>;
 };
 
 /* -------------------------------------------------------------- host */

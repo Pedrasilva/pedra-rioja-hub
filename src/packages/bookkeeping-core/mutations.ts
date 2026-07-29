@@ -97,3 +97,19 @@ export function useRecomputePeriodTotals() {
     "Period totals recomputed",
   );
 }
+
+export function useClosePeriod() {
+  return useContractMutation(
+    "closePeriod",
+    ["financial-periods", "financial-period-totals", "financial-documents"],
+    "Period closed",
+  );
+}
+
+export function useReopenPeriod() {
+  return useContractMutation(
+    "reopenPeriod",
+    ["financial-periods", "financial-period-totals", "financial-documents"],
+    "Period reopened",
+  );
+}
