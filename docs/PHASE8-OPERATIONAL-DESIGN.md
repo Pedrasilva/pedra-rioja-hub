@@ -3,6 +3,11 @@
 Status: **product design, planning only**, written 2026-07-29.
 No code, schema or migration is changed by this document.
 
+> **§5C is a frozen architectural contract for Phase 8A.** It is binding during
+> implementation, takes precedence over the rest of this document, and may not
+> be altered without an explicit decision to unfreeze it.
+
+
 Reference documents this one obeys rather than repeats:
 
 | Document | Role |
