@@ -62,6 +62,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "audit_log_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       bank_account_documents: {
@@ -116,6 +123,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_account_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "bank_account_documents_document_id_fkey"
@@ -200,6 +214,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -312,6 +333,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bank_classification_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "bank_classification_rules_counterparty_id_fkey"
             columns: ["counterparty_id"]
             isOneToOne: false
@@ -324,6 +352,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_classification_rules_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "bank_classification_rules_property_id_fkey"
@@ -462,6 +497,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bank_reconciliation_matches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
             columns: ["entry_id"]
             isOneToOne: false
@@ -570,6 +612,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_statement_import_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "bank_statement_import_rows_duplicate_of_transaction_id_fkey"
@@ -711,6 +760,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bank_statement_imports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "bank_statement_imports_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -827,6 +883,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bank_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "bank_transactions_import_id_fkey"
             columns: ["import_id"]
             isOneToOne: false
@@ -888,6 +951,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transfers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "bank_transfers_from_account_id_fkey"
@@ -1011,11 +1081,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "capex_project_costs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "capex_project_costs_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capex_project_costs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
         ]
       }
@@ -1102,6 +1186,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capex_projects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "capex_projects_property_id_fkey"
@@ -1312,6 +1403,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "cash_flow_entries_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -1324,6 +1422,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "cash_flow_entries_property_id_fkey"
@@ -1525,6 +1630,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "cash_flow_recurring_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "cash_flow_recurring_rules_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -1537,6 +1649,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "cash_flow_recurring_rules_property_id_fkey"
@@ -1629,6 +1748,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_scenarios_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -1789,6 +1915,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "counterparties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "counterparties_default_classification_fk"
             columns: ["default_classification_id"]
             isOneToOne: false
@@ -1864,11 +1997,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "depreciation_assets_capex_project_id_fkey"
+            columns: ["capex_project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
             foreignKeyName: "depreciation_assets_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "depreciation_assets_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "depreciation_assets_property_id_fkey"
@@ -1961,6 +2108,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "depreciation_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       dimension_values: {
@@ -2013,6 +2167,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dimension_values_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "dimension_values_dimension_id_fkey"
@@ -2074,6 +2235,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "dimensions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       document_links: {
@@ -2120,6 +2288,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "document_links_document_id_fkey"
@@ -2260,6 +2435,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "documents_supersedes_document_id_fkey"
             columns: ["supersedes_document_id"]
             isOneToOne: false
@@ -2327,6 +2509,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drive_folders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -2413,6 +2602,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_classifications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "financial_classifications_parent_id_fkey"
@@ -2515,6 +2711,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_document_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financial_document_lines_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -2522,11 +2725,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_document_lines_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
+          },
+          {
             foreignKeyName: "financial_document_lines_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "financial_document_lines_property_id_fkey"
@@ -2737,11 +2961,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financial_documents_corrects_document_id_fkey"
             columns: ["corrects_document_id"]
             isOneToOne: false
             referencedRelation: "financial_documents"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_corrects_document_id_fkey"
+            columns: ["corrects_document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_corrects_document_id_fkey"
+            columns: ["corrects_document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
           },
           {
             foreignKeyName: "financial_documents_counterparty_id_fkey"
@@ -2770,6 +3015,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "financial_documents_property_id_fkey"
@@ -2918,11 +3170,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financial_payments_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "financial_documents"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_payments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "financial_payments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
           },
           {
             foreignKeyName: "financial_payments_entry_id_fkey"
@@ -3022,6 +3295,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_period_totals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financial_period_totals_period_id_fkey"
             columns: ["period_id"]
             isOneToOne: false
@@ -3086,6 +3366,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_periods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -3195,6 +3482,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financing_agreements_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -3301,6 +3595,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_import_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "financing_schedule_import_rows_import_id_fkey"
@@ -3421,6 +3722,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financing_schedule_imports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financing_schedule_imports_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -3524,6 +3832,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "financing_schedule_rows_superseded_by_version_id_fkey"
@@ -3631,6 +3946,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_schedule_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -3772,6 +4094,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       property_acquisition_costs: {
@@ -3836,6 +4165,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_acquisition_costs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "property_acquisition_costs_property_id_fkey"
@@ -3932,6 +4268,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "property_events_property_id_fkey"
@@ -4033,6 +4376,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "property_insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "property_insurance_policies_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -4126,6 +4476,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "property_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "property_units_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -4214,6 +4571,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_valuations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "property_valuations_property_id_fkey"
@@ -4312,6 +4676,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "rent_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "rent_schedules_tenancy_id_fkey"
             columns: ["tenancy_id"]
             isOneToOne: false
@@ -4361,6 +4732,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "settings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -4459,6 +4837,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenancy_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "tenancy_agreements_property_id_fkey"
@@ -4574,6 +4959,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tenant_fitout_loan_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "tenant_fitout_loan_rows_loan_id_fkey"
             columns: ["loan_id"]
             isOneToOne: false
@@ -4656,6 +5048,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenant_fitout_loans_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "tenant_fitout_loans_property_id_fkey"
@@ -4773,6 +5172,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tenants_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       transaction_dimensions: {
@@ -4830,6 +5236,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "transaction_dimensions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "transaction_dimensions_dimension_id_fkey"
             columns: ["dimension_id"]
             isOneToOne: false
@@ -4878,6 +5291,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_roles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
     }
@@ -4910,6 +5330,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -4971,6 +5398,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "cash_flow_entries_property_id_fkey"
@@ -5049,6 +5483,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_reconciliation_matches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "bank_reconciliation_matches_entry_id_fkey"
@@ -5172,11 +5613,100 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bank_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "bank_transactions_import_id_fkey"
             columns: ["import_id"]
             isOneToOne: false
             referencedRelation: "bank_statement_imports"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_bookkeeping_overview: {
+        Row: {
+          cancelled_count: number | null
+          company_id: string | null
+          draft_count: number | null
+          outstanding_client_amount: number | null
+          outstanding_client_count: number | null
+          outstanding_supplier_amount: number | null
+          outstanding_supplier_count: number | null
+          overdue_amount: number | null
+          overdue_count: number | null
+          posted_count: number | null
+        }
+        Relationships: []
+      }
+      v_capex_summary: {
+        Row: {
+          actual_amount: number | null
+          actual_end_date: string | null
+          budget_amount: number | null
+          code: string | null
+          committed_amount: number | null
+          company_id: string | null
+          currency: string | null
+          forecast_amount: number | null
+          name: string | null
+          project_id: string | null
+          project_type: string | null
+          property_code: string | null
+          property_id: string | null
+          property_name: string | null
+          remaining_budget: number | null
+          spend_pct: number | null
+          start_date: string | null
+          status: string | null
+          target_end_date: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capex_projects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capex_projects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "capex_projects_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capex_projects_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "capex_projects_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "capex_projects_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
           },
         ]
       }
@@ -5271,6 +5801,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "cash_flow_entries_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
@@ -5283,6 +5820,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "capex_projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "cash_flow_entries_property_id_fkey"
@@ -5374,6 +5918,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "cash_flow_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "cash_flow_entries_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -5400,6 +5951,147 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_property_summary"
             referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_counterparty_ageing: {
+        Row: {
+          company_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          currency: string | null
+          direction: string | null
+          document_count: number | null
+          due_1_30: number | null
+          due_31_60: number | null
+          due_61_90: number | null
+          due_over_90: number | null
+          not_due: number | null
+          oldest_due_date: string | null
+          outstanding_amount: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_debt_maturity: {
+        Row: {
+          agreement_count: number | null
+          company_id: string | null
+          maturity_year: number | null
+          outstanding_principal: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      v_debt_summary: {
+        Row: {
+          agreement_count: number | null
+          company_id: string | null
+          currency: string | null
+          earliest_maturity: string | null
+          interest_paid: number | null
+          latest_maturity: string | null
+          lender: string | null
+          next_due_date: string | null
+          original_principal: number | null
+          outstanding_principal: number | null
+          remaining_total: number | null
+          weighted_rate: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      v_document_journal: {
+        Row: {
+          atcud: string | null
+          classification_code: string | null
+          classification_name: string | null
+          company_id: string | null
+          counterparty_name: string | null
+          counterparty_nif: string | null
+          currency: string | null
+          description: string | null
+          direction: string | null
+          doc_type: string | null
+          document_id: string | null
+          document_number: string | null
+          due_date: string | null
+          gross_amount: number | null
+          issue_date: string | null
+          line_no: number | null
+          net_amount: number | null
+          payment_state: string | null
+          project_code: string | null
+          property_code: string | null
+          series: string | null
+          status: string | null
+          vat_amount: number | null
+          vat_code: string | null
+          vat_rate: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -5435,6 +6127,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "financing_agreements_property_id_fkey"
@@ -5528,6 +6227,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financing_schedule_rows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financing_schedule_versions_agreement_id_fkey"
             columns: ["agreement_id"]
             isOneToOne: false
@@ -5540,6 +6246,94 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_financing_agreement_summary"
             referencedColumns: ["agreement_id"]
+          },
+        ]
+      }
+      v_income_statement: {
+        Row: {
+          bucket: string | null
+          cash_flow_category: string | null
+          classification_code: string | null
+          classification_id: string | null
+          classification_name: string | null
+          company_id: string | null
+          counterparty_name: string | null
+          currency: string | null
+          direction: string | null
+          document_id: string | null
+          document_number: string | null
+          gross_amount: number | null
+          issue_date: string | null
+          month: string | null
+          nature: string | null
+          net_amount: number | null
+          project_id: string | null
+          property_id: string | null
+          vat_amount: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_document_lines_classification_id_fkey"
+            columns: ["classification_id"]
+            isOneToOne: false
+            referencedRelation: "financial_classifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_document_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -5561,6 +6355,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       v_property_acquisition_totals: {
@@ -5579,6 +6380,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       v_property_current_valuation: {
@@ -5596,6 +6404,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_valuations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "property_valuations_property_id_fkey"
@@ -5643,6 +6458,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financing_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
             foreignKeyName: "financing_agreements_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -5688,6 +6510,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       v_property_rent_roll: {
@@ -5704,6 +6533,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenancy_agreements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "tenancy_agreements_property_id_fkey"
@@ -5766,6 +6602,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
         ]
       }
       v_property_timeline: {
@@ -5791,6 +6634,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
           {
             foreignKeyName: "property_events_property_id_fkey"
@@ -5906,6 +6756,31 @@ export type Database = {
           variance: number
         }[]
       }
+      close_financial_period: {
+        Args: { _notes?: string; _period_id: string }
+        Returns: {
+          closed_at: string | null
+          closed_by: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          period_type: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "financial_periods"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       commit_bank_statement_import: {
         Args: { _import_id: string }
         Returns: Json
@@ -5919,6 +6794,21 @@ export type Database = {
         Returns: Json
       }
       current_company_id: { Args: never; Returns: string }
+      executive_alerts: {
+        Args: { _company_id: string }
+        Returns: {
+          amount: number
+          category: string
+          detail: string
+          due_date: string
+          entity_id: string
+          entity_type: string
+          key: string
+          severity: string
+          title: string
+        }[]
+      }
+      executive_snapshot: { Args: { _company_id: string }; Returns: Json }
       generate_company_cash_flow: {
         Args: { _company_id: string; _through: string }
         Returns: number
@@ -5946,6 +6836,17 @@ export type Database = {
         Args: { _company_id: string; _user_id: string }
         Returns: boolean
       }
+      liquidity_forecast: {
+        Args: { _company_id: string; _scenario?: string }
+        Returns: {
+          horizon_date: string
+          horizon_days: number
+          inflows: number
+          net_movement: number
+          outflows: number
+          projected_balance: number
+        }[]
+      }
       mark_internal_transfer: {
         Args: {
           _from_transaction_id: string
@@ -5957,6 +6858,29 @@ export type Database = {
       mark_statement_batch_reconciled: {
         Args: { _import_id: string; _override_reason?: string }
         Returns: Json
+      }
+      property_profitability: {
+        Args: { _company_id: string; _from: string; _to: string }
+        Returns: {
+          acquisition_total: number
+          capex_spend: number
+          current_valuation: number
+          financing_costs: number
+          gross_yield: number
+          net_cash_flow: number
+          net_operating_income: number
+          net_yield: number
+          operating_costs: number
+          other_income: number
+          outstanding_debt: number
+          property_code: string
+          property_id: string
+          property_name: string
+          rental_income: number
+          roi: number
+          status: string
+          taxes: number
+        }[]
       }
       recompute_document_payment_state: {
         Args: { _document_id: string }
@@ -5988,6 +6912,31 @@ export type Database = {
           _title: string
         }
         Returns: undefined
+      }
+      reopen_financial_period: {
+        Args: { _period_id: string; _reason: string }
+        Returns: {
+          closed_at: string | null
+          closed_by: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          period_type: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "financial_periods"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       reverse_bank_match: {
         Args: { _match_id: string; _reason: string }
@@ -6062,6 +7011,18 @@ export type Database = {
       sync_source_settlement: {
         Args: { _entry_id: string }
         Returns: undefined
+      }
+      vat_summary: {
+        Args: { _company_id: string; _from: string; _to: string }
+        Returns: {
+          direction: string
+          document_count: number
+          gross_amount: number
+          net_amount: number
+          vat_amount: number
+          vat_code: string
+          vat_rate: number
+        }[]
       }
     }
     Enums: {
