@@ -839,9 +839,10 @@ units, reuse of recurring rules.
 *Theme: authority, and the front of the lifecycle.*
 
 1. **Team management**: invite, assign role, revoke (P0).
-2. **Generic approval record** plus authorisation thresholds and time-boxed
-   delegation, applied to supplier invoices, maintenance quotations, capex
-   commitments and reconciliation.
+2. **Generalise the approval record** introduced narrowly in 8A: authorisation
+   thresholds by type, time-boxed delegation, and application to supplier
+   invoices, maintenance quotations and reconciliation as well as commitments.
+
 3. **Approvals awaiting me** on the dashboard; **operations work list** for
    managers.
 4. **Payment run**: batch approved, due, outstanding items into one settlement
@@ -875,9 +876,12 @@ platform is safe to depend on entirely.
 
 ### 11.1 Ordering rationale
 
-- 8A first because **committed spend is the biggest hole in the cash-flow
-  promise**, and because maintenance is the highest-frequency activity still
-  outside the product.
+- 8A first, and **commitment-first within 8A**, because committed spend is the
+  biggest hole in the cash-flow promise and because every later operational
+  feature (maintenance, insurance, utilities, service contracts, professional
+  services, taxes) would otherwise invent its own route to cash flow. One
+  pathway built once is cheaper than six built separately and reconciled later.
+
 - 8B second because rent indexation loses money silently every month it is
   missing, and because compliance expiry is the highest-severity, lowest-effort
   risk.
