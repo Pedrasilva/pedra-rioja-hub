@@ -708,6 +708,212 @@ The model is not to be redesigned during implementation.
 ---
 
 
+## 5D. FROZEN ARCHITECTURAL CONTRACT — Canonical Financial Lifecycle
+
+**Frozen for Phase 8A and all later phases.** §5D defines how records move
+between the existing financial domains. It does not override the ownership
+rules frozen in §5C; where §5D describes ownership it restates §5C rather than
+amending it.
+
+### 5D.1 Canonical lifecycle
+
+Every expenditure-side financial obligation must follow this canonical
+progression:
+
+```text
+Operational Event
+  → Commitment
+    → Committed Cash Flow
+      → Financial Document
+        → Payment
+          → Bank Transaction
+            → Reconciliation
+```
+
+Each stage owns a different business fact.
+
+The lifecycle is directional. Earlier-stage modules may create or reference
+later-stage records only through approved domain contracts, adapters or server
+functions.
+
+No module may bypass ownership boundaries by writing directly into another
+module's records.
+
+### 5D.2 Stage ownership
+
+**Operational Event.** Examples include: capex project; maintenance job;
+insurance renewal; service contract; utility obligation; tax instalment;
+compliance obligation; procurement request.
+
+The operational record owns: business context; operational status; dates and
+deadlines; responsible parties; attribution context; supporting evidence.
+
+It does not own expected expenditure, invoice amounts, payments, bank
+transactions or reconciliation.
+
+**Commitment.** The commitment owns: the authorised future obligation;
+counterparty; authorised and committed values; schedule versions; approval
+state; approved variations; remaining commitment; drawdown capacity.
+
+It does not own accounting documents, payments or bank activity.
+
+**Committed Cash Flow.** Cash flow owns: the projection of approved commitment
+schedule lines; inclusion or exclusion from forecasts; expected timing;
+forecast state.
+
+It does not own the underlying obligation and cannot directly edit
+source-owned commitment projections.
+
+**Financial Document.** Bookkeeping owns: supplier invoices; credit notes;
+accounting values; VAT; document lifecycle; document lines; accounting
+classification.
+
+It does not own the original operational obligation or commitment authority.
+
+**Payment.** Bookkeeping owns: recorded settlement of financial documents;
+payment allocations; payment reversals; document settlement state.
+
+A recorded payment is not, by itself, proof that money moved through a bank
+account.
+
+**Bank Transaction.** Banking owns: imported or recorded bank movements;
+transaction identity; account balance effects; duplicate detection;
+transaction metadata.
+
+A bank transaction must not alter accounting source values.
+
+**Reconciliation.** Reconciliation owns: matching; allocation; partial
+matching; split matching; transfer matching; reversal lineage; reconciliation
+status.
+
+Reconciliation must never mutate source amounts in commitments, bookkeeping or
+banking.
+
+### 5D.3 No direct jumps
+
+The following direct actions are prohibited:
+
+- an operational record creating or owning an invoice;
+- an operational record creating a payment;
+- an operational record creating a bank transaction;
+- a capex project storing actual expenditure totals;
+- a maintenance job storing an independent expected cost;
+- an obligation generating committed cash flow without a commitment;
+- a commitment creating or modifying a bookkeeping document;
+- a commitment creating a bank transaction;
+- a cash-flow entry creating an invoice or payment;
+- a payment creating or modifying a bank transaction;
+- reconciliation modifying invoice, payment or bank-transaction values.
+
+Where two stages need to be linked, the relationship must be explicit and
+auditable.
+
+### 5D.4 Permitted links
+
+The design may support explicit links including:
+
+- operational record → commitment;
+- commitment schedule line → committed cash-flow entry;
+- commitment → financial-document drawdown;
+- financial document → payment;
+- payment → bank transaction through reconciliation;
+- bank transaction → reconciliation match;
+- document or evidence link → any authorised domain record.
+
+These links do not transfer ownership.
+
+### 5D.5 Drawdowns
+
+A financial document may consume one or more commitments through drawdown
+allocations. A commitment may be consumed by multiple financial documents.
+
+Drawdowns:
+
+- allocate commitment consumption;
+- support partial allocation;
+- support retained amounts;
+- support approved overrun or variation;
+- preserve reversal lineage;
+- do not change invoice amounts;
+- do not change payment amounts;
+- do not change bank-transaction amounts.
+
+The committed, invoiced, paid and remaining values must be derived from the
+relevant source records and allocations.
+
+### 5D.6 Exceptions
+
+A stage may be absent only where the business event genuinely does not require
+it. Examples:
+
+- a forecast scenario may exist without an operational event or commitment;
+- an unplanned invoice may exist without a prior commitment;
+- a bank fee may be imported before a bookkeeping document exists;
+- an opening balance may not have a complete historical lifecycle.
+
+Such exceptions must be explicit and must not become shortcuts for normal
+workflows.
+
+The absence of an earlier stage must not cause a later module to assume
+ownership of that earlier business fact.
+
+### 5D.7 Income-side lifecycle
+
+This section governs the expenditure-side lifecycle.
+
+Income-side workflows, including lease administration, rent schedules, tenant
+billing and receipts, will be defined separately.
+
+Do not force income-side events into the expenditure commitment model unless
+explicitly approved in a later frozen design decision.
+
+### 5D.8 Audit and immutability
+
+Every transition or link between lifecycle stages must be auditable.
+
+Historical, posted, paid, reconciled or superseded records must remain
+immutable according to their owning module's lifecycle.
+
+Corrections must use: reversal; cancellation; superseding version; approved
+variation; new allocation.
+
+Do not update historical source records in place merely to align later stages.
+
+### 5D.9 Enforcement
+
+Implementations must use:
+
+- foreign-key or typed reference contracts where appropriate;
+- server-side validation;
+- source-ownership guards;
+- fail-closed permissions;
+- idempotent synchronisation;
+- audit triggers;
+- reversal rather than deletion.
+
+UI-level restrictions alone are not sufficient.
+
+### 5D.10 Implementation stop condition
+
+Before implementing Phase 8A, confirm that the commitment, cash-flow,
+bookkeeping, banking and reconciliation integrations can preserve this
+lifecycle.
+
+Stop and report before creating migrations if implementation would require:
+
+- direct cross-module writes;
+- duplicated financial ownership;
+- mutable historical source records;
+- weakening a source-ownership guard;
+- bypassing commitment approval;
+- storing derived totals as competing sources of truth.
+
+---
+
+
+
+
+
 
 
 ## 6. Team, roles and approvals
