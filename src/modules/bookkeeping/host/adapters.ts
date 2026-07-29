@@ -6,7 +6,7 @@
  * transactions, cash-flow ledger).
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import type {
@@ -89,12 +89,33 @@ export function createDimensionAdapter(companyId: string | undefined): Dimension
 
 /* ---------------------------------------------------------- documents */
 
+export type AttachmentActions = {
+  attach: (data: {
+    companyId: string;
+    sourceType: string;
+    sourceId: string;
+    documentId: string;
+    relation: string;
+  }) => Promise<unknown>;
+  detach: (data: {
+    companyId: string;
+    sourceType: string;
+    sourceId: string;
+    documentId: string;
+  }) => Promise<unknown>;
+};
+
 export function createDocumentsAdapter(
   companyId: string | undefined,
   canRecord: boolean,
+  actions?: AttachmentActions,
+  queryClient?: QueryClient,
 ): DocumentsAdapter {
+  const invalidate = () =>
+    void queryClient?.invalidateQueries({ queryKey: ["bk-linked-files"] });
+
   return {
-    capabilities: { canLink: canRecord, canUpload: false },
+    capabilities: { canLink: canRecord && Boolean(actions), canUpload: false },
     useLinkedFiles: ({ sourceType, sourceId }) => {
       const query = useQuery({
         queryKey: ["bk-linked-files", sourceType, sourceId],
@@ -132,6 +153,51 @@ export function createDocumentsAdapter(
       });
       return { files: query.data ?? [], isLoading: query.isLoading };
     },
+    /** Company documents the user may attach as evidence. */
+    useAvailableFiles: (search: string) => {
+      const query = useQuery({
+        queryKey: ["bk-available-files", companyId, search],
+        enabled: Boolean(companyId),
+        queryFn: async () => {
+          let q = supabase
+            .from("documents")
+            .select("id, title, status, drive_web_view_link")
+            .eq("company_id", companyId!)
+            .is("deleted_at", null)
+            .order("created_at", { ascending: false })
+            .limit(25);
+          if (search.trim()) q = q.ilike("title", `%${search.trim()}%`);
+          const { data, error } = await q;
+          if (error) throw error;
+          return (data ?? []).map((d) => ({
+            id: d.id,
+            title: d.title,
+            kind: "supporting" as const,
+            url: d.drive_web_view_link,
+            status: d.status,
+          }));
+        },
+      });
+      return { files: query.data ?? [], isLoading: query.isLoading };
+    },
+    linkExisting: actions
+      ? async ({ sourceType, sourceId, documentId, kind }) => {
+          await actions.attach({
+            companyId: companyId!,
+            sourceType,
+            sourceId,
+            documentId,
+            relation: kind,
+          });
+          invalidate();
+        }
+      : undefined,
+    unlink: actions
+      ? async ({ sourceType, sourceId, documentId }) => {
+          await actions.detach({ companyId: companyId!, sourceType, sourceId, documentId });
+          invalidate();
+        }
+      : undefined,
   };
 }
 

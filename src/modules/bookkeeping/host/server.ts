@@ -67,8 +67,6 @@ export function usePedraRiojaServerContract(): BookkeepingServerContract {
     recomputePeriodTotals: useServerFn(recomputePeriodTotals),
     closePeriod: useServerFn(closeFinancialPeriod),
     reopenPeriod: useServerFn(reopenFinancialPeriod),
-    attachDocument: useServerFn(attachDocumentToSource),
-    detachDocument: useServerFn(detachDocumentFromSource),
   };
 
   const run =
