@@ -444,7 +444,7 @@ export const attachDocumentToSource = createServerFn({ method: "POST" })
           relation: data.relation,
           created_by: context.userId,
         },
-        { onConflict: "document_id,entity_type,entity_id" },
+        { onConflict: "document_id,entity_type,entity_id,relation" },
       )
       .select("id")
       .single();
