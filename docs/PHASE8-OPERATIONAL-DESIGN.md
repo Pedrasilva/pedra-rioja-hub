@@ -200,26 +200,30 @@ Classification key: **Core (Phase 8)** · **Later** · **Out of scope**.
 | **Investment analysis** | Already solved | Yield, ROI, IRR (XIRR) ship in reporting. Cash-on-cash, DSCR and LTV are listed P1 additions to the same report — extend, do not build. |
 | **Portfolio strategy** | Out of scope | Hold/sell/refinance strategy is a boardroom judgement informed by the reporting the product already produces. Encoding it would be modelling opinion, not fact. |
 
-### 2.1 The three genuinely new record types
+### 2.1 The genuinely new record types
 
-Everything classified Core above collapses into **three new owned records** plus
+Everything classified Core above collapses into **four new owned records** plus
 extensions of existing ones. This matters: it is the measure of whether Phase 8
 respects the architecture.
 
-1. **Maintenance job** — a dated unit of work on a property/unit, with a
-   contractor (counterparty), a status, optional quoted amount, and links to
-   evidence and to the resulting financial document. Owns *the work*, never
-   *the money*.
-2. **Obligation** — a recurring or dated compliance/certificate item on a
+1. **Commitment** — a promise to pay a known counterparty a known amount on a
+   known future date, made before any invoice exists. Owns *the promise*, never
+   *the invoice*, *the payment* or *the work*. This is the record Phase 8A is
+   built around; see §5B.
+2. **Maintenance job** — a dated unit of work on a property/unit, with a
+   contractor (counterparty), a status, and links to evidence. Owns *the work*,
+   never *the money* — when the work is ordered it raises a commitment.
+3. **Obligation** — a recurring or dated compliance/certificate item on a
    property, company or agreement, with a due date, responsible role and
    evidence document. Owns *the deadline*, never *the document* (Drive) or
-   *the cost* (bookkeeping).
-3. **Pipeline deal** — a pre-property opportunity with a stage, indicative
+   *the cost* (a commitment, then bookkeeping).
+4. **Pipeline deal** — a pre-property opportunity with a stage, indicative
    figures and a due-diligence checklist. Owns *the intent*, and is converted
    into a property rather than duplicated as one.
 
 Everything else in Phase 8 is a screen, a work list, an alert, or a field on a
 table that already exists.
+
 
 ---
 
@@ -320,6 +324,298 @@ dependencies, contractor time tracking. Those are construction-management tools;
 this company commissions works, it does not execute them.
 
 ---
+
+## 5B. The commitment layer — refined Phase 8A design
+
+Phase 8A is redesigned around a single idea: **the commitment is the primary
+operational record of intended expenditure.** Maintenance jobs, service
+contracts, insurance policies, professional engagements and capex orders are not
+separate financial mechanisms — they are different *reasons* for a commitment.
+Building the commitment first means each of those later features is a thin
+descriptive record plus a link, not a new money pathway.
+
+Nothing in this section is implemented yet. No table, view, RPC or migration is
+created by this document.
+
+### 5B.1 What a commitment is, and what it is not
+
+A commitment is a **promise to pay**: a counterparty, an amount, an expected
+date or schedule, a reason, and an authority. It exists in the window between
+"we intend to spend this" (forecast) and "we have been invoiced" (financial
+document).
+
+| A commitment **is** | A commitment **is not** |
+| --- | --- |
+| The company's own record of an order, contract, engagement, policy or accepted quotation | An invoice, a credit note or any bookkeeping document |
+| The authority under which future money may leave | A payment or a bank movement |
+| The origin of *committed* cash-flow visibility | A stored cash-flow figure |
+| A container for a schedule of expected instalments | A general ledger or an accrual |
+| Attributable to a property, unit or project through dimensions | A real-estate foreign key inside bookkeeping |
+
+The distinction that keeps principle 10 (never count twice) intact: a commitment
+states what is **still owed**; a financial document states what has been
+**billed**. The two never sum. Documents *draw down* commitments.
+
+### 5B.2 Commitment types
+
+One table, one lifecycle, one approval mechanism, typed by purpose:
+
+| Type | Typical origin | Typical shape | Usually attributed to |
+| --- | --- | --- | --- |
+| `capex` | Contractor contract, works order, architect appointment | Milestone schedule | Project + property |
+| `maintenance` | Accepted repair quotation | Single amount, sometimes staged | Property/unit + job |
+| `professional_services` | Engagement letter — legal, tax, valuation, agency | Fixed fee or milestones | Company, property or project |
+| `insurance` | Annual policy | Annual or instalment schedule | Property, or company for portfolio cover |
+| `utilities` | Supply contract | Recurring estimate, variable actuals | Property/unit |
+| `tax` | Assessment or self-assessment obligation (IMI, IMT, IRC, Stamp Duty) | One or more dated instalments | Property or company |
+| `service_contract` | Lift, cleaning, security, alarm, gardening | Recurring fixed amount, term dates | Property |
+| `other` | Anything genuinely operational and promised | Free | Any |
+
+Types differ only in defaults, labels and reporting bucket. They do **not**
+differ in lifecycle, ownership or accounting behaviour — that uniformity is the
+whole benefit.
+
+### 5B.3 Ownership
+
+| Fact | Owner | Everyone else |
+| --- | --- | --- |
+| The promise, its amount, schedule and status | **Commitment** | References it |
+| The work being done | Maintenance job / capex project | Links to the commitment |
+| The supplier identity | `counterparties` (bookkeeping) | Commitment holds the id |
+| The invoice, VAT and classification | `financial_documents` + lines | Commitment is drawn down, never restated |
+| The payment | Settlement records | Commitment shows remaining balance |
+| The bank line | `bank_transactions` | Reconciliation links through the document |
+| The evidence file | Google Drive, via the existing evidence adapter | Commitment stores the link only |
+| Committed exposure figures | **Nobody** — derived in views | Dashboard, reports, cash flow read the view |
+
+The commitment owns **exactly one number**: the amount promised (with its
+schedule). Every other number about it — invoiced to date, paid to date,
+remaining, overrun against budget — is computed.
+
+### 5B.4 Lifecycle
+
+```text
+   draft ──▶ pending_approval ──▶ approved ──▶ active
+                    │                 │           │
+                    ▼                 ▼           ├─▶ partially_drawn
+                rejected          cancelled       ├─▶ fully_drawn ──▶ closed
+                                                  └─▶ cancelled (with reason)
+```
+
+| Status | Meaning | Cash-flow effect | Editable |
+| --- | --- | --- | --- |
+| `draft` | Being prepared | none (invisible to reports, principle 9) | freely |
+| `pending_approval` | Submitted for authority | none | no — withdraw to edit |
+| `approved` | Authority granted, not yet issued | none | amount locked |
+| `active` | Issued to the counterparty; the company is bound | **committed** for the undrawn balance | schedule may be *revised*, creating a new version |
+| `partially_drawn` | Some invoices received | committed for the remainder only | as active |
+| `fully_drawn` | Invoiced in full | none remaining | no |
+| `closed` | Complete and settled, or deliberately closed with a balance released | none | no |
+| `cancelled` | Withdrawn before completion, with reason and author | none | no |
+| `rejected` | Approval refused, with reason | none | no |
+
+Consistent with principle 3, no status transition rewrites history: revisions
+close the current schedule version and open a new one for future instalments
+only, exactly as financing schedule versioning already works. Drawn, invoiced or
+reconciled instalments are immutable.
+
+### 5B.5 Approval requirements
+
+Approval is what makes a commitment meaningful; without it the record is a note.
+The generic approval mechanism proposed in §6 becomes a Phase 8A dependency
+rather than a Phase 8C nicety — but only in its minimal form.
+
+- Every commitment above a configurable company threshold requires approval by a
+  user holding the `approver` (or `owner`) role before it can become `active`.
+- Below the threshold, `manager` may activate directly; the activation is still
+  recorded as an event with author and timestamp.
+- Approval records the approver, timestamp, the amount approved and any
+  condition. Approving a *revision* upward above the threshold requires a fresh
+  approval; a downward revision does not.
+- Approval never touches accounting. A commitment that is approved has still
+  posted nothing.
+- Rejection is an event with a reason; the commitment does not disappear.
+
+This also gives the `approver` role — which currently exists in the enum but is
+enforced nowhere — its first real duty.
+
+### 5B.6 Relationship with projects
+
+**Projects consume commitments; they do not own expenditure.**
+
+- A capex project owns its **budget** (by cost category), its phases, its
+  responsible person and its status. It owns no spend figure.
+- Every intended cost on a project is a commitment carrying that `project_id`.
+- `v_capex_summary` becomes fully derivable and honest:
+  - *budget* — from the project's budget lines;
+  - *committed* — sum of undrawn balances of active commitments on the project;
+  - *invoiced* — sum of posted documents attributed to the project via
+    dimensions;
+  - *paid* — sum of settlements against those documents;
+  - *remaining budget* — budget − (committed + invoiced), never double counted.
+- Overrun alerts fire on the derived figure, so they fire *when the order is
+  placed*, not months later when the invoice arrives. This is the single
+  biggest practical gain of the commitment-first model.
+- On completion, the capitalised total available to book value and depreciation
+  is the invoiced (not committed) total, so nothing is capitalised on a promise.
+
+### 5B.7 Relationship with counterparties
+
+- A commitment must reference a `counterparties` row — the same supplier record
+  bookkeeping uses. There is no second supplier list.
+- The contractor overlay (trade, service area, insurance expiry) proposed for
+  Phase 8A remains an extension of `counterparties`, not a new entity.
+- Counterparty exposure — total undrawn commitments plus unpaid posted documents
+  — becomes a derived figure on the counterparty screen, and a genuinely new
+  piece of management information the company does not have today.
+- A commitment may be raised against a counterparty created inline during
+  capture, so the ten-second flow survives.
+
+### 5B.8 Relationship with bookkeeping
+
+This is the boundary that must not blur.
+
+- Bookkeeping continues to own **documents, lines, VAT, classifications,
+  settlement and periods**. The commitment module writes none of them.
+- A supplier invoice is linked to the commitment it draws down. The link records
+  the drawn amount, so partial and staged billing work naturally, and one
+  invoice may draw down more than one commitment.
+- The invoice's amount always wins. A commitment is never adjusted to match an
+  invoice; the difference is a visible *variance*, which is exactly the figure a
+  director wants.
+- Attribution to property, unit or project travels through the existing
+  **dimensions** layer, so bookkeeping still holds no real-estate foreign key
+  (principle 12) and the module stays portable.
+- Over-drawing a commitment is permitted but flagged, never silently absorbed.
+- Nothing about a commitment enters the income statement, VAT summary or period
+  totals. Only posted documents do (principle 9).
+
+### 5B.9 Relationship with cash flow
+
+**Cash flow derives committed values; it does not store them.**
+
+`cash_flow_entries` already carries `source_type` / `source_id`, `state` with a
+`committed` value, and `is_included`. The commitment layer reuses that contract
+unchanged:
+
+- Each undrawn instalment of an active commitment is represented as a
+  cash-flow row with `source_type = 'commitment'`, its `source_id`, and
+  `state = 'committed'` — projected from the commitment schedule by the same
+  generation mechanism the financing and recurring-rule modules already use, and
+  owned by the commitment module, not typed by hand.
+- When an invoice draws down an instalment, the committed projection for that
+  instalment stops being counted; the document's own entry takes over. The
+  timeline shows one movement, not two (principle 10).
+- Cash flow never edits a commitment, and the commitment module never writes a
+  cash-flow row belonging to another source. The existing source-ownership
+  guard trigger already enforces this pattern.
+- Forecast rows that a commitment supersedes are marked as superseded by
+  reference, so the forecast → committed transition is visible as an event
+  rather than as a deletion.
+
+Net effect: the 30/90/180/365-day liquidity forecast on the dashboard finally
+includes money the company has already promised — currently its largest blind
+spot.
+
+### 5B.10 Relationship with reporting
+
+All new reporting is view-level and derived:
+
+- **Commitment register** — open commitments by type, counterparty, property,
+  project and due date.
+- **Committed exposure** — total undrawn, by month and by category, alongside
+  bank balances; the practical solvency question.
+- **Budget vs committed vs invoiced vs paid** on every project and property.
+- **Variance** — invoiced against committed, per commitment and per counterparty.
+- **Ageing extension** — commitments overdue for invoicing (the date passed, no
+  document arrived) is a control the company currently lacks entirely.
+- Operating cost, financing cost, capex and tax remain mutually exclusive
+  buckets; a commitment inherits its bucket from its type and never appears in
+  two.
+
+Nothing is stored as a total.
+
+### 5B.11 Relationship with documents
+
+- A commitment's own paperwork — quotation, order, signed contract, policy
+  schedule, engagement letter, tax assessment — is evidence, attached through
+  the **existing Drive evidence adapter** with `source_type = 'commitment'`.
+- No new storage mechanism, no Drive dependency inside `bookkeeping-core`.
+- Attaching or removing evidence never changes an amount, including on an active
+  or fully drawn commitment (principle 6).
+- The invoice that draws down a commitment keeps its own document evidence in
+  bookkeeping; the commitment does not copy it, it links through the drawdown.
+
+### 5B.12 The end-to-end lifecycle
+
+```text
+FORECAST                 recurring rule, budget line, or manual expectation
+  │                      state = forecast · owned by cash flow / project budget
+  ▼
+COMMITMENT               quotation accepted, order placed, policy renewed
+  │                      approved → active · owns the promise
+  │                      projects committed cash-flow rows by reference
+  ▼
+FINANCIAL DOCUMENT       supplier invoice received and posted
+  │                      owns amounts, VAT, classification · draws down commitment
+  │                      commitment's committed projection retires by the drawn amount
+  ▼
+PAYMENT                  settlement against the document
+  │                      owned by bookkeeping settlement
+  ▼
+BANK RECONCILIATION      bank line matched to the payment, confirmed by a person
+                         owned by banking · never automatic
+```
+
+Worked example — a €40,000 roof refurbishment:
+
+| Step | Record created | Owner | Cash-flow effect |
+| --- | --- | --- | --- |
+| Budgeted in the project | Project budget line €40,000 | Project | forecast |
+| Quotation accepted, order placed | Commitment €38,500, 3 milestones | Commitment | forecast retires; 3 committed rows appear |
+| Approved by director | Approval event | Approval | none |
+| Milestone 1 invoiced €12,000 | Supplier invoice, posted | Bookkeeping | milestone 1 committed row retires; document entry appears |
+| Invoice paid | Settlement | Bookkeeping | entry becomes actual |
+| Bank line matched | Reconciliation | Banking | entry becomes reconciled |
+| Project completes | Commitment `fully_drawn` → `closed` | Commitment | none |
+
+At no point does the same €12,000 exist twice, and at every point exactly one
+module can change it.
+
+### 5B.13 Why maintenance, insurance and service contracts fit without new machinery
+
+| Feature | What it adds | What it reuses |
+| --- | --- | --- |
+| Maintenance job | The work: property/unit, description, status, photos, contractor | Raises a `maintenance` commitment when the quote is accepted; all money behaviour identical |
+| Insurance policy | Cover details, insured value, renewal date, broker | An `insurance` commitment with an annual schedule; renewal creates the next commitment |
+| Service contract | Term, notice period, scope | A `service_contract` commitment with a recurring schedule; termination closes it |
+| Utilities | Supply point, meter, tariff | A `utilities` commitment with an estimated recurring schedule and variance against actual invoices |
+| Professional engagement | Scope, engagement letter | A `professional_services` commitment, fixed or milestone |
+| Tax assessment | Reference, assessment period | A `tax` commitment with dated instalments |
+
+Each is a small descriptive table (or, for several, just fields on an existing
+one) plus a commitment. Without the commitment layer, each would have invented
+its own way of reaching cash flow — six pathways instead of one. That is the
+argument for building this first.
+
+### 5B.14 Validation checklist before implementation
+
+The model is considered validated when all of the following hold on paper:
+
+1. No amount appears in two owned tables.
+2. Cash flow contains no commitment figure that is not projected from a
+   commitment schedule by reference.
+3. A posted invoice can always be traced to at most the commitments it draws
+   down, and drawdowns never exceed reporting totals.
+4. Removing the commitment module would degrade visibility but corrupt nothing.
+5. Every commitment status change is an event with author, timestamp and reason
+   where applicable.
+6. Bookkeeping still contains no real-estate foreign key.
+7. Every derived figure in §5B.10 can be expressed as a view over existing plus
+   proposed tables, with nothing stored.
+
+---
+
 
 ## 6. Team, roles and approvals
 
@@ -469,27 +765,52 @@ Four sub-phases. Each is independently shippable, delivers a coherent operating
 capability, reuses existing tables wherever possible, and adds no figure that is
 stored rather than derived.
 
-### Phase 8A — Operate the buildings and the works
+### Phase 8A — The commitment layer
 
-*Theme: make committed spend and physical work visible.*
+*Theme: commitments become the primary operational record; everything
+operational is expressed through them. Full design in §5B.*
 
-1. Finish the outstanding banking P0s: closing-balance control and unreconcile
-   with reason.
+Ordered so that the money pathway is proven before any descriptive module is
+built on top of it.
+
+**8A.1 — Foundations (prerequisite work already outstanding)**
+1. Banking P0s: closing-balance control and unreconcile with reason.
 2. Cash-flow chart collapse of reconciled vs forecast/committed, and the
    base-vs-scenario comparison view.
-3. **Editable capex project workspace** with budget by category, status and
-   evidence.
-4. **Commitment register** feeding committed cash-flow entries by reference,
-   drawn down by invoices through dimensions.
-5. **Maintenance jobs** with contractor (counterparty), status, quotation
-   evidence and optional committed cost.
-6. **Contractor overlay on counterparties** — trade, service area, insurance
-   expiry.
 
-*Value:* the company can run refurbishments and repairs in-product, and the
-cash-flow forecast finally includes money it has already promised.
-*Architecture:* two new owned tables (job, commitment) plus fields; everything
-else is existing.
+**8A.2 — The commitment record**
+3. **Commitments** — one owned table with the eight types of §5B.2, the
+   lifecycle of §5B.4, schedule versioning modelled on financing schedules, and
+   Drive evidence through the existing adapter.
+4. **Minimal approval**: company threshold, `approver`/`owner` authority,
+   approve/reject as events. Only the commitment case — the general approval
+   mechanism stays in 8C.
+5. **Committed cash-flow projection by reference**: `source_type =
+   'commitment'`, undrawn instalments only, nothing stored.
+6. **Drawdown**: link a posted supplier invoice to the commitments it consumes,
+   with variance visible and no restatement in either direction.
+
+**8A.3 — Consumers of the commitment**
+7. **Editable capex project workspace** — owns budget, phases, status and
+   evidence; consumes commitments for all spend. `v_capex_summary` recast onto
+   budget / committed / invoiced / paid.
+8. **Commitment register and exposure views** (§5B.10), including commitments
+   overdue for invoicing and counterparty exposure.
+9. **Maintenance jobs** — the work record; accepting a quotation raises a
+   `maintenance` commitment. No independent money pathway.
+10. **Contractor overlay on counterparties** — trade, service area, insurance
+    expiry.
+
+*Value:* the company can run refurbishments and repairs in-product; committed
+spend becomes visible at the moment of ordering rather than of invoicing; the
+liquidity forecast includes money already promised.
+*Architecture:* two new owned tables (commitment with its schedule/drawdown
+children, and maintenance job), one narrow approval record, plus fields and
+views. No existing ownership changes.
+
+*Gate:* 8A.3 does not start until the §5B.14 validation checklist passes against
+the implemented 8A.2 behaviour.
+
 
 ### Phase 8B — Operate the income
 
@@ -518,9 +839,10 @@ units, reuse of recurring rules.
 *Theme: authority, and the front of the lifecycle.*
 
 1. **Team management**: invite, assign role, revoke (P0).
-2. **Generic approval record** plus authorisation thresholds and time-boxed
-   delegation, applied to supplier invoices, maintenance quotations, capex
-   commitments and reconciliation.
+2. **Generalise the approval record** introduced narrowly in 8A: authorisation
+   thresholds by type, time-boxed delegation, and application to supplier
+   invoices, maintenance quotations and reconciliation as well as commitments.
+
 3. **Approvals awaiting me** on the dashboard; **operations work list** for
    managers.
 4. **Payment run**: batch approved, due, outstanding items into one settlement
@@ -554,9 +876,12 @@ platform is safe to depend on entirely.
 
 ### 11.1 Ordering rationale
 
-- 8A first because **committed spend is the biggest hole in the cash-flow
-  promise**, and because maintenance is the highest-frequency activity still
-  outside the product.
+- 8A first, and **commitment-first within 8A**, because committed spend is the
+  biggest hole in the cash-flow promise and because every later operational
+  feature (maintenance, insurance, utilities, service contracts, professional
+  services, taxes) would otherwise invent its own route to cash flow. One
+  pathway built once is cheaper than six built separately and reconciled later.
+
 - 8B second because rent indexation loses money silently every month it is
   missing, and because compliance expiry is the highest-severity, lowest-effort
   risk.
@@ -592,9 +917,17 @@ Pedra Rioja Hub has the financial spine of a property investment company. What
 it lacks is the **operational layer above it**: the work on the buildings, the
 deadlines attached to them, and the authority to spend money on them.
 
-Three new owned records — **maintenance job**, **obligation**, **approval** —
-plus an editable **capex project with commitments**, plus screens over data the
-platform already computes, is the whole of what stands between v1.0 architecture
-and running the company entirely in-product.
+Four new owned records — **commitment**, **maintenance job**, **obligation**,
+**approval** — plus an editable **capex project** that consumes commitments
+instead of owning spend, plus screens over data the platform already computes,
+is the whole of what stands between v1.0 architecture and running the company
+entirely in-product.
+
+The commitment is the keystone. It closes the missing rung between forecast and
+actual, gives the `approver` role its first duty, makes committed exposure a
+derived fact rather than a spreadsheet, and reduces maintenance, insurance,
+utilities, service contracts, professional engagements and taxes to descriptive
+records over one shared money pathway.
 
 No table needs redesigning to get there.
+
