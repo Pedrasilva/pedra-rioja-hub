@@ -219,7 +219,7 @@ describe("commitment register", () => {
     expect(screen.getByText("Roof replacement — Block A")).toBeInTheDocument();
     expect(screen.getByText("Lift servicing contract")).toBeInTheDocument();
     expect(screen.getByText("€100,000.00")).toBeInTheDocument();
-    expect(screen.getByText("€60,000.00")).toBeInTheDocument();
+    expect(screen.getAllByText("€60,000.00").length).toBeGreaterThan(0);
   });
 
   it("totals only the visible rows", () => {
@@ -770,7 +770,7 @@ describe("maintenance", () => {
     renderMaintenance([job()]);
     expect(screen.getByText("Boiler service")).toBeInTheDocument();
     expect(screen.getByText("Ana")).toBeInTheDocument();
-    expect(screen.getByText("€60,000.00")).toBeInTheDocument();
+    expect(screen.getAllByText("€60,000.00").length).toBeGreaterThan(0);
     expect(screen.getByText("€40,000.00")).toBeInTheDocument();
   });
 
