@@ -48,6 +48,8 @@ export const SOURCE_TYPES = [
   "property_acquisition_cost",
   "financial_document",
   "financial_payment",
+  "commitment",
+  "maintenance_job",
   "external_import",
 ] as const;
 export type SourceType = (typeof SOURCE_TYPES)[number];
