@@ -138,3 +138,41 @@ export const toastMock = {
   success: (m: string) => toasts.push({ kind: "success", message: m }),
   error: (m: string) => toasts.push({ kind: "error", message: m }),
 };
+
+/* -------------------------------------------- commitment server functions */
+
+export const COMMITMENT_FN_NAMES = [
+  "createCommitmentDraft",
+  "updateCommitmentDraft",
+  "requestCommitmentApproval",
+  "approveCommitment",
+  "rejectCommitment",
+  "activateCommitment",
+  "archiveCommitment",
+  "completeCommitment",
+  "createScheduleVersion",
+  "activateScheduleVersion",
+  "approveScheduleVariance",
+  "createDrawdown",
+  "reverseDrawdown",
+  "createMaintenanceJob",
+  "updateMaintenanceJob",
+] as const;
+
+export type CommitmentFnName = (typeof COMMITMENT_FN_NAMES)[number];
+
+export const commitmentFns = Object.fromEntries(
+  COMMITMENT_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<CommitmentFnName, ReturnType<typeof vi.fn>>;
+
+export function commitmentFnModule() {
+  return commitmentFns;
+}
+
+export function lastCommitmentPayload(name: CommitmentFnName) {
+  const call = commitmentFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
