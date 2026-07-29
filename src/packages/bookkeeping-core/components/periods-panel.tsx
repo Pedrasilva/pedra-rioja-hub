@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
+import { formatDate, formatMoneyPrecise, titleCase } from "../format";
 import { useCreatePeriod, useRecomputePeriodTotals } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
 import { useFinancialPeriods, usePeriodDocuments, usePeriodTotals } from "../queries";

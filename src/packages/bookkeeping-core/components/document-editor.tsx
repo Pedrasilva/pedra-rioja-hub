@@ -15,11 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { formatMoneyPrecise } from "@/lib/format";
-import { supabase } from "@/integrations/supabase/client";
+import { formatMoneyPrecise } from "../format";
 import { useCreateDocument, useUpdateDocument } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
-import { useDimensionOptions } from "../host";
+import { useBookkeepingHost, useDimensionOptions } from "../host";
 import {
   useClassifications,
   useCounterparties,
@@ -109,6 +108,7 @@ export function DocumentEditorDialog({
   });
   const [lines, setLines] = useState<LineDraft[]>([newLine(1)]);
   const [drift, setDrift] = useState<string | null>(null);
+  const { data: hostData } = useBookkeepingHost();
 
   const seedKey = `${open}:${documentId ?? "new"}:${existing?.document?.id ?? ""}`;
   const [lastSeed, setLastSeed] = useState("");
@@ -205,13 +205,9 @@ export function DocumentEditorDialog({
 
   /** The database owns the amounts; the preview must agree or we surface it. */
   const verifyTotals = async (id: string) => {
-    const { data } = await supabase
-      .from("financial_documents")
-      .select("net_amount, vat_amount, gross_amount")
-      .eq("id", id)
-      .maybeSingle();
-    if (!data) return;
-    const dbGross = round2(Number(data.gross_amount));
+    const saved = await hostData.getDocumentTotals(id);
+    if (!saved) return;
+    const dbGross = round2(Number(saved.gross_amount));
     if (dbGross !== totals.gross) {
       setDrift(
         `Saved totals differ from the on-screen preview: the database calculated ${formatMoneyPrecise(

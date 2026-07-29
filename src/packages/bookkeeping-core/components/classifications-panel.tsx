@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { titleCase } from "@/lib/format";
+import { titleCase } from "../format";
 import { useCreateClassification } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
 import { useClassifications} from "../queries";
