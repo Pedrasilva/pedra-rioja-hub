@@ -253,3 +253,32 @@ export const periodSchema = z.object({
   periodEnd: isoDate,
   notes: z.string().trim().nullish(),
 });
+
+/* ------------------------------------------------- period close / reopen */
+
+export const closePeriodSchema = z.object({
+  periodId: uuid,
+  notes: z.string().trim().nullish(),
+});
+
+export const reopenPeriodSchema = z.object({
+  periodId: uuid,
+  reason: z.string().trim().min(3),
+});
+
+/* ------------------------------------------------------------ evidence */
+
+export const attachDocumentSchema = z.object({
+  companyId: uuid,
+  sourceType: z.string().trim().min(1),
+  sourceId: uuid,
+  documentId: uuid,
+  relation: z.enum(["primary", "supporting", "proof_of_payment"]).default("supporting"),
+});
+
+export const detachDocumentSchema = z.object({
+  companyId: uuid,
+  sourceType: z.string().trim().min(1),
+  sourceId: uuid,
+  documentId: uuid,
+});
