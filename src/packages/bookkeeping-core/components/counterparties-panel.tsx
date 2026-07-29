@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { titleCase } from "@/lib/format";
+import { titleCase } from "../format";
 import {
   useArchiveCounterparty,
   useCreateCounterparty,

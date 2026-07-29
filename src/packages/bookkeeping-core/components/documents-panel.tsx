@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
+import { formatDate, formatMoneyPrecise, titleCase } from "../format";
 import { useCancelDocument, usePostDocument } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
 import { useDimensionOptions } from "../host";

@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate, formatMoneyPrecise, titleCase } from "@/lib/format";
+import { formatDate, formatMoneyPrecise, titleCase } from "../format";
 import { useUpsertBankRule } from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
 import { useDimensionOptions } from "../host";
