@@ -14,6 +14,136 @@ export type Database = {
   }
   public: {
     Tables: {
+      approval_events: {
+        Row: {
+          actor_id: string | null
+          comment: string | null
+          company_id: string
+          created_at: string
+          event: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          comment?: string | null
+          company_id: string
+          created_at?: string
+          event: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          comment?: string | null
+          company_id?: string
+          created_at?: string
+          event?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approval_requests: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          decision: string
+          decision_reason: string | null
+          id: string
+          reason: string | null
+          requested_amount: number | null
+          requested_at: string
+          requested_by: string
+          rule_reference: string | null
+          target_id: string
+          target_type: string
+          threshold_amount: number | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string
+          decision_reason?: string | null
+          id?: string
+          reason?: string | null
+          requested_amount?: number | null
+          requested_at?: string
+          requested_by?: string
+          rule_reference?: string | null
+          target_id: string
+          target_type: string
+          threshold_amount?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string
+          decision_reason?: string | null
+          id?: string
+          reason?: string | null
+          requested_amount?: number | null
+          requested_at?: string
+          requested_by?: string
+          rule_reference?: string | null
+          target_id?: string
+          target_type?: string
+          threshold_amount?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -1755,6 +1885,484 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
             referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      commitment_drawdowns: {
+        Row: {
+          amount: number
+          commitment_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          document_id: string | null
+          drawdown_date: string
+          id: string
+          kind: string
+          notes: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          reverses_drawdown_id: string | null
+          schedule_line_id: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount: number
+          commitment_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          document_id?: string | null
+          drawdown_date?: string
+          id?: string
+          kind?: string
+          notes?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          reverses_drawdown_id?: string | null
+          schedule_line_id?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount?: number
+          commitment_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          document_id?: string | null
+          drawdown_date?: string
+          id?: string
+          kind?: string
+          notes?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          reverses_drawdown_id?: string | null
+          schedule_line_id?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commitment_drawdowns_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_reverses_drawdown_id_fkey"
+            columns: ["reverses_drawdown_id"]
+            isOneToOne: false
+            referencedRelation: "commitment_drawdowns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_drawdowns_schedule_line_id_fkey"
+            columns: ["schedule_line_id"]
+            isOneToOne: false
+            referencedRelation: "commitment_schedule_lines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commitment_schedule_lines: {
+        Row: {
+          amount: number
+          commitment_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          expected_date: string
+          id: string
+          is_contingency: boolean
+          is_retention: boolean
+          line_no: number
+          line_type: string
+          source_id: string | null
+          source_type: string | null
+          status: string
+          superseded_at: string | null
+          superseded_by_version_id: string | null
+          updated_at: string
+          updated_by: string | null
+          version_id: string
+        }
+        Insert: {
+          amount: number
+          commitment_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          expected_date: string
+          id?: string
+          is_contingency?: boolean
+          is_retention?: boolean
+          line_no: number
+          line_type?: string
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version_id: string
+        }
+        Update: {
+          amount?: number
+          commitment_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          expected_date?: string
+          id?: string
+          is_contingency?: boolean
+          is_retention?: boolean
+          line_no?: number
+          line_type?: string
+          source_id?: string | null
+          source_type?: string | null
+          status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commitment_schedule_lines_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_lines_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_lines_superseded_by_version_id_fkey"
+            columns: ["superseded_by_version_id"]
+            isOneToOne: false
+            referencedRelation: "commitment_schedule_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_lines_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "commitment_schedule_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commitment_schedule_versions: {
+        Row: {
+          activated_at: string | null
+          activated_by: string | null
+          approval_request_id: string | null
+          commitment_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          effective_from: string
+          id: string
+          is_current: boolean
+          notes: string | null
+          reason: string | null
+          requires_approval: boolean
+          schedule_type: string
+          status: string
+          superseded_at: string | null
+          superseded_by_version_id: string | null
+          total_amount: number
+          updated_at: string
+          updated_by: string | null
+          variance_amount: number
+          variance_approved: boolean
+          variance_reason: string | null
+          version_no: number
+        }
+        Insert: {
+          activated_at?: string | null
+          activated_by?: string | null
+          approval_request_id?: string | null
+          commitment_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          effective_from: string
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          reason?: string | null
+          requires_approval?: boolean
+          schedule_type?: string
+          status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+          variance_amount?: number
+          variance_approved?: boolean
+          variance_reason?: string | null
+          version_no: number
+        }
+        Update: {
+          activated_at?: string | null
+          activated_by?: string | null
+          approval_request_id?: string | null
+          commitment_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          reason?: string | null
+          requires_approval?: boolean
+          schedule_type?: string
+          status?: string
+          superseded_at?: string | null
+          superseded_by_version_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+          variance_amount?: number
+          variance_approved?: boolean
+          variance_reason?: string | null
+          version_no?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commitment_schedule_versions_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_superseded_by_version_id_fkey"
+            columns: ["superseded_by_version_id"]
+            isOneToOne: false
+            referencedRelation: "commitment_schedule_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commitments: {
+        Row: {
+          approval_override_reason: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          archived_at: string | null
+          authorised_amount: number
+          cancellation_reason: string | null
+          code: string | null
+          commitment_type: string
+          committed_amount: number
+          company_id: string
+          completion_notes: string | null
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          notes: string | null
+          source_id: string | null
+          source_type: string | null
+          start_date: string | null
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          approval_override_reason?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          archived_at?: string | null
+          authorised_amount?: number
+          cancellation_reason?: string | null
+          code?: string | null
+          commitment_type?: string
+          committed_amount?: number
+          company_id: string
+          completion_notes?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          start_date?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          approval_override_reason?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          archived_at?: string | null
+          authorised_amount?: number
+          cancellation_reason?: string | null
+          code?: string | null
+          commitment_type?: string
+          committed_amount?: number
+          company_id?: string
+          completion_notes?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          start_date?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commitments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "commitments_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -3956,6 +4564,117 @@ export type Database = {
           },
         ]
       }
+      maintenance_jobs: {
+        Row: {
+          archived_at: string | null
+          cancellation_reason: string | null
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          completion_date: string | null
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          notes: string | null
+          priority: string
+          requested_date: string
+          responsible_name: string | null
+          responsible_user_id: string | null
+          status: string
+          target_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archived_at?: string | null
+          cancellation_reason?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          completion_date?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string
+          requested_date?: string
+          responsible_name?: string | null
+          responsible_user_id?: string | null
+          status?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archived_at?: string | null
+          cancellation_reason?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          completion_date?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string
+          requested_date?: string
+          responsible_name?: string | null
+          responsible_user_id?: string | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_jobs_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -5645,15 +6364,21 @@ export type Database = {
       }
       v_capex_summary: {
         Row: {
+          active_commitments: number | null
           actual_amount: number | null
           actual_end_date: string | null
+          approved_commitments: number | null
           budget_amount: number | null
           code: string | null
+          commitment_variance: number | null
           committed_amount: number | null
           company_id: string | null
           currency: string | null
           forecast_amount: number | null
+          invoice_variance: number | null
+          invoiced_amount: number | null
           name: string | null
+          paid_amount: number | null
           project_id: string | null
           project_type: string | null
           property_code: string | null
@@ -5951,6 +6676,63 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_property_summary"
             referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_commitment_summary: {
+        Row: {
+          approval_status: string | null
+          approved_committed_amount: number | null
+          approved_variance: number | null
+          archived_at: string | null
+          authorised_amount: number | null
+          available_drawdown: number | null
+          code: string | null
+          commitment_id: string | null
+          commitment_type: string | null
+          company_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          currency: string | null
+          deleted_at: string | null
+          end_date: string | null
+          invoiced_amount: number | null
+          overdue_scheduled_amount: number | null
+          paid_amount: number | null
+          project_id: string | null
+          property_id: string | null
+          remaining_commitment: number | null
+          retained_amount: number | null
+          scheduled_amount: number | null
+          start_date: string | null
+          status: string | null
+          title: string | null
+          unapproved_variance: number | null
+          unit_id: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commitments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "commitments_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -6337,6 +7119,68 @@ export type Database = {
           },
         ]
       }
+      v_maintenance_job_summary: {
+        Row: {
+          archived_at: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          commitment_title: string | null
+          committed_amount: number | null
+          company_id: string | null
+          completion_date: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          deleted_at: string | null
+          invoiced_amount: number | null
+          job_id: string | null
+          paid_amount: number | null
+          priority: string | null
+          requested_date: string | null
+          responsible_name: string | null
+          status: string | null
+          target_date: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_jobs_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_portfolio_summary: {
         Row: {
           acquisition_total: number | null
@@ -6687,6 +7531,14 @@ export type Database = {
       }
     }
     Functions: {
+      activate_commitment: {
+        Args: { _commitment_id: string }
+        Returns: undefined
+      }
+      activate_commitment_schedule_version: {
+        Args: { _reason?: string; _version_id: string }
+        Returns: number
+      }
       apply_financing_schedule: {
         Args: {
           _agreement_id: string
@@ -6700,6 +7552,18 @@ export type Database = {
         }
         Returns: string
       }
+      approve_commitment: {
+        Args: {
+          _comment?: string
+          _commitment_id: string
+          _override_reason?: string
+        }
+        Returns: undefined
+      }
+      approve_commitment_variance: {
+        Args: { _reason: string; _version_id: string }
+        Returns: undefined
+      }
       bank_statement_balance_check: {
         Args: { _import_id: string }
         Returns: {
@@ -6710,9 +7574,14 @@ export type Database = {
           unreconciled_value: number
         }[]
       }
+      can_approve_company: { Args: { _company_id: string }; Returns: boolean }
       can_manage_company: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
+      cancel_commitment: {
+        Args: { _commitment_id: string; _reason: string }
+        Returns: undefined
+      }
       cash_flow_entry_from_transaction: {
         Args: {
           _bank_transaction_id: string
@@ -6785,6 +7654,19 @@ export type Database = {
         Args: { _import_id: string }
         Returns: Json
       }
+      commitment_attribution: {
+        Args: { _commitment_id: string }
+        Returns: {
+          project_id: string
+          property_id: string
+          unit_id: string
+        }[]
+      }
+      commitment_summary: { Args: { _commitment_id: string }; Returns: Json }
+      complete_commitment: {
+        Args: { _commitment_id: string; _notes?: string }
+        Returns: undefined
+      }
       confirm_bank_match: {
         Args: {
           _allocations: Json
@@ -6792,6 +7674,61 @@ export type Database = {
           _notes?: string
         }
         Returns: Json
+      }
+      create_commitment_draft: {
+        Args: {
+          _authorised_amount?: number
+          _code?: string
+          _commitment_type?: string
+          _company_id: string
+          _counterparty_id?: string
+          _currency?: string
+          _description?: string
+          _end_date?: string
+          _notes?: string
+          _source_id?: string
+          _source_type?: string
+          _start_date?: string
+          _title: string
+        }
+        Returns: string
+      }
+      create_commitment_drawdown: {
+        Args: {
+          _amount: number
+          _commitment_id: string
+          _document_id: string
+          _drawdown_date?: string
+          _kind?: string
+          _notes?: string
+          _schedule_line_id?: string
+        }
+        Returns: string
+      }
+      create_commitment_schedule_version: {
+        Args: {
+          _commitment_id: string
+          _effective_from: string
+          _lines: Json
+          _notes?: string
+          _reason?: string
+          _schedule_type?: string
+        }
+        Returns: string
+      }
+      create_maintenance_job: {
+        Args: {
+          _commitment_id?: string
+          _company_id: string
+          _counterparty_id?: string
+          _description?: string
+          _notes?: string
+          _priority?: string
+          _responsible_name?: string
+          _target_date?: string
+          _title: string
+        }
+        Returns: string
       }
       current_company_id: { Args: never; Returns: string }
       executive_alerts: {
@@ -6913,6 +7850,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      reject_commitment: {
+        Args: { _commitment_id: string; _reason: string }
+        Returns: undefined
+      }
       reopen_financial_period: {
         Args: { _period_id: string; _reason: string }
         Returns: {
@@ -6938,9 +7879,17 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      request_commitment_approval: {
+        Args: { _commitment_id: string; _reason?: string }
+        Returns: string
+      }
       reverse_bank_match: {
         Args: { _match_id: string; _reason: string }
         Returns: Json
+      }
+      reverse_commitment_drawdown: {
+        Args: { _drawdown_id: string; _reason: string }
+        Returns: string
       }
       reverse_financial_payment: {
         Args: { _payment_id: string; _reason: string }
@@ -7004,6 +7953,10 @@ export type Database = {
           source_type: string
         }[]
       }
+      sync_commitment_cash_flow: {
+        Args: { _commitment_id: string }
+        Returns: number
+      }
       sync_document_cash_flow: {
         Args: { _document_id: string }
         Returns: string
@@ -7011,6 +7964,41 @@ export type Database = {
       sync_source_settlement: {
         Args: { _entry_id: string }
         Returns: undefined
+      }
+      update_commitment_draft: {
+        Args: {
+          _authorised_amount?: number
+          _commitment_id: string
+          _commitment_type?: string
+          _counterparty_id?: string
+          _description?: string
+          _end_date?: string
+          _notes?: string
+          _start_date?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_maintenance_job: {
+        Args: {
+          _cancellation_reason?: string
+          _commitment_id?: string
+          _completion_date?: string
+          _counterparty_id?: string
+          _description?: string
+          _job_id: string
+          _notes?: string
+          _priority?: string
+          _responsible_name?: string
+          _status?: string
+          _target_date?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      validate_commitment_schedule: {
+        Args: { _version_id: string }
+        Returns: Json
       }
       vat_summary: {
         Args: { _company_id: string; _from: string; _to: string }
