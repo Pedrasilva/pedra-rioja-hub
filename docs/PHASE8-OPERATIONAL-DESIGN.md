@@ -616,6 +616,92 @@ The model is considered validated when all of the following hold on paper:
 
 ---
 
+## 5C. FROZEN ARCHITECTURAL CONTRACT — Phase 8A
+
+Status: **binding**. These rules were frozen before implementation began and
+must not be altered while Phase 8A is built. They take precedence over any
+other statement in this document, including §5B, where the two disagree.
+
+### 5C.1 Commitment ownership
+
+- A commitment is the **canonical owner of all expected expenditure**.
+- Operational modules — capex projects, maintenance jobs, obligations, service
+  contracts, insurance, utilities, tax schedules — describe *why* an
+  expenditure exists. They **do not own financial amounts**.
+- Expected cost must always come from a linked commitment.
+- A commitment **may** exist without an operational source.
+- An operational record **may** exist without an approved commitment, but in
+  that case it must **not** generate committed cash flow.
+
+### 5C.2 Cash-flow generation
+
+- Only **approved and active** commitment schedule lines may generate included
+  committed cash-flow entries.
+- Commitment projections must continue to use the existing mechanism only:
+  `cash_flow_entries.source_type`, `cash_flow_entries.source_id`,
+  `state = 'committed'`, `is_included`, and the source-ownership guard trigger.
+- Cash flow remains a **projection engine only**. It never owns commitments.
+
+### 5C.3 Drawdowns
+
+- Drawdowns **consume** commitments. They never modify bookkeeping source
+  amounts.
+- Invoices continue to own invoice values. Payments continue to own payment
+  values. Drawdowns only allocate commitment consumption.
+- Derived values — committed, invoiced, paid, remaining, variance — must remain
+  **derived** wherever practical, never duplicated.
+
+### 5C.4 Schedule versioning
+
+- Commitment schedules follow the **same immutability model as financing
+  schedules**.
+- Historical schedule lines remain immutable.
+- Only **future eligible** projections may be replaced.
+- Historical, invoiced, paid or reconciled schedule lines must never change.
+- Every superseded schedule version remains available for audit.
+
+### 5C.5 Capex ownership
+
+- Capex projects own: budgets, phases, programme, project status, attribution
+  context.
+- Capex projects **do not own expenditure**.
+- Capex financial summaries are derived from commitments, invoices and
+  payments. `v_capex_summary` is updated accordingly.
+
+### 5C.6 Approval
+
+- Minimal approval belongs in Phase 8A. Its only purpose is to authorise
+  commitments and material commitment changes.
+- Phase 8C will later generalise the approval engine **without changing the
+  commitment model**.
+- Approval is **fail-closed**: no approval means no included committed
+  cash-flow projection.
+
+### 5C.7 Frozen ownership boundaries
+
+| Module | Owns |
+| --- | --- |
+| Bookkeeping | Invoices, accounting values, VAT, payments |
+| Banking | Bank transactions |
+| Reconciliation | Allocations |
+| Cash flow | Projections only |
+| Financing | Financing agreements and repayment schedules |
+| Documents | Evidence and file metadata |
+| Dimensions | Attribution |
+
+No implementation may move ownership across these module boundaries.
+
+### 5C.8 Implementation guard
+
+Before creating any migration or schema change, verify that the implementation
+preserves **every** rule in §5C. If any rule cannot be preserved, **stop
+immediately and report the conflict** rather than adapting the architecture.
+The model is not to be redesigned during implementation.
+
+---
+
+
+
 
 ## 6. Team, roles and approvals
 
