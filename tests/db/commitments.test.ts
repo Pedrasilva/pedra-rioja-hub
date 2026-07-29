@@ -1212,7 +1212,7 @@ describe("evidence and audit", () => {
       .insert({
         company_id: company.id,
         title: "Signed contract",
-        document_type: "contract",
+        category: "legal",
       })
       .select("id")
       .single();
@@ -1220,15 +1220,15 @@ describe("evidence and audit", () => {
     const link = await admin.from("document_links").insert({
       company_id: company.id,
       document_id: doc.data!.id,
-      source_type: "commitment",
-      source_id: id,
+      entity_type: "commitment",
+      entity_id: id,
       relation: "primary",
     });
     expectNoError(link, "link evidence");
     const read = await clients.viewer
       .from("document_links")
       .select("document_id")
-      .eq("source_id", id);
+      .eq("entity_id", id);
     expect(read.data).toHaveLength(1);
   });
 
@@ -1237,8 +1237,8 @@ describe("evidence and audit", () => {
     const audit = await admin
       .from("audit_log")
       .select("id, action")
-      .eq("record_id", id)
-      .eq("table_name", "commitments");
+      .eq("entity_id", id)
+      .eq("entity_type", "commitments");
     expectNoError(audit, "load audit rows");
     expect(audit.data!.length).toBeGreaterThanOrEqual(3);
   });
