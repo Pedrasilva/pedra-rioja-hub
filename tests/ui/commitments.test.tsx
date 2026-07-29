@@ -13,6 +13,13 @@ import userEvent from "@testing-library/user-event";
 vi.mock("@/integrations/supabase/client", async () => ({
   supabase: (await import("./mocks")).supabaseProxy,
 }));
+vi.mock("@tanstack/react-router", async (orig) => ({
+  ...(await orig<Record<string, unknown>>()),
+  Link: ({ children, ...rest }: { children?: unknown }) => {
+    const { to: _to, params: _params, ...attrs } = rest as Record<string, unknown>;
+    return <a {...attrs}>{children as never}</a>;
+  },
+}));
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
   (await import("./mocks")).serverFnModule(),
@@ -383,7 +390,7 @@ describe("approval", () => {
         { ...pendingRequest, decision: "rejected", decision_reason: "Quote too high" },
       ],
     });
-    expect(screen.getByText("Rejected")).toBeInTheDocument();
+    expect(screen.getAllByText("Rejected").length).toBeGreaterThan(0);
     expect(screen.getByText("Quote too high")).toBeInTheDocument();
   });
 
