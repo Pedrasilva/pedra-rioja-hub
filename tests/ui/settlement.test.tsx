@@ -3,13 +3,13 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 vi.mock("@/integrations/supabase/client", async () => ({
-  supabase: (await import("./harness")).supabaseProxy,
+  supabase: (await import("./mocks")).supabaseProxy,
 }));
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
-  (await import("./harness")).serverFnModule(),
+  (await import("./mocks")).serverFnModule(),
 );
-vi.mock("sonner", async () => ({ toast: (await import("./harness")).toastMock }));
+vi.mock("sonner", async () => ({ toast: (await import("./mocks")).toastMock }));
 
 import { SettlementPanel } from "@/packages/bookkeeping-core/components/settlement-panel";
 import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
