@@ -55,7 +55,15 @@ export {
  * The tests render the shared core through the real Pedra Rioja host, so the
  * adapter boundary itself is exercised on every component test.
  */
-function TestHost({ children }: { children: ReactElement | ReactElement[] }) {
+export type HostOverrides = Partial<Omit<BookkeepingHost, "server">>;
+
+function TestHost({
+  children,
+  overrides,
+}: {
+  children: ReactElement | ReactElement[];
+  overrides?: HostOverrides;
+}) {
   const server = usePedraRiojaServerContract();
   const host: BookkeepingHost = {
     tenant: { companyId: COMPANY, companyLabel: "Pedra Rioja", isLoading: false },
@@ -67,11 +75,15 @@ function TestHost({ children }: { children: ReactElement | ReactElement[] }) {
     fiscal: fiscalConfig(),
     data: pedraRiojaData,
     server,
+    ...overrides,
   };
   return <BookkeepingHostProvider host={host}>{children}</BookkeepingHostProvider>;
 }
 
-export function renderWithProviders(ui: ReactElement, options?: RenderOptions) {
+export function renderWithProviders(
+  ui: ReactElement,
+  options?: RenderOptions & { host?: HostOverrides },
+) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false, gcTime: 0, staleTime: 0 },
@@ -81,7 +93,7 @@ export function renderWithProviders(ui: ReactElement, options?: RenderOptions) {
   const result = render(ui, {
     wrapper: ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <TestHost>{children as ReactElement}</TestHost>
+        <TestHost overrides={options?.host}>{children as ReactElement}</TestHost>
       </QueryClientProvider>
     ),
     ...options,
