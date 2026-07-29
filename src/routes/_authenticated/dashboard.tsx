@@ -29,7 +29,7 @@ const PHASES = [
   { n: 1, name: "Foundation", detail: "Company, users, roles, settings, audit log", done: true },
   { n: 2, name: "Property register", detail: "Properties, units, ownership, documents" },
   { n: 3, name: "Counterparties", detail: "Tenants, suppliers, banks, contacts" },
-  { n: 4, name: "Bookkeeping core", detail: "Documents, lines, VAT, payments (ported from PSA Hub)" },
+  { n: 4, name: "Bookkeeping core", detail: "Documents, lines, VAT, payments" },
   { n: 5, name: "Dimensions", detail: "Linking transactions to properties, projects, tenancies" },
   { n: 6, name: "Tenancies & rent", detail: "Leases, rent roll, indexation, receivables" },
   { n: 7, name: "Financing", detail: "Mortgages, schedules, fit-out repayments" },
@@ -86,7 +86,7 @@ function Dashboard() {
             <CardTitle className="font-display text-2xl">Operational</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            Documents, VAT, payments and classifications — aligned with PSA Hub. No general ledger.
+            Documents, VAT, payments and classifications. No general ledger.
           </CardContent>
         </Card>
       </div>

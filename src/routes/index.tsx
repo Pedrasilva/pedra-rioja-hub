@@ -36,7 +36,7 @@ const PILLARS = [
   {
     icon: Receipt,
     title: "Operational bookkeeping",
-    body: "Documents, VAT lines, payments and classifications — the PSA Hub model, kept company-agnostic.",
+    body: "Documents, VAT lines, payments and classifications — company-agnostic and derived from line data.",
   },
   {
     icon: Landmark,
