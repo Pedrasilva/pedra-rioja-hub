@@ -7,6 +7,7 @@
  * between Pedra Rioja and the shared bookkeeping module.
  */
 
+import { useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
 import { useWorkspace } from "@/hooks/use-workspace";
@@ -21,7 +22,7 @@ import {
   createDocumentsAdapter,
 } from "./adapters";
 import { pedraRiojaData } from "./data";
-import { usePedraRiojaServerContract } from "./server";
+import { usePedraRiojaAttachmentActions, usePedraRiojaServerContract } from "./server";
 
 /** Portugal-first fiscal configuration for this host. */
 export const PEDRA_RIOJA_FISCAL = fiscalConfig({ defaultCurrency: "EUR" });
@@ -31,6 +32,8 @@ export function usePedraRiojaBookkeepingHost(): BookkeepingHost {
   const companyId = workspace?.company?.id;
   const capabilities = capabilitiesFor(workspace?.roles);
   const server = usePedraRiojaServerContract();
+  const attachments = usePedraRiojaAttachmentActions();
+  const queryClient = useQueryClient();
 
   return {
     tenant: {
@@ -40,7 +43,12 @@ export function usePedraRiojaBookkeepingHost(): BookkeepingHost {
     },
     capabilities,
     dimensions: createDimensionAdapter(companyId),
-    documents: createDocumentsAdapter(companyId, capabilities.canRecord),
+    documents: createDocumentsAdapter(
+      companyId,
+      capabilities.canRecord,
+      attachments,
+      queryClient,
+    ),
     banking: createBankingAdapter(companyId),
     cashFlow: createCashFlowAdapter(companyId),
     fiscal: PEDRA_RIOJA_FISCAL,

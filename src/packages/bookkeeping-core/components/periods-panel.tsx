@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, RefreshCw } from "lucide-react";
+import { Lock, Plus, RefreshCw, Unlock } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate, formatMoneyPrecise, titleCase } from "../format";
-import { useCreatePeriod, useRecomputePeriodTotals } from "../mutations";
+import {
+  useClosePeriod,
+  useCreatePeriod,
+  useRecomputePeriodTotals,
+  useReopenPeriod,
+} from "../mutations";
 import type { BookkeepingCapabilities } from "../capabilities";
 import { useFinancialPeriods, usePeriodDocuments, usePeriodTotals } from "../queries";
 import { OptionSelect } from "./selectors";
@@ -37,6 +42,8 @@ export function PeriodsPanel({
   const { data: periods } = useFinancialPeriods(companyId);
   const create = useCreatePeriod();
   const recompute = useRecomputePeriodTotals();
+  const closePeriod = useClosePeriod();
+  const reopenPeriod = useReopenPeriod();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -48,6 +55,7 @@ export function PeriodsPanel({
   });
 
   const activeId = selected ?? periods?.[0]?.id ?? null;
+  const activePeriod = (periods ?? []).find((p) => p.id === activeId) ?? null;
   const { data: totals } = usePeriodTotals(activeId ?? undefined);
   const { data: docs } = usePeriodDocuments(companyId, activeId ?? undefined);
 
@@ -124,16 +132,47 @@ export function PeriodsPanel({
         <Card>
           <CardHeader className="flex-row items-center justify-between pb-2">
             <CardTitle className="text-base">Period totals</CardTitle>
-            {capabilities.canRecomputePeriods && activeId ? (
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={recompute.isPending}
-                onClick={() => recompute.mutate({ periodId: activeId })}
-              >
-                <RefreshCw className="size-4" /> Recompute
-              </Button>
-            ) : null}
+            <div className="flex gap-2">
+              {capabilities.canRecomputePeriods && activeId ? (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={recompute.isPending}
+                  onClick={() => recompute.mutate({ periodId: activeId })}
+                >
+                  <RefreshCw className="size-4" /> Recompute
+                </Button>
+              ) : null}
+              {capabilities.canClosePeriods && activePeriod ? (
+                activePeriod.status === "open" ? (
+                  <Button
+                    size="sm"
+                    disabled={closePeriod.isPending || docSummary.drafts > 0}
+                    title={
+                      docSummary.drafts > 0
+                        ? "Post or cancel the remaining drafts before closing"
+                        : undefined
+                    }
+                    onClick={() => closePeriod.mutate({ periodId: activePeriod.id })}
+                  >
+                    <Lock className="size-4" /> Close period
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={reopenPeriod.isPending}
+                    onClick={() => {
+                      const reason = window.prompt("Why is this period being reopened?");
+                      if (reason && reason.trim().length >= 3)
+                        reopenPeriod.mutate({ periodId: activePeriod.id, reason: reason.trim() });
+                    }}
+                  >
+                    <Unlock className="size-4" /> Reopen
+                  </Button>
+                )
+              ) : null}
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

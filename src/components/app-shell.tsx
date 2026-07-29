@@ -1,5 +1,6 @@
 import { Link, useRouter, type LinkProps } from "@tanstack/react-router";
 import {
+  BarChart3,
   Building2,
   Landmark,
 
@@ -25,6 +26,7 @@ const NAV: NavItem[] = [
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
   { to: "/banking", label: "Banking", icon: Landmark },
   { to: "/bookkeeping", label: "Bookkeeping", icon: Receipt },
+  { to: "/reports", label: "Reports", icon: BarChart3 },
 
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },

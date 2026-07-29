@@ -24,6 +24,8 @@ export type BookkeepingCapabilities = {
   canManageClassifications: boolean;
   canManageRules: boolean;
   canRecomputePeriods: boolean;
+  /** Closing and reopening a period is a manage-level control. */
+  canClosePeriods: boolean;
   /**
    * Standalone manual cash-flow ledger items change the ledger without an
    * accounting source document — deliberately manage-level.
@@ -45,6 +47,7 @@ export const NO_CAPABILITIES: BookkeepingCapabilities = Object.freeze({
   canManageClassifications: false,
   canManageRules: false,
   canRecomputePeriods: false,
+  canClosePeriods: false,
   canCreateLedgerItem: false,
 });
 
@@ -75,6 +78,7 @@ export function capabilitiesFromAccess(access: {
     canManageClassifications: canManage,
     canManageRules: canManage,
     canRecomputePeriods: canManage,
+    canClosePeriods: canManage,
     canCreateLedgerItem: canManage,
   };
 }
