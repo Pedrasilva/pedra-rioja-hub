@@ -14,6 +14,7 @@ export * from "./queries";
 export * from "./schemas";
 export * from "./types";
 
+export { AttachmentsPanel } from "./components/attachments-panel";
 export { ClassificationsPanel } from "./components/classifications-panel";
 export { CounterpartiesPanel } from "./components/counterparties-panel";
 export { DocumentEditorDialog } from "./components/document-editor";
