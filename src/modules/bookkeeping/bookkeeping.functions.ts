@@ -2,13 +2,17 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   archiveCounterpartySchema,
+  attachDocumentSchema,
   bankClassificationRuleSchema,
   cancelDocumentSchema,
+  closePeriodSchema,
+  detachDocumentSchema,
   classificationSchema,
   counterpartySchema,
   financialDocumentSchema,
   periodSchema,
   postDocumentSchema,
+  reopenPeriodSchema,
   reversePaymentSchema,
   settlementSchema,
   updateCounterpartySchema,
@@ -397,4 +401,68 @@ export const createFinancialPeriod = createServerFn({ method: "POST" })
       .single();
     if (error) throw new Error(error.message);
     return row;
+  });
+
+export const closeFinancialPeriod = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => closePeriodSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { data: row, error } = await context.supabase.rpc("close_financial_period", {
+      _period_id: data.periodId,
+      _notes: data.notes ?? undefined,
+    });
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const reopenFinancialPeriod = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => reopenPeriodSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { data: row, error } = await context.supabase.rpc("reopen_financial_period", {
+      _period_id: data.periodId,
+      _reason: data.reason,
+    });
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+/* ------------------------------------------------------------ evidence */
+
+export const attachDocumentToSource = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => attachDocumentSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { data: row, error } = await context.supabase
+      .from("document_links")
+      .upsert(
+        {
+          company_id: data.companyId,
+          document_id: data.documentId,
+          entity_type: data.sourceType,
+          entity_id: data.sourceId,
+          relation: data.relation,
+          created_by: context.userId,
+        },
+        { onConflict: "document_id,entity_type,entity_id" },
+      )
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const detachDocumentFromSource = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => detachDocumentSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("document_links")
+      .delete()
+      .eq("company_id", data.companyId)
+      .eq("document_id", data.documentId)
+      .eq("entity_type", data.sourceType)
+      .eq("entity_id", data.sourceId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
