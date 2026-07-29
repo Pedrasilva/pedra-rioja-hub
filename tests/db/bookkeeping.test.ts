@@ -11,7 +11,7 @@ import {
   userClient,
 } from "../support/client";
 import { createTestCompany, dropTestCompany, type TestCompany } from "../support/fixtures";
-import { computeDocumentTotals, computeLine, isValidNif } from "../../src/modules/bookkeeping/schemas";
+import { computeDocumentTotals, computeLine, isValidNif } from "../../src/packages/bookkeeping-core/schemas";
 
 const ROLES = ["owner", "manager", "bookkeeper", "assistant", "approver", "viewer"] as const;
 type Role = (typeof ROLES)[number];
