@@ -3,9 +3,11 @@
 Status: **product design, planning only**, written 2026-07-29.
 No code, schema or migration is changed by this document.
 
-> **§5C is a frozen architectural contract for Phase 8A.** It is binding during
-> implementation, takes precedence over the rest of this document, and may not
-> be altered without an explicit decision to unfreeze it.
+> **§5C and §5D are frozen architectural contracts.** §5C is binding for Phase
+> 8A; §5D is binding for Phase 8A and all later phases. Both take precedence
+> over the rest of this document and may not be altered without an explicit
+> decision to unfreeze them. §5D defines how records move between domains; it
+> does not override the ownership rules frozen in §5C.
 
 
 Reference documents this one obeys rather than repeats:
