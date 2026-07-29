@@ -1,3 +1,5 @@
+> **Historical document.** Superseded by `PRODUCT-STRATEGY.md` (2026-07-29): Pedra Rioja Hub and PSA Hub stay separate applications with separate databases. Kept only as background for a possible future *design* alignment — see `BOOKKEEPING-REFERENCE-DESIGN.md`. Nothing here is an active plan.
+
 # Phase 6 — Shared Bookkeeping Architecture
 
 Assessment only. No schema changes, no migrations, no new screens have been made for this phase.

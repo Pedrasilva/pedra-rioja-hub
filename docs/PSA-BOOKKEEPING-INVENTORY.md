@@ -1,3 +1,5 @@
+> **Historical document.** Superseded by `PRODUCT-STRATEGY.md` (2026-07-29): Pedra Rioja Hub and PSA Hub stay separate applications with separate databases. Kept only as background for a possible future *design* alignment — see `BOOKKEEPING-REFERENCE-DESIGN.md`. Nothing here is an active plan.
+
 # PSA Hub — Bookkeeping / Financial Module Inventory
 
 _Read-only inventory. No comparison with Pedra Rioja, no migration proposals, no code changes._

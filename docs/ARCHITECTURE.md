@@ -4,6 +4,11 @@
 
 Status: design only. No application code, no database, no seed data yet.
 
+> Current product decision: `PRODUCT-STRATEGY.md` — Pedra Rioja Hub and PSA Hub
+> remain separate applications and databases. Bookkeeping alignment is a product
+> and UX reference (`BOOKKEEPING-REFERENCE-DESIGN.md`), not an integration.
+> Remaining delivery plan: `ROADMAP.md`.
+
 ---
 
 ## 1. Recommended application architecture

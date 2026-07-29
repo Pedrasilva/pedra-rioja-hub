@@ -1,9 +1,9 @@
 /**
  * Shared bookkeeping core — host adapter contracts.
  *
- * Everything the shared module cannot know about its host lives here. A host
- * application (Pedra Rioja today, PSA Hub in Phase 6e) implements these and
- * supplies them through `BookkeepingHostProvider`.
+ * Everything the shared module cannot know about its host lives here. The host
+ * application implements these and supplies them through
+ * `BookkeepingHostProvider`.
  *
  * The core must never import host tables, routes, navigation, storage rules or
  * permission internals — only these interfaces.

@@ -3,7 +3,7 @@
  *
  * These are the only places where the bookkeeping UI touches Pedra Rioja's
  * real-estate domain (properties, capex projects, Drive documents, bank
- * transactions, cash-flow ledger). PSA Hub will supply its own equivalents.
+ * transactions, cash-flow ledger).
  */
 
 import { useQuery } from "@tanstack/react-query";
