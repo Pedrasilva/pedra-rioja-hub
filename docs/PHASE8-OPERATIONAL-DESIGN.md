@@ -765,27 +765,52 @@ Four sub-phases. Each is independently shippable, delivers a coherent operating
 capability, reuses existing tables wherever possible, and adds no figure that is
 stored rather than derived.
 
-### Phase 8A — Operate the buildings and the works
+### Phase 8A — The commitment layer
 
-*Theme: make committed spend and physical work visible.*
+*Theme: commitments become the primary operational record; everything
+operational is expressed through them. Full design in §5B.*
 
-1. Finish the outstanding banking P0s: closing-balance control and unreconcile
-   with reason.
+Ordered so that the money pathway is proven before any descriptive module is
+built on top of it.
+
+**8A.1 — Foundations (prerequisite work already outstanding)**
+1. Banking P0s: closing-balance control and unreconcile with reason.
 2. Cash-flow chart collapse of reconciled vs forecast/committed, and the
    base-vs-scenario comparison view.
-3. **Editable capex project workspace** with budget by category, status and
-   evidence.
-4. **Commitment register** feeding committed cash-flow entries by reference,
-   drawn down by invoices through dimensions.
-5. **Maintenance jobs** with contractor (counterparty), status, quotation
-   evidence and optional committed cost.
-6. **Contractor overlay on counterparties** — trade, service area, insurance
-   expiry.
 
-*Value:* the company can run refurbishments and repairs in-product, and the
-cash-flow forecast finally includes money it has already promised.
-*Architecture:* two new owned tables (job, commitment) plus fields; everything
-else is existing.
+**8A.2 — The commitment record**
+3. **Commitments** — one owned table with the eight types of §5B.2, the
+   lifecycle of §5B.4, schedule versioning modelled on financing schedules, and
+   Drive evidence through the existing adapter.
+4. **Minimal approval**: company threshold, `approver`/`owner` authority,
+   approve/reject as events. Only the commitment case — the general approval
+   mechanism stays in 8C.
+5. **Committed cash-flow projection by reference**: `source_type =
+   'commitment'`, undrawn instalments only, nothing stored.
+6. **Drawdown**: link a posted supplier invoice to the commitments it consumes,
+   with variance visible and no restatement in either direction.
+
+**8A.3 — Consumers of the commitment**
+7. **Editable capex project workspace** — owns budget, phases, status and
+   evidence; consumes commitments for all spend. `v_capex_summary` recast onto
+   budget / committed / invoiced / paid.
+8. **Commitment register and exposure views** (§5B.10), including commitments
+   overdue for invoicing and counterparty exposure.
+9. **Maintenance jobs** — the work record; accepting a quotation raises a
+   `maintenance` commitment. No independent money pathway.
+10. **Contractor overlay on counterparties** — trade, service area, insurance
+    expiry.
+
+*Value:* the company can run refurbishments and repairs in-product; committed
+spend becomes visible at the moment of ordering rather than of invoicing; the
+liquidity forecast includes money already promised.
+*Architecture:* two new owned tables (commitment with its schedule/drawdown
+children, and maintenance job), one narrow approval record, plus fields and
+views. No existing ownership changes.
+
+*Gate:* 8A.3 does not start until the §5B.14 validation checklist passes against
+the implemented 8A.2 behaviour.
+
 
 ### Phase 8B — Operate the income
 
@@ -888,9 +913,17 @@ Pedra Rioja Hub has the financial spine of a property investment company. What
 it lacks is the **operational layer above it**: the work on the buildings, the
 deadlines attached to them, and the authority to spend money on them.
 
-Three new owned records — **maintenance job**, **obligation**, **approval** —
-plus an editable **capex project with commitments**, plus screens over data the
-platform already computes, is the whole of what stands between v1.0 architecture
-and running the company entirely in-product.
+Four new owned records — **commitment**, **maintenance job**, **obligation**,
+**approval** — plus an editable **capex project** that consumes commitments
+instead of owning spend, plus screens over data the platform already computes,
+is the whole of what stands between v1.0 architecture and running the company
+entirely in-product.
+
+The commitment is the keystone. It closes the missing rung between forecast and
+actual, gives the `approver` role its first duty, makes committed exposure a
+derived fact rather than a spreadsheet, and reduces maintenance, insurance,
+utilities, service contracts, professional engagements and taxes to descriptive
+records over one shared money pathway.
 
 No table needs redesigning to get there.
+
