@@ -2,6 +2,7 @@ import { Link, useRouter, type LinkProps } from "@tanstack/react-router";
 import {
   BarChart3,
   Building2,
+  ClipboardCheck,
   Landmark,
 
   LayoutDashboard,
@@ -10,6 +11,7 @@ import {
   Settings,
   Users,
   Wallet,
+  Wrench,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -24,6 +26,8 @@ const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
+  { to: "/commitments", label: "Commitments", icon: ClipboardCheck },
+  { to: "/operations", label: "Operations", icon: Wrench },
   { to: "/banking", label: "Banking", icon: Landmark },
   { to: "/bookkeeping", label: "Bookkeeping", icon: Receipt },
   { to: "/reports", label: "Reports", icon: BarChart3 },
