@@ -3,6 +3,9 @@
 Frame: finish Pedra Rioja as a complete, stable, single-product application.
 No PSA Hub work. See `PRODUCT-STRATEGY.md`.
 
+See also `DESIGN-PRINCIPLES.md` for the behavioural rules every item below
+must respect.
+
 Priority key:
 **[P0]** required before initial production use ·
 **[P1]** important shortly after launch ·
@@ -14,16 +17,27 @@ Delivered: foundation and roles (P1), property domain model (P1.5), property
 register and workspace (P2), Google Drive documents (P2.5), financing and
 versioned schedules (P3), cash-flow engine (P4), banking and reconciliation
 (P5), canonical bookkeeping domain and workspace (P6b/6c), internal bookkeeping
-module boundary (P6d). 262 database tests + 93 UI tests green.
+module boundary (P6d), and **Phase 7 — executive dashboard, management
+reporting, bookkeeping completion and operational intelligence**.
+
+Phase 7 shipped: `/dashboard` executive snapshot with consolidated alerts;
+`/reports` suite (income statement, profitability, cash-flow statement, debt,
+performance, capex, yield/ROI/IRR) with filters, drill-down and CSV export;
+document attachments, counterparty ageing, period close/reopen, journals and
+VAT summaries; proactive insights (liquidity, cost ratio, debt service,
+vacancy, budget overrun, refinancing).
+
+Test coverage: 285 database tests + 143 UI and helper tests green.
 
 ## 1. Bookkeeping
 
-- **[P0]** Document attachments wired to the Drive documents module from the
-  document editor (link, list, open) — currently properties-only.
-- **[P0]** Outstanding-balance and ageing view per counterparty (receivables /
-  payables) driven from documents and payments.
-- **[P0]** Period close: lock a closed period against new postings; recompute
-  and freeze totals.
+- ~~Document attachments wired to the Drive documents module from the document
+  editor (link, list, open).~~ **Done (Phase 7C)** — evidence can be linked,
+  uploaded and detached, including on posted documents and in closed periods.
+- ~~Outstanding-balance and ageing view per counterparty.~~ **Done (Phase 7C)**
+  — `v_counterparty_ageing`, buckets not-due / 1-30 / 31-60 / 61-90 / 90+.
+- ~~Period close: lock a closed period against new postings.~~ **Done
+  (Phase 7C)** — close and reopen with audit trail.
 - **[P1]** Credit notes / corrective documents linked to the corrected document
   with automatic outstanding adjustment.
 - **[P1]** Document numbering series with per-series counters and gap checks.
@@ -43,7 +57,8 @@ module boundary (P6d). 262 database tests + 93 UI tests green.
 - **[P0]** Reconciled bank transactions visibly collapsing their forecast /
   committed counterparts (no double counting in the chart).
 - **[P0]** Scenario comparison view (base vs scenario) on the same horizon.
-- **[P1]** Liquidity alerts: projected balance below a per-account threshold.
+- ~~Liquidity alerts: projected balance below threshold.~~ **Done (Phase 7D)**
+  at portfolio level. Remaining **[P1]**: per-account thresholds.
 - **[P2]** Sensitivity on interest rate and vacancy assumptions.
 
 ## 4. Recurring costs and income
@@ -55,15 +70,17 @@ module boundary (P6d). 262 database tests + 93 UI tests green.
 
 ## 5. Projects and commitments
 
-- **[P0]** Capex project workspace: budget vs committed vs actual, fed by
-  documents and cash-flow commitments.
+- ~~Capex reporting: budget vs committed vs actual with overrun alerts.~~
+  **Done (Phase 7B/7D)**. Remaining **[P0]**: an editable capex project
+  workspace (the reporting view is read-only today).
 - **[P1]** Commitment register (orders, contracts) with drawdown against budget.
 - **[P2]** Milestone-based progress billing.
 
 ## 6. Taxation
 
-- **[P0]** VAT period report: output/input VAT per period, per rate, drillable
-  to documents; export.
+- ~~VAT period report: output/input VAT per period, per rate, drillable to
+  documents; export.~~ **Done (Phase 7C)** — `vat_summary` per direction, rate
+  and VAT code, with CSV export.
 - **[P1]** Property tax (IMI/AIMI) and stamp-duty commitments as scheduled
   cash-flow items per property.
 - **[P2]** Corporate-tax estimate worksheet.
@@ -78,12 +95,12 @@ module boundary (P6d). 262 database tests + 93 UI tests green.
 
 ## 8. Accounting-oriented reporting
 
-- **[P0]** Portfolio income statement (operational) by period, per property and
-  consolidated.
-- **[P0]** Accountant export pack: documents, lines, payments, classifications
-  as CSV for the external accountant.
-- **[P1]** Investment reporting: yield, cash-on-cash, DSCR, LTV per property and
-  portfolio.
+- ~~Portfolio income statement (operational) by period, per property and
+  consolidated.~~ **Done (Phase 7B)**.
+- ~~Accountant export pack: documents, lines, payments, classifications as CSV.~~
+  **Done (Phase 7C)** — journals and per-report CSV export.
+- ~~Investment reporting: yield, ROI, IRR per property and portfolio.~~
+  **Done (Phase 7B)**. Remaining **[P1]**: cash-on-cash, DSCR and LTV.
 - **[P2]** Investor-facing PDF report.
 
 ## 9. Document management
@@ -95,8 +112,10 @@ module boundary (P6d). 262 database tests + 93 UI tests green.
 
 ## 10. Dashboards
 
-- **[P0]** Replace the phase-status dashboard with the real portfolio dashboard:
-  portfolio value, debt, occupancy, 12-month net cash flow, overdue items.
+- ~~Replace the phase-status dashboard with the real portfolio dashboard.~~
+  **Done (Phase 7A)** — portfolio, liquidity with 30/90/180/365-day forecast,
+  financing, income, costs, projects, bookkeeping and a consolidated alerts
+  panel.
 - **[P1]** Per-property dashboard tab consolidating the same KPIs.
 - **[P2]** Configurable widgets.
 
@@ -132,14 +151,26 @@ module boundary (P6d). 262 database tests + 93 UI tests green.
 - **[P1]** Backup/restore rehearsal and a data-retention note.
 - **[P1]** Onboarding: first-run company setup wizard.
 
+## Phase 7 — closed
+
+Delivered as described under "Status today": executive dashboard (7A),
+management reporting (7B), bookkeeping completion (7C) and operational
+intelligence (7D), with database contract tests for the new views and RPCs,
+helper tests for the reporting maths, and UI tests for document attachments.
+
+Deliberately left out of Phase 7 (and now sequenced below): editable capex
+project workspace, scenario comparison, per-account liquidity thresholds, and
+the accountant PDF pack.
+
 ## Proposed next phase
 
-**Phase 7 — Operational completeness (all P0 items above)**, sequenced:
+**Phase 8 — Operational completeness (remaining P0 items)**, sequenced:
 
-1. Real portfolio dashboard + income statement (visible value first).
-2. Bookkeeping attachments, ageing, period close.
-3. Banking closing-balance control + unreconcile UI.
-4. Cash-flow double-count collapse + scenario comparison.
-5. VAT period report + accountant export.
-6. Team management and approver capability.
-7. Property/unit import, performance and auth hardening, end-to-end smoke.
+1. Banking closing-balance control + unreconcile UI.
+2. Cash-flow double-count collapse in the chart + scenario comparison.
+3. Editable capex project workspace with commitments.
+4. Recurring rule editor: indexation and end dates.
+5. Team management screen and the approver capability in reconciliation and
+   period close.
+6. Property/unit import, Drive folder provisioning retry.
+7. Performance pass, auth hardening, per-route metadata, end-to-end smoke.

@@ -103,6 +103,8 @@ describe("Pedra Rioja host adapters", () => {
       "upsertBankRule",
       "createPeriod",
       "recomputePeriodTotals",
+      "closePeriod",
+      "reopenPeriod",
     ]) {
       expect.soft(server, op).toMatch(new RegExp(`${op}:`));
     }
@@ -111,7 +113,9 @@ describe("Pedra Rioja host adapters", () => {
   it("only deletes draft document lines on the server, never a document or a payment", () => {
     const server = host.get(join(HOST_DIR, "bookkeeping.functions.ts"))!;
     const deletes = [...server.matchAll(/\.from\("([a-z_]+)"\)\s*\.delete\(\)/g)].map((m) => m[1]);
-    expect(deletes).toEqual(["financial_document_lines"]);
+    // `document_links` rows are evidence links, not accounting records: detaching
+    // a document removes the link only, never the document or its amounts.
+    expect(new Set(deletes)).toEqual(new Set(["financial_document_lines", "document_links"]));
     expect(server).not.toMatch(/from\("financial_documents"\)[\s\S]{0,40}\.delete\(\)/);
     expect(server).not.toMatch(/from\("financial_payments"\)[\s\S]{0,40}\.delete\(\)/);
   });

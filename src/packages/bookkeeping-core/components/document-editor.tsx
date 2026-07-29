@@ -32,6 +32,7 @@ import {
   PT_VAT_PRESETS,
   round2,
 } from "../schemas";
+import { AttachmentsPanel } from "./attachments-panel";
 import { classificationLabel, OptionSelect } from "./selectors";
 
 export type LineDraft = {
@@ -529,6 +530,17 @@ export function DocumentEditorDialog({
             <Total label="Gross" value={totals.gross} />
             <Total label="Payable" value={totals.payable} />
           </div>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2">
+          <h3 className="font-display text-base font-semibold">Attachments</h3>
+          <p className="text-xs text-muted-foreground">
+            Evidence supports the entry. Attaching a file never changes amounts, so it stays
+            available after posting.
+          </p>
+          <AttachmentsPanel sourceType="financial_document" sourceId={documentId ?? undefined} />
         </div>
 
         {missingExemption ? (

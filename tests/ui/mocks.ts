@@ -107,6 +107,10 @@ export const SERVER_FN_NAMES = [
   "upsertBankClassificationRule",
   "recomputePeriodTotals",
   "createFinancialPeriod",
+  "closeFinancialPeriod",
+  "reopenFinancialPeriod",
+  "attachDocumentToSource",
+  "detachDocumentFromSource",
 ] as const;
 
 export type ServerFnName = (typeof SERVER_FN_NAMES)[number];
