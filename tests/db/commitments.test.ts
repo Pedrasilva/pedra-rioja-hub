@@ -8,7 +8,6 @@ import {
   authUrl,
   expectNoError,
   serviceRoleKey,
-  sqlRows,
   userClient,
 } from "../support/client";
 import { createTestCompany, dropTestCompany, type TestCompany } from "../support/fixtures";
@@ -34,6 +33,7 @@ let other: TestCompany;
 let counterpartyId: string;
 let projectId: string;
 let projectDimensionId: string;
+let bankAccountId: string;
 const clients = {} as Record<Role, SupabaseClient>;
 const userIds = {} as Record<Role, string>;
 
@@ -163,17 +163,60 @@ async function makeDocument(gross: number, companyId = company.id) {
 }
 
 /**
- * Freezes a schedule line the way invoicing, settlement or reconciliation does.
- * The guard trigger refuses direct writes, so this goes through psql with the
- * same internal flag the server functions set.
+ * Freezes a schedule line the way the real lifecycle does: a drawdown makes it
+ * invoiced, settling the invoice makes it paid, and a bank-backed settlement
+ * makes it reconciled. Direct row writes are refused by the guard trigger.
  */
-function freezeLine(versionId: string, expectedDate: string, status: string) {
-  sqlRows(
-    `select set_config('pedra.commitment_fn','on',false);` +
-      ` update public.commitment_schedule_lines set status = '${status}'` +
-      ` where version_id = '${versionId}' and expected_date = '${expectedDate}';` +
-      ` select set_config('pedra.commitment_fn','off',false);`,
+async function freezeLine(versionId: string, expectedDate: string, status: string) {
+  const line = await admin
+    .from("commitment_schedule_lines")
+    .select("id, commitment_id, amount")
+    .eq("version_id", versionId)
+    .eq("expected_date", expectedDate)
+    .single();
+  expectNoError(line, "load schedule line");
+  const amount = Number(line.data!.amount);
+  const doc = await makeDocument(amount);
+  expectNoError(
+    await rpc("manager", "create_commitment_drawdown", {
+      _commitment_id: line.data!.commitment_id,
+      _document_id: doc,
+      _amount: amount,
+      _schedule_line_id: line.data!.id,
+    }),
+    "drawdown against the line",
   );
+  if (status === "invoiced") return;
+
+  await admin.from("financial_documents").update({ status: "posted" }).eq("id", doc);
+  let bankTransactionId: string | null = null;
+  if (status === "reconciled") {
+    const tx = await admin
+      .from("bank_transactions")
+      .insert({
+        company_id: company.id,
+        bank_account_id: bankAccountId,
+        transaction_date: "2026-03-20",
+        description: "Contractor payment",
+        debit_amount: amount,
+        credit_amount: 0,
+        amount: -amount,
+        currency: "EUR",
+        fingerprint: `qa-${Math.random().toString(36).slice(2, 10)}`,
+      })
+      .select("id")
+      .single();
+    expectNoError(tx, "insert bank transaction");
+    bankTransactionId = tx.data!.id;
+  }
+  const pay = await admin.from("financial_payments").insert({
+    company_id: company.id,
+    document_id: doc,
+    payment_date: "2026-03-20",
+    amount,
+    bank_transaction_id: bankTransactionId,
+  });
+  expectNoError(pay, "settle the invoice");
 }
 
 async function commitmentRow(id: string) {
@@ -236,6 +279,14 @@ beforeAll(async () => {
     .single();
   expectNoError(project, "insert capex project");
   projectId = project.data!.id;
+
+  const bank = await admin
+    .from("bank_accounts")
+    .insert({ company_id: company.id, name: "Commitments Current", opening_balance: 0 })
+    .select("id")
+    .single();
+  expectNoError(bank, "insert bank account");
+  bankAccountId = bank.data!.id;
 
   const dim = await admin
     .from("dimensions")
@@ -604,7 +655,7 @@ describe("commitment schedule versioning", () => {
       "activate v1",
     );
     // freeze the historical line the way invoicing and settlement would
-    freezeLine(v1, "2026-01-15", "paid");
+    await freezeLine(v1, "2026-01-15", "paid");
 
     const v2 = await scheduleVersion(
       id,
@@ -637,7 +688,7 @@ describe("commitment schedule versioning", () => {
         await rpc("manager", "activate_commitment_schedule_version", { _version_id: v1 }),
         "activate",
       );
-      freezeLine(v1, "2026-05-01", frozen);
+      await freezeLine(v1, "2026-05-01", frozen);
       const res = await rpc("manager", "create_commitment_schedule_version", {
         _commitment_id: id,
         _effective_from: "2026-01-01",
