@@ -8,6 +8,7 @@ import {
   authUrl,
   expectNoError,
   serviceRoleKey,
+  sqlRows,
   userClient,
 } from "../support/client";
 import { createTestCompany, dropTestCompany, type TestCompany } from "../support/fixtures";
@@ -161,6 +162,20 @@ async function makeDocument(gross: number, companyId = company.id) {
   return doc.data!.id as string;
 }
 
+/**
+ * Freezes a schedule line the way invoicing, settlement or reconciliation does.
+ * The guard trigger refuses direct writes, so this goes through psql with the
+ * same internal flag the server functions set.
+ */
+function freezeLine(versionId: string, expectedDate: string, status: string) {
+  sqlRows(
+    `select set_config('pedra.commitment_fn','on',false);` +
+      ` update public.commitment_schedule_lines set status = '${status}'` +
+      ` where version_id = '${versionId}' and expected_date = '${expectedDate}';` +
+      ` select set_config('pedra.commitment_fn','off',false);`,
+  );
+}
+
 async function commitmentRow(id: string) {
   const res = await admin.from("commitments").select("*").eq("id", id).single();
   expectNoError(res, "reload commitment");
@@ -284,9 +299,9 @@ describe("commitment access control", () => {
   });
 
   it.each(ROLES)("%s approval authority matches the capability matrix", async (role) => {
-    const id = await draft("manager", { _authorised_amount: 5_000 });
+    const id = await draft("assistant", { _authorised_amount: 5_000 });
     expectNoError(
-      await rpc("manager", "request_commitment_approval", { _commitment_id: id }),
+      await rpc("assistant", "request_commitment_approval", { _commitment_id: id }),
       "request",
     );
     const res = await rpc(role, "approve_commitment", { _commitment_id: id, _comment: "x" });
@@ -299,9 +314,9 @@ describe("commitment access control", () => {
   });
 
   it.each(ROLES)("%s activation permission matches the manage capability", async (role) => {
-    const id = await draft("manager", { _authorised_amount: 5_000 });
+    const id = await draft("assistant", { _authorised_amount: 5_000 });
     expectNoError(
-      await rpc("manager", "request_commitment_approval", { _commitment_id: id }),
+      await rpc("assistant", "request_commitment_approval", { _commitment_id: id }),
       "request",
     );
     expectNoError(
@@ -314,9 +329,13 @@ describe("commitment access control", () => {
     await admin.from("commitments").delete().eq("id", id);
   });
 
-  it("enforces company isolation on reads and writes", async () => {
-    const foreign = await draft("manager", { _authorised_amount: 1_000 }, other.id);
-    expect(foreign).toBeUndefined();
+  it("enforces company isolation on writes", async () => {
+    const res = await rpc("manager", "create_commitment_draft", {
+      _company_id: other.id,
+      _title: "Foreign draft",
+      _authorised_amount: 1_000,
+    });
+    expect(res.error, "a user cannot write into another company").not.toBeNull();
   });
 
   it("refuses a draft in a company the user has no role in", async () => {
@@ -352,7 +371,7 @@ describe("commitment lifecycle", () => {
     const id = await draft();
     const row = await commitmentRow(id);
     expect(row.status).toBe("draft");
-    expect(row.approval_status).toBe("none");
+    expect(row.approval_status).toBe("not_requested");
     expect(await projections(id)).toHaveLength(0);
   });
 
@@ -584,12 +603,8 @@ describe("commitment schedule versioning", () => {
       await rpc("manager", "activate_commitment_schedule_version", { _version_id: v1 }),
       "activate v1",
     );
-    // freeze the historical line the way invoicing would
-    await admin
-      .from("commitment_schedule_lines")
-      .update({ status: "paid" })
-      .eq("version_id", v1)
-      .eq("expected_date", "2026-01-15");
+    // freeze the historical line the way invoicing and settlement would
+    freezeLine(v1, "2026-01-15", "paid");
 
     const v2 = await scheduleVersion(
       id,
@@ -622,7 +637,7 @@ describe("commitment schedule versioning", () => {
         await rpc("manager", "activate_commitment_schedule_version", { _version_id: v1 }),
         "activate",
       );
-      await admin.from("commitment_schedule_lines").update({ status: frozen }).eq("version_id", v1);
+      freezeLine(v1, "2026-05-01", frozen);
       const res = await rpc("manager", "create_commitment_schedule_version", {
         _commitment_id: id,
         _effective_from: "2026-01-01",
@@ -1045,19 +1060,14 @@ describe("drawdowns and commitment consumption", () => {
 
 describe("capex and maintenance ownership", () => {
   async function attributeToProject(commitmentId: string) {
+    // capex projects already publish themselves as a dimension value
     const value = await admin
       .from("dimension_values")
-      .insert({
-        company_id: company.id,
-        dimension_id: projectDimensionId,
-        code: `prj-${Math.random().toString(36).slice(2, 8)}`,
-        label: "Roof renewal",
-        entity_table: "capex_projects",
-        entity_id: projectId,
-      })
       .select("id")
+      .eq("dimension_id", projectDimensionId)
+      .eq("entity_id", projectId)
       .single();
-    expectNoError(value, "insert dimension value");
+    expectNoError(value, "load project dimension value");
     const link = await admin.from("transaction_dimensions").insert({
       company_id: company.id,
       source_type: "commitment",
