@@ -65,14 +65,14 @@ const viewer = commitmentCapabilities(["viewer"]);
 
 function commitment(overrides: Partial<CommitmentRow> = {}): CommitmentRow {
   return {
-    id: "com-1",
+    id: "aaaaaaaa-1111-4111-8111-111111111111",
     company_id: COMPANY,
     title: "Roof replacement — Block A",
     code: "COM-001",
     description: "Full roof strip and re-tile",
     notes: null,
     commitment_type: "capex_contract",
-    counterparty_id: "cp-supplier",
+    counterparty_id: "ffffffff-1111-4111-8111-111111111111",
     currency: "EUR",
     authorised_amount: 100000,
     status: "draft",
@@ -91,7 +91,7 @@ function commitment(overrides: Partial<CommitmentRow> = {}): CommitmentRow {
 
 function summary(overrides: Partial<CommitmentSummary> = {}): CommitmentSummary {
   return {
-    commitment_id: "com-1",
+    commitment_id: "aaaaaaaa-1111-4111-8111-111111111111",
     company_id: COMPANY,
     code: "COM-001",
     title: "Roof replacement — Block A",
@@ -101,7 +101,7 @@ function summary(overrides: Partial<CommitmentSummary> = {}): CommitmentSummary 
     currency: "EUR",
     start_date: "2026-01-01",
     end_date: "2026-12-31",
-    counterparty_id: "cp-supplier",
+    counterparty_id: "ffffffff-1111-4111-8111-111111111111",
     counterparty_name: "Rioja Manutenção Lda",
     authorised_amount: 100000,
     scheduled_amount: 100000,
@@ -116,7 +116,7 @@ function summary(overrides: Partial<CommitmentSummary> = {}): CommitmentSummary 
     unapproved_variance: 0,
     property_id: null,
     unit_id: null,
-    project_id: "proj-1",
+    project_id: "ffffffff-2222-4222-8222-222222222222",
     archived_at: null,
     ...overrides,
   };
@@ -124,8 +124,8 @@ function summary(overrides: Partial<CommitmentSummary> = {}): CommitmentSummary 
 
 function version(overrides: Partial<ScheduleVersionRow> = {}): ScheduleVersionRow {
   return {
-    id: "ver-1",
-    commitment_id: "com-1",
+    id: "cccccccc-1111-4111-8111-111111111111",
+    commitment_id: "aaaaaaaa-1111-4111-8111-111111111111",
     version_no: 1,
     schedule_type: "milestone",
     effective_from: "2026-01-01",
@@ -146,9 +146,9 @@ function version(overrides: Partial<ScheduleVersionRow> = {}): ScheduleVersionRo
 
 function line(overrides: Partial<ScheduleLineRow> = {}): ScheduleLineRow {
   return {
-    id: "line-1",
-    commitment_id: "com-1",
-    version_id: "ver-1",
+    id: "dddddddd-1111-4111-8111-111111111111",
+    commitment_id: "aaaaaaaa-1111-4111-8111-111111111111",
+    version_id: "cccccccc-1111-4111-8111-111111111111",
     line_no: 1,
     expected_date: "2026-03-01",
     amount: 40000,
@@ -193,7 +193,7 @@ describe("commitment register", () => {
   const rows = [
     summary(),
     summary({
-      commitment_id: "com-2",
+      commitment_id: "aaaaaaaa-2222-4222-8222-222222222222",
       title: "Lift servicing contract",
       commitment_type: "service_contract",
       status: "draft",
@@ -256,7 +256,7 @@ describe("approval", () => {
   const pendingRequest: ApprovalRequestRow = {
     id: "req-1",
     target_type: "commitment",
-    target_id: "com-1",
+    target_id: "aaaaaaaa-1111-4111-8111-111111111111",
     reason: "Board approved the works",
     requested_amount: 100000,
     requested_by: OWNER,
@@ -295,7 +295,7 @@ describe("approval", () => {
     await user.click(screen.getByRole("button", { name: "Request approval" }));
     await waitFor(() => expect(commitmentFns.requestCommitmentApproval).toHaveBeenCalled());
     expect(lastCommitmentPayload("requestCommitmentApproval")).toMatchObject({
-      commitmentId: "com-1",
+      commitmentId: "aaaaaaaa-1111-4111-8111-111111111111",
       reason: "Board approved",
     });
   });
@@ -441,8 +441,8 @@ describe("schedule versioning", () => {
 
   it("shows each line's own status and its cash-flow projection", () => {
     renderSchedule({
-      lines: [line(), line({ id: "line-2", line_no: 2, status: "paid", amount: 60000 })],
-      projections: [{ source_id: "line-1", state: "committed", reconciliation_state: "unmatched" }],
+      lines: [line(), line({ id: "dddddddd-2222-4222-8222-222222222222", line_no: 2, status: "paid", amount: 60000 })],
+      projections: [{ source_id: "dddddddd-1111-4111-8111-111111111111", state: "committed", reconciliation_state: "unmatched" }],
     });
     expect(screen.getByText("Paid")).toBeInTheDocument();
     expect(screen.getByText(/Committed · Unmatched/)).toBeInTheDocument();
@@ -459,7 +459,7 @@ describe("schedule versioning", () => {
     renderSchedule({
       lines: [
         line(),
-        line({ id: "line-2", line_no: 2, status: "paid", amount: 60000 }),
+        line({ id: "dddddddd-2222-4222-8222-222222222222", line_no: 2, status: "paid", amount: 60000 }),
       ],
     });
     await user.click(screen.getByRole("button", { name: /Revise schedule/ }));
@@ -470,11 +470,11 @@ describe("schedule versioning", () => {
   it("counts frozen history towards the schedule total", async () => {
     const user = userEvent.setup();
     renderSchedule({
-      lines: [line(), line({ id: "line-2", line_no: 2, status: "paid", amount: 60000 })],
+      lines: [line(), line({ id: "dddddddd-2222-4222-8222-222222222222", line_no: 2, status: "paid", amount: 60000 })],
     });
     await user.click(screen.getByRole("button", { name: /Revise schedule/ }));
-    expect(screen.getByText(/Frozen history/).textContent).toContain("€60,000.00");
-    expect(screen.getByText(/Schedule total/).textContent).toContain("€100,000.00");
+    expect(screen.getByText(/Frozen history/).parentElement!.textContent).toContain("€60,000.00");
+    expect(screen.getByText(/Schedule total/).parentElement!.textContent).toContain("€100,000.00");
   });
 
   it("warns as soon as the revision exceeds the authorised amount", async () => {
@@ -497,7 +497,7 @@ describe("schedule versioning", () => {
       commitmentId: string;
       lines: unknown[];
     };
-    expect(payload.commitmentId).toBe("com-1");
+    expect(payload.commitmentId).toBe("aaaaaaaa-1111-4111-8111-111111111111");
     expect(payload.lines).toHaveLength(1);
   });
 
@@ -553,7 +553,7 @@ describe("schedule versioning", () => {
     await user.click(screen.getByRole("button", { name: "Approve variance" }));
     await waitFor(() => expect(commitmentFns.approveScheduleVariance).toHaveBeenCalled());
     expect(lastCommitmentPayload("approveScheduleVariance")).toMatchObject({
-      versionId: "ver-1",
+      versionId: "cccccccc-1111-4111-8111-111111111111",
       reason: "Scope increase agreed",
     });
   });
@@ -582,10 +582,10 @@ describe("schedule versioning", () => {
 
 describe("drawdowns", () => {
   const drawdown = (overrides: Partial<DrawdownRow> = {}): DrawdownRow => ({
-    id: "dd-1",
-    commitment_id: "com-1",
+    id: "eeeeeeee-1111-4111-8111-111111111111",
+    commitment_id: "aaaaaaaa-1111-4111-8111-111111111111",
     document_id: DOCUMENTS[0]!.id,
-    schedule_line_id: "line-1",
+    schedule_line_id: "dddddddd-1111-4111-8111-111111111111",
     amount: 24600,
     drawdown_date: "2026-03-05",
     kind: "allocation",
@@ -624,18 +624,18 @@ describe("drawdowns", () => {
 
   it("shows the net drawn and remaining capacity from the view", () => {
     renderDrawdowns({ drawdowns: [drawdown()] });
-    expect(screen.getByText(/Net drawn/).textContent).toContain("€24,600.00");
-    expect(screen.getByText(/Net drawn/).textContent).toContain("€60,000.00");
+    expect(screen.getByText(/Net drawn/).parentElement!.textContent).toContain("€24,600.00");
+    expect(screen.getByText(/Net drawn/).parentElement!.textContent).toContain("€60,000.00");
   });
 
   it("excludes reversed rows from the net drawn", () => {
     renderDrawdowns({
       drawdowns: [
         drawdown({ status: "reversed", reversal_reason: "Wrong commitment" }),
-        drawdown({ id: "dd-2", kind: "reversal", amount: -24600, status: "reversed" }),
+        drawdown({ id: "eeeeeeee-2222-4222-8222-222222222222", kind: "reversal", amount: -24600, status: "reversed" }),
       ],
     });
-    expect(screen.getByText(/Net drawn/).textContent).toContain("€0.00");
+    expect(screen.getByText(/Net drawn/).parentElement!.textContent).toContain("€0.00");
   });
 
   it("shows the lineage between a reversal and its original", () => {
@@ -643,11 +643,11 @@ describe("drawdowns", () => {
       drawdowns: [
         drawdown({ status: "reversed" }),
         drawdown({
-          id: "dd-2",
+          id: "eeeeeeee-2222-4222-8222-222222222222",
           kind: "reversal",
           amount: -24600,
           status: "reversed",
-          reverses_drawdown_id: "dd-1",
+          reverses_drawdown_id: "eeeeeeee-1111-4111-8111-111111111111",
         }),
       ],
     });
@@ -691,7 +691,7 @@ describe("drawdowns", () => {
     await user.click(screen.getByRole("button", { name: /Record drawdown/ }));
     const dialog = await screen.findByRole("dialog");
     await user.type(within(dialog).getByLabelText("Amount allocation 1"), "1500");
-    expect(within(dialog).getByText(/Allocated/).textContent).toContain("€1,500.00");
+    expect(within(dialog).getByText(/Allocated/).parentElement!.textContent).toContain("€1,500.00");
   });
 
   it("requires a reason before a reversal can be sent", async () => {
@@ -699,18 +699,18 @@ describe("drawdowns", () => {
     renderDrawdowns({ drawdowns: [drawdown()] });
     const reverse = screen.getByRole("button", { name: "Reverse" });
     expect(reverse).toBeDisabled();
-    await user.type(screen.getByLabelText("Reversal reason dd-1"), "Allocated to the wrong job");
+    await user.type(screen.getByLabelText(/Reversal reason/), "Allocated to the wrong job");
     await user.click(screen.getByRole("button", { name: "Reverse" }));
     await waitFor(() => expect(commitmentFns.reverseDrawdown).toHaveBeenCalled());
     expect(lastCommitmentPayload("reverseDrawdown")).toMatchObject({
-      drawdownId: "dd-1",
+      drawdownId: "eeeeeeee-1111-4111-8111-111111111111",
       reason: "Allocated to the wrong job",
     });
   });
 
   it("never offers to reverse a reversal", () => {
     renderDrawdowns({
-      drawdowns: [drawdown({ id: "dd-2", kind: "reversal", amount: -100 })],
+      drawdowns: [drawdown({ id: "eeeeeeee-2222-4222-8222-222222222222", kind: "reversal", amount: -100 })],
     });
     expect(screen.queryByRole("button", { name: "Reverse" })).not.toBeInTheDocument();
   });
@@ -725,7 +725,7 @@ describe("drawdowns", () => {
 
 describe("maintenance", () => {
   const job = (overrides: Partial<MaintenanceJobRow> = {}): MaintenanceJobRow => ({
-    id: "job-1",
+    id: "bbbbbbbb-1111-4111-8111-111111111111",
     company_id: COMPANY,
     code: "MNT-001",
     title: "Boiler service",
@@ -736,8 +736,8 @@ describe("maintenance", () => {
     target_date: "2026-03-01",
     completion_date: null,
     responsible_name: "Ana",
-    counterparty_id: "cp-supplier",
-    commitment_id: "com-1",
+    counterparty_id: "ffffffff-1111-4111-8111-111111111111",
+    commitment_id: "aaaaaaaa-1111-4111-8111-111111111111",
     cancellation_reason: null,
     notes: null,
     ...overrides,
@@ -806,7 +806,7 @@ describe("maintenance", () => {
     await user.click(within(dialog).getByRole("button", { name: "Save changes" }));
     await waitFor(() => expect(commitmentFns.updateMaintenanceJob).toHaveBeenCalled());
     expect(lastCommitmentPayload("updateMaintenanceJob")).toMatchObject({
-      jobId: "job-1",
+      jobId: "bbbbbbbb-1111-4111-8111-111111111111",
       responsibleName: "Ana Silva",
     });
   });
@@ -823,7 +823,7 @@ describe("maintenance", () => {
 describe("capex summary", () => {
   const row: CapexSummaryRow = {
     company_id: COMPANY,
-    project_id: "proj-1",
+    project_id: "ffffffff-2222-4222-8222-222222222222",
     code: "CPX-1",
     name: "Block A refurbishment",
     status: "in_progress",
