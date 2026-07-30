@@ -1818,6 +1818,370 @@ export type Database = {
           },
         ]
       }
+      budget_lines: {
+        Row: {
+          budget_version_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          dimension_id: string | null
+          dimension_value_id: string | null
+          direction: string
+          id: string
+          label: string
+          line_no: number
+          notes: string | null
+          period_month: number | null
+          planned_amount: number
+          project_id: string | null
+          property_id: string | null
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          budget_version_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          dimension_id?: string | null
+          dimension_value_id?: string | null
+          direction?: string
+          id?: string
+          label: string
+          line_no?: number
+          notes?: string | null
+          period_month?: number | null
+          planned_amount?: number
+          project_id?: string | null
+          property_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          budget_version_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          dimension_id?: string | null
+          dimension_value_id?: string | null
+          direction?: string
+          id?: string
+          label?: string
+          line_no?: number
+          notes?: string | null
+          period_month?: number | null
+          planned_amount?: number
+          project_id?: string | null
+          property_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_lines_budget_version_id_fkey"
+            columns: ["budget_version_id"]
+            isOneToOne: false
+            referencedRelation: "budget_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_budget_version_id_fkey"
+            columns: ["budget_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_budget_version_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_dimension_id_fkey"
+            columns: ["dimension_id"]
+            isOneToOne: false
+            referencedRelation: "dimensions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_dimension_value_id_fkey"
+            columns: ["dimension_value_id"]
+            isOneToOne: false
+            referencedRelation: "dimension_values"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budget_versions: {
+        Row: {
+          approval_request_id: string | null
+          approval_status: string
+          archive_reason: string | null
+          archived_at: string | null
+          budget_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_current: boolean
+          notes: string | null
+          published_at: string | null
+          published_by: string | null
+          reason: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          version_no: number
+        }
+        Insert: {
+          approval_request_id?: string | null
+          approval_status?: string
+          archive_reason?: string | null
+          archived_at?: string | null
+          budget_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_no: number
+        }
+        Update: {
+          approval_request_id?: string | null
+          approval_status?: string
+          archive_reason?: string | null
+          archived_at?: string | null
+          budget_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_no?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_versions_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      budgets: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          code: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          fiscal_year: number
+          id: string
+          name: string
+          notes: string | null
+          project_id: string | null
+          property_id: string | null
+          status: string
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          fiscal_year: number
+          id?: string
+          name: string
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          status?: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          fiscal_year?: number
+          id?: string
+          name?: string
+          notes?: string | null
+          project_id?: string | null
+          property_id?: string | null
+          status?: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "budgets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       capex_project_costs: {
         Row: {
           amount: number
@@ -8163,6 +8527,197 @@ export type Database = {
         }
         Relationships: []
       }
+      v_budget_line_performance: {
+        Row: {
+          budget_id: string | null
+          budget_name: string | null
+          budget_version_id: string | null
+          committed_amount: number | null
+          company_id: string | null
+          consumed_pct: number | null
+          currency: string | null
+          dimension_id: string | null
+          dimension_value_id: string | null
+          dimension_value_label: string | null
+          direction: string | null
+          fiscal_year: number | null
+          invoiced_amount: number | null
+          label: string | null
+          line_id: string | null
+          line_no: number | null
+          notes: string | null
+          paid_amount: number | null
+          period_month: number | null
+          planned_amount: number | null
+          project_id: string | null
+          property_id: string | null
+          remaining_amount: number | null
+          unit_id: string | null
+          variance_amount: number | null
+          version_no: number | null
+          version_status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_lines_budget_version_id_fkey"
+            columns: ["budget_version_id"]
+            isOneToOne: false
+            referencedRelation: "budget_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_budget_version_id_fkey"
+            columns: ["budget_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_budget_version_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "budget_lines_dimension_id_fkey"
+            columns: ["dimension_id"]
+            isOneToOne: false
+            referencedRelation: "dimensions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_lines_dimension_value_id_fkey"
+            columns: ["dimension_value_id"]
+            isOneToOne: false
+            referencedRelation: "dimension_values"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_versions_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_budget_version_summary: {
+        Row: {
+          approval_request_id: string | null
+          approval_status: string | null
+          archived_at: string | null
+          budget_id: string | null
+          budget_status: string | null
+          code: string | null
+          committed_amount: number | null
+          company_id: string | null
+          created_at: string | null
+          currency: string | null
+          fiscal_year: number | null
+          invoiced_amount: number | null
+          is_current: boolean | null
+          line_count: number | null
+          name: string | null
+          notes: string | null
+          paid_amount: number | null
+          planned_amount: number | null
+          planned_inflow: number | null
+          planned_outflow: number | null
+          project_id: string | null
+          property_id: string | null
+          property_name: string | null
+          published_at: string | null
+          published_by: string | null
+          reason: string | null
+          remaining_amount: number | null
+          status: string | null
+          unit_id: string | null
+          updated_at: string | null
+          variance_amount: number | null
+          version_id: string | null
+          version_no: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_versions_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "budgets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "capex_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "v_capex_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "budgets_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_capex_summary: {
         Row: {
           active_commitments: number | null
@@ -10011,6 +10566,18 @@ export type Database = {
         Args: { _actor: string; _request_id: string }
         Returns: undefined
       }
+      approval_cb_budget_version_granted: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_budget_version_rejected: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_budget_version_released: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
       approval_cb_commitment_granted: {
         Args: { _request_id: string; _target_id: string }
         Returns: undefined
@@ -10064,6 +10631,14 @@ export type Database = {
       }
       archive_approval_workflow: {
         Args: { _reason?: string; _workflow_id: string }
+        Returns: undefined
+      }
+      archive_budget: {
+        Args: { _budget_id: string; _reason?: string }
+        Returns: undefined
+      }
+      archive_budget_version: {
+        Args: { _reason?: string; _version_id: string }
         Returns: undefined
       }
       archive_operational_record: {
@@ -10200,6 +10775,28 @@ export type Database = {
           _notes?: string
           _reminder_hours?: number
           _workflow_id: string
+        }
+        Returns: string
+      }
+      create_budget: {
+        Args: {
+          _code?: string
+          _company_id: string
+          _currency?: string
+          _fiscal_year: number
+          _name: string
+          _notes?: string
+          _project_id?: string
+          _property_id?: string
+          _unit_id?: string
+        }
+        Returns: string
+      }
+      create_budget_version: {
+        Args: {
+          _budget_id: string
+          _copy_from_version_id?: string
+          _reason?: string
         }
         Returns: string
       }
@@ -10382,6 +10979,7 @@ export type Database = {
         Args: { _step_id: string }
         Returns: undefined
       }
+      delete_budget_line: { Args: { _line_id: string }; Returns: undefined }
       ensure_default_approval_workflow: {
         Args: { _company_id: string; _target_type: string }
         Returns: string
@@ -10495,6 +11093,10 @@ export type Database = {
         Args: { _version_id: string }
         Returns: string
       }
+      publish_budget_version: {
+        Args: { _version_id: string }
+        Returns: undefined
+      }
       recompute_document_payment_state: {
         Args: { _document_id: string }
         Returns: undefined
@@ -10566,6 +11168,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      request_budget_version_approval: {
+        Args: { _reason?: string; _version_id: string }
+        Returns: string
       }
       request_commitment_approval: {
         Args: { _commitment_id: string; _reason?: string }
@@ -10688,6 +11294,21 @@ export type Database = {
       }
       sync_source_settlement: {
         Args: { _entry_id: string }
+        Returns: undefined
+      }
+      update_budget: {
+        Args: {
+          _budget_id: string
+          _code?: string
+          _currency?: string
+          _fiscal_year?: number
+          _name?: string
+          _notes?: string
+          _project_id?: string
+          _property_id?: string
+          _status?: string
+          _unit_id?: string
+        }
         Returns: undefined
       }
       update_commitment_draft: {
@@ -10830,6 +11451,24 @@ export type Database = {
           _rule?: string
           _step_id?: string
           _step_no: number
+          _version_id: string
+        }
+        Returns: string
+      }
+      upsert_budget_line: {
+        Args: {
+          _dimension_id?: string
+          _dimension_value_id?: string
+          _direction?: string
+          _label: string
+          _line_id?: string
+          _line_no?: number
+          _notes?: string
+          _period_month?: number
+          _planned_amount: number
+          _project_id?: string
+          _property_id?: string
+          _unit_id?: string
           _version_id: string
         }
         Returns: string
