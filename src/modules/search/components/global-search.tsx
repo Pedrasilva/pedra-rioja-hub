@@ -57,7 +57,12 @@ export function GlobalSearch({ companyId }: { companyId: string | undefined }) {
         <Search className="h-4 w-4" />
         <span className="hidden sm:inline">Search…</span>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Portfolio search"
+        description="Search properties, documents, commitments, budgets and maintenance"
+      >
         <CommandInput
           placeholder="Search properties, documents, commitments, contracts…"
           value={term}
