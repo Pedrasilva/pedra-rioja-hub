@@ -1451,3 +1451,113 @@ records over one shared money pathway.
 
 No table needs redesigning to get there.
 
+
+---
+
+## 13. Phase 8F — FROZEN SCOPE
+
+**Status: FROZEN.** Derived only from work already named in this document and
+`docs/ROADMAP.md`. No new scope is invented here. §5C, §5D and §5E remain
+frozen and take precedence over anything below.
+
+### 13.1 Delivered vs original plan
+
+| Original plan (§11) | Delivered | Note |
+| --- | --- | --- |
+| 8A — commitment layer | **8A ✓** | Commitments, minimal approval, drawdowns, capex, maintenance jobs, contractor overlay. |
+| 8B — operate the income | **8B ✓** | Indexation and end dates, obligations register, service contracts, vacancy, rent roll. |
+| 8C — govern and decide | **8C ✓ (approval engine + team management only)** | Generic workflow engine replaced the narrow 8A mechanism. Items 4 and 5 of §11/8C were **not** built. |
+| 8D — plan and harden | **8D ✓** | Budgets, forecast vs plan, DSCR/LTV/cash-on-cash, preventive maintenance, imports, cross-entity search, hardening. |
+| (not in original plan) | **8E ✓** | Lease and asset management: versioned leases, tenants, occupancy, rent roll, rent reviews, WAULT and expiry reporting. |
+
+### 13.2 Deferred inventory (the whole of it)
+
+Carried forward from §11/8C items 4–5, §1.1, §1.2 and §9:
+
+1. **Payment run** — §9 table row and §11/8C.4. Batch approved, due,
+   outstanding items into one settlement session.
+2. **Acquisition pipeline** — §1.1, §4 table, §11/8C.5. Stage, price, agent,
+   decision; converts to a property on completion.
+3. **Due-diligence checklist** — §1.2, §11/8C.5. A reusable checklist attached
+   to a pipeline deal.
+4. **Disposal pipeline** — §4, classified **Later**. Explicitly excluded below.
+
+Everything else on the roadmap that is still open is P1/P2 polish over shipped
+modules, not a Phase 8F domain.
+
+### 13.3 Phase 8F scope (in this order)
+
+**8F.1 — Payment run**
+- One owned table (`payment_run`) with a line child referencing outstanding
+  items by `source_type` / `source_id`. The run owns **only the batch**.
+- No amount is stored that bookkeeping or banking already owns; outstanding
+  balances stay derived.
+- A run is submitted through the Phase 8C approval engine — no bespoke
+  approval mechanism (§5E).
+- Confirming a run produces settlements through the existing settlement
+  pathway; it never posts a document and never writes cash-flow entries
+  directly (§5D).
+
+**8F.2 — Acquisition pipeline**
+- One light owned table (`pipeline_deal`): stage, asking/offer price, agent
+  counterparty, decision, target property attributes.
+- Stage transitions are events, not destructive edits.
+- Pipeline value is **not** portfolio value: excluded from all existing
+  portfolio, valuation and investment views.
+- Cash-flow exposure only by reference, as forecast, and only for a deal in an
+  advanced stage — never as a commitment.
+- Completion converts the deal into a property record; the deal remains as
+  history and is never deleted.
+
+**8F.3 — Due-diligence checklist**
+- A checklist template plus per-deal instance child of `pipeline_deal`.
+- Items carry status, responsible member, due date and Drive evidence through
+  the existing document adapter.
+- Blocking items gate the deal's move to the completion stage; enforcement is
+  server-side and fail-closed.
+
+### 13.4 Exclusions (not Phase 8F)
+
+- Disposal pipeline; full underwriting, valuation modelling or IRR on deals.
+- Any new approval mechanism, any new cash-flow pathway, any new document store.
+- Investor-facing PDF reporting, OCR capture, direct bank feeds, credit notes,
+  depreciation schedules, per-property access scoping — all remain P1/P2 items
+  on `docs/ROADMAP.md`.
+- Any change to leases, commitments, bookkeeping or banking ownership.
+
+### 13.5 Ownership boundaries
+
+| Fact | Owner |
+| --- | --- |
+| Payment batch membership and batch state | `payment_run` |
+| Outstanding balance of an item | Bookkeeping (derived) |
+| Money leaving the account | Banking settlement / reconciliation |
+| Authority to pay | Approval engine (§5E) |
+| Deal stage, offer, decision | `pipeline_deal` |
+| Checklist completion | `pipeline_checklist_item` |
+| Property once acquired | `properties` |
+| Evidence files | Google Drive via the existing adapter |
+| Attribution | Dimensions only |
+
+### 13.6 Is a new frozen contract needed?
+
+**No.** §5C (commitment ownership), §5D (canonical financial lifecycle) and
+§5E (generic approval) already govern every 8F record. Phase 8F adds
+consumers, not a new architectural layer. If implementation reveals a payment
+run needing to originate money outside §5D, work stops rather than the
+contract being amended.
+
+### 13.7 Unresolved decisions
+
+1. Whether a payment run may include items with no approval requirement at all
+   (auto-eligible below threshold), or whether every run requires one decision.
+2. Whether a pipeline deal in an advanced stage appears in the liquidity
+   forecast by default or only when explicitly flagged.
+3. Whether checklist templates are company-level only, or per deal type.
+4. Whether an abandoned deal is archived or retained as a closed stage.
+
+### 13.8 Implementation readiness
+
+Ready. Every dependency (approval engine, settlements, dimensions, Drive
+adapter, reminders, search index) is shipped and tested. Nothing in 8F
+requires a migration to an existing owned table beyond additive columns.
