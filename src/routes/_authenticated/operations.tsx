@@ -68,8 +68,10 @@ function OperationsPage() {
   const capabilities = commitmentCapabilities(workspace?.roles);
   const commitmentActions = useCommitmentActions();
   const actions = useOperationsActions();
+  const maintenanceActions = useMaintenanceActions();
 
   const { data: jobs = [] } = useMaintenanceJobs(companyId);
+  const { data: schedules = [], isLoading: loadingSchedules } = useMaintenanceSchedules(companyId);
   const { data: commitments = [] } = useCommitmentSummaries(companyId);
   const { data: capex = [] } = useCapexSummaries(companyId);
 
@@ -99,6 +101,7 @@ function OperationsPage() {
           <TabsTrigger value="insurance">Insurance</TabsTrigger>
           <TabsTrigger value="utilities">Utilities</TabsTrigger>
           <TabsTrigger value="tax">Tax</TabsTrigger>
+          <TabsTrigger value="preventive">Preventive</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           <TabsTrigger value="capex">Capex</TabsTrigger>
         </TabsList>
@@ -164,6 +167,16 @@ function OperationsPage() {
                 canRecord={capabilities.canRecord && !row.archived_at}
               />
             )}
+          />
+        </TabsContent>
+
+        <TabsContent value="preventive">
+          <MaintenanceSchedulesPanel
+            companyId={companyId}
+            schedules={schedules}
+            capabilities={capabilities}
+            actions={maintenanceActions}
+            isLoading={loadingSchedules}
           />
         </TabsContent>
 
