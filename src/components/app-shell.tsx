@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABELS, useWorkspace } from "@/hooks/use-workspace";
+import { GlobalSearch } from "@/modules/search/components/global-search";
+
 
 type NavItem = { to: LinkProps["to"]; label: string; icon: typeof LayoutDashboard; soon?: boolean };
 
