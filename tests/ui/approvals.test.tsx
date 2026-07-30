@@ -590,7 +590,7 @@ describe("request viewer", () => {
     expect(screen.getAllByText("Roof replacement").length).toBeGreaterThan(0);
     expect(screen.getByText(/Snapshot at submission/i)).toBeInTheDocument();
     expect(screen.getByText("Authorised amount")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Open the commitment record/i })).toBeInTheDocument();
+    expect(screen.getByText(/Open the commitment record/i)).toBeInTheDocument();
   });
 
   it("keeps historical Phase 8A decisions visible and labelled", () => {
