@@ -13,6 +13,10 @@ import {
   Wallet,
   Wrench,
   ShieldCheck,
+  FileSignature,
+  Contact,
+  ScrollText,
+  DoorOpen,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -28,6 +32,10 @@ type NavItem = { to: LinkProps["to"]; label: string; icon: typeof LayoutDashboar
 const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/properties", label: "Properties", icon: Building2 },
+  { to: "/leases", label: "Leases", icon: FileSignature },
+  { to: "/tenants", label: "Tenants", icon: Contact },
+  { to: "/rent-roll", label: "Rent roll", icon: ScrollText },
+  { to: "/occupancy", label: "Occupancy", icon: DoorOpen },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
   { to: "/budgets", label: "Budgets", icon: Target },
   { to: "/commitments", label: "Commitments", icon: ClipboardCheck },
