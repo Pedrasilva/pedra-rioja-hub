@@ -176,3 +176,43 @@ export function lastCommitmentPayload(name: CommitmentFnName) {
   const call = commitmentFns[name].mock.calls.at(-1);
   return (call?.[0] as { data: unknown } | undefined)?.data;
 }
+
+/* ------------------------------------------- operations server functions */
+
+export const OPERATIONS_FN_NAMES = [
+  "createObligation",
+  "updateObligation",
+  "createServiceContract",
+  "updateServiceContract",
+  "createInsurancePolicy",
+  "updateInsurancePolicy",
+  "createUtilityContract",
+  "updateUtilityContract",
+  "createTaxSchedule",
+  "updateTaxSchedule",
+  "addTaxScheduleDate",
+  "archiveOperationalRecord",
+  "linkOperationalCommitment",
+  "createOperationalCommitment",
+  "upsertOperationalReminder",
+  "resolveOperationalReminder",
+  "generateOperationalReminders",
+] as const;
+
+export type OperationsFnName = (typeof OPERATIONS_FN_NAMES)[number];
+
+export const operationsFns = Object.fromEntries(
+  OPERATIONS_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<OperationsFnName, ReturnType<typeof vi.fn>>;
+
+export function operationsFnModule() {
+  return operationsFns;
+}
+
+export function lastOperationsPayload(name: OperationsFnName) {
+  const call = operationsFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
