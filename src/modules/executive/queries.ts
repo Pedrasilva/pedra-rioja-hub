@@ -374,3 +374,56 @@ export function useDocumentJournal(companyId: string | undefined, range: ReportR
     },
   });
 }
+
+/**
+ * Phase 8D — investment metrics (DSCR, LTV, cash-on-cash), all derived in the
+ * database from financing agreements, valuations and settled cash flow.
+ */
+export type InvestmentMetricRow = {
+  agreement_id: string | null;
+  company_id: string | null;
+  property_id: string | null;
+  property_name: string | null;
+  lender: string | null;
+  type: string | null;
+  status: string | null;
+  currency: string | null;
+  original_principal: number | null;
+  outstanding_principal: number | null;
+  current_valuation: number | null;
+  acquisition_total: number | null;
+  net_operating_income_12m: number | null;
+  annual_debt_service: number | null;
+  debt_service_paid_12m: number | null;
+  dscr: number | null;
+  ltv_pct: number | null;
+  cash_on_cash_pct: number | null;
+};
+
+export function useInvestmentMetrics(companyId: string | undefined) {
+  return useQuery({
+    queryKey: ["investment-metrics", companyId],
+    enabled: Boolean(companyId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("v_investment_metrics")
+        .select("*")
+        .eq("company_id", companyId!)
+        .order("property_name", { ascending: true });
+      if (error) throw error;
+      return (data ?? []).map((r) => ({
+        ...r,
+        original_principal: Number(r.original_principal ?? 0),
+        outstanding_principal: Number(r.outstanding_principal ?? 0),
+        current_valuation: Number(r.current_valuation ?? 0),
+        acquisition_total: Number(r.acquisition_total ?? 0),
+        net_operating_income_12m: Number(r.net_operating_income_12m ?? 0),
+        annual_debt_service: Number(r.annual_debt_service ?? 0),
+        debt_service_paid_12m: Number(r.debt_service_paid_12m ?? 0),
+        dscr: r.dscr === null ? null : Number(r.dscr),
+        ltv_pct: r.ltv_pct === null ? null : Number(r.ltv_pct),
+        cash_on_cash_pct: r.cash_on_cash_pct === null ? null : Number(r.cash_on_cash_pct),
+      })) as InvestmentMetricRow[];
+    },
+  });
+}

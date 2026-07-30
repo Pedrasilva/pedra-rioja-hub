@@ -29,12 +29,14 @@ import { useWorkspace } from "@/hooks/use-workspace";
 import { formatDate, formatMoney, formatNumber, formatPercent, titleCase } from "@/lib/format";
 import { useCashFlowMonthly } from "@/modules/cashflow/queries";
 import { EmptyHint, Kpi } from "@/modules/executive/components/kpi";
+import { InvestmentMetricsPanel } from "@/modules/executive/components/investment-metrics";
 import {
   useCapexSummary,
   useCounterpartyAgeing,
   useDebtSummary,
   useDocumentJournal,
   useIncomeStatement,
+  useInvestmentMetrics,
   usePropertyProfitability,
   useVatSummary,
 } from "@/modules/executive/queries";
@@ -145,6 +147,7 @@ function ReportsPage() {
           <TabsTrigger value="capex">CapEx</TabsTrigger>
           <TabsTrigger value="ageing">Ageing</TabsTrigger>
           <TabsTrigger value="vat">VAT</TabsTrigger>
+          <TabsTrigger value="metrics">Metrics</TabsTrigger>
           <TabsTrigger value="journal">Journal</TabsTrigger>
         </TabsList>
 
@@ -169,7 +172,11 @@ function ReportsPage() {
         <TabsContent value="vat" className="mt-4">
           <VatTab companyId={companyId} range={scoped} money={money} />
         </TabsContent>
+        <TabsContent value="metrics" className="mt-4">
+          <MetricsTab companyId={companyId} currency={currency} />
+        </TabsContent>
         <TabsContent value="journal" className="mt-4">
+
           <JournalTab companyId={companyId} range={scoped} money={money} />
         </TabsContent>
       </Tabs>
@@ -895,5 +902,13 @@ function JournalTab({
         </div>
       )}
     </Panel>
+  );
+}
+
+/** Phase 8D — DSCR, LTV and cash-on-cash, all derived in the database. */
+function MetricsTab({ companyId, currency }: { companyId: string; currency: string }) {
+  const q = useInvestmentMetrics(companyId);
+  return (
+    <InvestmentMetricsPanel rows={q.data ?? []} currency={currency} isLoading={q.isLoading} />
   );
 }
