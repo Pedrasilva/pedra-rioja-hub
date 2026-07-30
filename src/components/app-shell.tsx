@@ -149,7 +149,9 @@ export function AppShell({
             ) : null}
           </div>
           <div className="flex items-center gap-2">
+            <GlobalSearch companyId={workspace?.company?.id} />
             {actions}
+
             <Button variant="outline" size="sm" onClick={signOut} className="md:hidden">
               <LogOut className="size-4" /> Sign out
             </Button>
