@@ -1971,6 +1971,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "budget_lines_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
       budget_versions: {
@@ -2179,6 +2186,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
           },
         ]
       }
@@ -2651,6 +2665,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "cash_flow_entries_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
       cash_flow_recurring_rules: {
@@ -2877,6 +2898,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_recurring_rules_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
           },
         ]
       }
@@ -4458,6 +4486,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "financial_document_lines_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
       financial_documents: {
@@ -4728,6 +4763,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_documents_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
           },
         ]
       }
@@ -5813,6 +5855,1264 @@ export type Database = {
           },
         ]
       }
+      lease_breaks: {
+        Row: {
+          break_type: string
+          company_id: string
+          conditions: string | null
+          created_at: string
+          created_by: string | null
+          effective_date: string | null
+          exercised_on: string | null
+          id: string
+          lease_id: string
+          notes: string | null
+          notice_days: number
+          notice_deadline: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          version_id: string | null
+          window_end: string | null
+          window_start: string
+        }
+        Insert: {
+          break_type?: string
+          company_id: string
+          conditions?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          exercised_on?: string | null
+          id?: string
+          lease_id: string
+          notes?: string | null
+          notice_days?: number
+          notice_deadline?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string | null
+          window_end?: string | null
+          window_start: string
+        }
+        Update: {
+          break_type?: string
+          company_id?: string
+          conditions?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          exercised_on?: string | null
+          id?: string
+          lease_id?: string
+          notes?: string | null
+          notice_days?: number
+          notice_deadline?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string | null
+          window_end?: string | null
+          window_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_breaks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_breaks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      lease_charges: {
+        Row: {
+          amount: number
+          charge_type: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          end_date: string | null
+          frequency: string
+          id: string
+          label: string | null
+          lease_id: string
+          notes: string | null
+          start_date: string | null
+          updated_at: string
+          updated_by: string | null
+          vat_applicable: boolean
+          vat_rate: number | null
+          version_id: string
+        }
+        Insert: {
+          amount?: number
+          charge_type?: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          label?: string | null
+          lease_id: string
+          notes?: string | null
+          start_date?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_applicable?: boolean
+          vat_rate?: number | null
+          version_id: string
+        }
+        Update: {
+          amount?: number
+          charge_type?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          label?: string | null
+          lease_id?: string
+          notes?: string | null
+          start_date?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_applicable?: boolean
+          vat_rate?: number | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_charges_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_charges_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_charges_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_charges_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_charges_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_charges_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_charges_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_charges_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_charges_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      lease_guarantors: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          expiry_date: string | null
+          guarantee_amount: number | null
+          guarantee_type: string
+          id: string
+          lease_id: string
+          name: string
+          notes: string | null
+          reference: string | null
+          start_date: string | null
+          status: string
+          tenant_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          expiry_date?: string | null
+          guarantee_amount?: number | null
+          guarantee_type?: string
+          id?: string
+          lease_id: string
+          name: string
+          notes?: string | null
+          reference?: string | null
+          start_date?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          expiry_date?: string | null
+          guarantee_amount?: number | null
+          guarantee_type?: string
+          id?: string
+          lease_id?: string
+          name?: string
+          notes?: string | null
+          reference?: string | null
+          start_date?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_guarantors_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "lease_guarantors_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+        ]
+      }
+      lease_notices: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          effective_date: string | null
+          id: string
+          lease_id: string
+          notice_type: string
+          reference: string | null
+          served_by: string
+          served_on: string
+          status: string
+          summary: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          lease_id: string
+          notice_type: string
+          reference?: string | null
+          served_by?: string
+          served_on: string
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          lease_id?: string
+          notice_type?: string
+          reference?: string | null
+          served_by?: string
+          served_on?: string
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_notices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_notices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_notices_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_notices_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_notices_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_notices_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+        ]
+      }
+      lease_reviews: {
+        Row: {
+          agreed_rent: number | null
+          applied_at: string | null
+          applied_version_id: string | null
+          approval_request_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          current_rent: number | null
+          effective_date: string
+          id: string
+          index_name: string | null
+          index_pct: number | null
+          index_value: number | null
+          lease_id: string
+          notes: string | null
+          proposed_rent: number | null
+          review_date: string
+          review_type: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+          version_id: string | null
+        }
+        Insert: {
+          agreed_rent?: number | null
+          applied_at?: string | null
+          applied_version_id?: string | null
+          approval_request_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          current_rent?: number | null
+          effective_date: string
+          id?: string
+          index_name?: string | null
+          index_pct?: number | null
+          index_value?: number | null
+          lease_id: string
+          notes?: string | null
+          proposed_rent?: number | null
+          review_date: string
+          review_type?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string | null
+        }
+        Update: {
+          agreed_rent?: number | null
+          applied_at?: string | null
+          applied_version_id?: string | null
+          approval_request_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_rent?: number | null
+          effective_date?: string
+          id?: string
+          index_name?: string | null
+          index_pct?: number | null
+          index_value?: number | null
+          lease_id?: string
+          notes?: string | null
+          proposed_rent?: number | null
+          review_date?: string
+          review_type?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_reviews_applied_version_id_fkey"
+            columns: ["applied_version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_applied_version_id_fkey"
+            columns: ["applied_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_applied_version_id_fkey"
+            columns: ["applied_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      lease_tenants: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_primary: boolean
+          lease_id: string
+          notes: string | null
+          role: string
+          share_pct: number | null
+          tenant_id: string
+          updated_at: string
+          updated_by: string | null
+          version_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_primary?: boolean
+          lease_id: string
+          notes?: string | null
+          role?: string
+          share_pct?: number | null
+          tenant_id: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_primary?: boolean
+          lease_id?: string
+          notes?: string | null
+          role?: string
+          share_pct?: number | null
+          tenant_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_tenants_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_tenants_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      lease_units: {
+        Row: {
+          apportionment_pct: number | null
+          area_m2: number | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          demise_label: string | null
+          id: string
+          lease_id: string
+          notes: string | null
+          property_id: string
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+          version_id: string
+        }
+        Insert: {
+          apportionment_pct?: number | null
+          area_m2?: number | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          demise_label?: string | null
+          id?: string
+          lease_id: string
+          notes?: string | null
+          property_id: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version_id: string
+        }
+        Update: {
+          apportionment_pct?: number | null
+          area_m2?: number | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          demise_label?: string | null
+          id?: string
+          lease_id?: string
+          notes?: string | null
+          property_id?: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_units_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_units_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_units_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "lease_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "lease_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "lease_units_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+          {
+            foreignKeyName: "lease_units_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "lease_units_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      lease_versions: {
+        Row: {
+          activated_at: string | null
+          activated_by: string | null
+          base_rent: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          deposit_amount: number
+          deposit_expiry_date: string | null
+          deposit_reference: string | null
+          effective_from: string
+          effective_to: string | null
+          end_date: string | null
+          id: string
+          indexation_index: string | null
+          indexation_month: number | null
+          indexation_pct: number | null
+          indexation_type: string
+          is_open_ended: boolean
+          lease_id: string
+          notes: string | null
+          notice_period_days: number | null
+          payment_day: number | null
+          payment_frequency: string
+          review_cycle_months: number | null
+          service_charge: number
+          start_date: string
+          status: string
+          superseded_at: string | null
+          updated_at: string
+          updated_by: string | null
+          vat_applicable: boolean
+          version_no: number
+          version_reason: string
+        }
+        Insert: {
+          activated_at?: string | null
+          activated_by?: string | null
+          base_rent?: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deposit_amount?: number
+          deposit_expiry_date?: string | null
+          deposit_reference?: string | null
+          effective_from: string
+          effective_to?: string | null
+          end_date?: string | null
+          id?: string
+          indexation_index?: string | null
+          indexation_month?: number | null
+          indexation_pct?: number | null
+          indexation_type?: string
+          is_open_ended?: boolean
+          lease_id: string
+          notes?: string | null
+          notice_period_days?: number | null
+          payment_day?: number | null
+          payment_frequency?: string
+          review_cycle_months?: number | null
+          service_charge?: number
+          start_date: string
+          status?: string
+          superseded_at?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_applicable?: boolean
+          version_no: number
+          version_reason?: string
+        }
+        Update: {
+          activated_at?: string | null
+          activated_by?: string | null
+          base_rent?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deposit_amount?: number
+          deposit_expiry_date?: string | null
+          deposit_reference?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          end_date?: string | null
+          id?: string
+          indexation_index?: string | null
+          indexation_month?: number | null
+          indexation_pct?: number | null
+          indexation_type?: string
+          is_open_ended?: boolean
+          lease_id?: string
+          notes?: string | null
+          notice_period_days?: number | null
+          payment_day?: number | null
+          payment_frequency?: string
+          review_cycle_months?: number | null
+          service_charge?: number
+          start_date?: string
+          status?: string
+          superseded_at?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_applicable?: boolean
+          version_no?: number
+          version_reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "lease_versions_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_versions_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_versions_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "lease_versions_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+        ]
+      }
+      leases: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          code: string | null
+          commencement_date: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          current_version_id: string | null
+          id: string
+          lease_type: string
+          notes: string | null
+          primary_tenant_id: string | null
+          property_id: string
+          renewed_from_lease_id: string | null
+          status: string
+          termination_date: string | null
+          termination_reason: string | null
+          title: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commencement_date?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          lease_type?: string
+          notes?: string | null
+          primary_tenant_id?: string | null
+          property_id: string
+          renewed_from_lease_id?: string | null
+          status?: string
+          termination_date?: string | null
+          termination_reason?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commencement_date?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          lease_type?: string
+          notes?: string | null
+          primary_tenant_id?: string | null
+          property_id?: string
+          renewed_from_lease_id?: string | null
+          status?: string
+          termination_date?: string | null
+          termination_reason?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "leases_current_version_fk"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "lease_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_current_version_fk"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "leases_current_version_fk"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["version_id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_renewed_from_lease_id_fkey"
+            columns: ["renewed_from_lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "leases_renewed_from_lease_id_fkey"
+            columns: ["renewed_from_lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_renewed_from_lease_id_fkey"
+            columns: ["renewed_from_lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "leases_renewed_from_lease_id_fkey"
+            columns: ["renewed_from_lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+        ]
+      }
       maintenance_inspection_evidence: {
         Row: {
           company_id: string
@@ -6073,6 +7373,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "maintenance_jobs_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
       maintenance_schedules: {
@@ -6222,6 +7529,173 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_schedules_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+        ]
+      }
+      occupancy_history: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          lease_id: string | null
+          notes: string | null
+          period_end: string | null
+          period_start: string
+          property_id: string
+          reason: string | null
+          status: string
+          tenant_id: string | null
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lease_id?: string | null
+          notes?: string | null
+          period_end?: string | null
+          period_start: string
+          property_id: string
+          reason?: string | null
+          status: string
+          tenant_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lease_id?: string | null
+          notes?: string | null
+          period_end?: string | null
+          period_start?: string
+          property_id?: string
+          reason?: string | null
+          status?: string
+          tenant_id?: string | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "occupancy_history_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
           },
         ]
       }
@@ -7749,11 +9223,119 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tenancy_agreements_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "tenancy_agreements_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
             foreignKeyName: "tenancy_agreements_unit_id_fkey"
             columns: ["unit_id"]
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenancy_agreements_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+        ]
+      }
+      tenant_contacts: {
+        Row: {
+          archived_at: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          is_primary: boolean
+          name: string
+          notes: string | null
+          phone: string | null
+          role: string | null
+          tenant_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archived_at?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_primary?: boolean
+          name: string
+          notes?: string | null
+          phone?: string | null
+          role?: string | null
+          tenant_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archived_at?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_primary?: boolean
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          role?: string | null
+          tenant_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_contacts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenant_contacts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "tenant_contacts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenant_contacts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "tenant_contacts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
           },
         ]
       }
@@ -7966,11 +9548,27 @@ export type Database = {
             referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tenant_fitout_loans_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "tenant_fitout_loans_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
         ]
       }
       tenants: {
         Row: {
           address: string | null
+          archive_reason: string | null
+          archived_at: string | null
           code: string | null
           company_id: string
           created_at: string
@@ -7984,14 +9582,20 @@ export type Database = {
           name: string
           notes: string | null
           phone: string | null
+          registration_number: string | null
+          sector: string | null
           status: string
           tax_number: string | null
           tenant_type: string
+          trading_name: string | null
           updated_at: string
           updated_by: string | null
+          website: string | null
         }
         Insert: {
           address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
           code?: string | null
           company_id: string
           created_at?: string
@@ -8005,14 +9609,20 @@ export type Database = {
           name: string
           notes?: string | null
           phone?: string | null
+          registration_number?: string | null
+          sector?: string | null
           status?: string
           tax_number?: string | null
           tenant_type?: string
+          trading_name?: string | null
           updated_at?: string
           updated_by?: string | null
+          website?: string | null
         }
         Update: {
           address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
           code?: string | null
           company_id?: string
           created_at?: string
@@ -8026,11 +9636,15 @@ export type Database = {
           name?: string
           notes?: string | null
           phone?: string | null
+          registration_number?: string | null
+          sector?: string | null
           status?: string
           tax_number?: string | null
           tenant_type?: string
+          trading_name?: string | null
           updated_at?: string
           updated_by?: string | null
+          website?: string | null
         }
         Relationships: [
           {
@@ -8332,10 +9946,196 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "utility_contracts_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+        ]
+      }
+      vacancy_periods: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          marketing_status: string
+          notes: string | null
+          property_id: string
+          reason: string
+          target_occupation_date: string | null
+          target_rent: number | null
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+          vacancy_end: string | null
+          vacancy_start: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          marketing_status?: string
+          notes?: string | null
+          property_id: string
+          reason?: string
+          target_occupation_date?: string | null
+          target_rent?: number | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vacancy_end?: string | null
+          vacancy_start: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          marketing_status?: string
+          notes?: string | null
+          property_id?: string
+          reason?: string
+          target_occupation_date?: string | null
+          target_rent?: number | null
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vacancy_end?: string | null
+          vacancy_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vacancy_periods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vacancy_periods_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
     }
     Views: {
+      lease_reminders: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          created_by: string | null
+          due_on: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string | null
+          lease_code: string | null
+          lease_id: string | null
+          notes: string | null
+          property_id: string | null
+          reason: string | null
+          remind_on: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       v_approval_history: {
         Row: {
           actor_id: string | null
@@ -9052,6 +10852,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "budgets_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
       v_capex_summary: {
@@ -9300,6 +11107,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cash_flow_entries_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
           },
         ]
       }
@@ -10021,6 +11835,132 @@ export type Database = {
           },
         ]
       }
+      v_lease_expiry_profile: {
+        Row: {
+          annual_rent_expiring: number | null
+          company_id: string | null
+          expiry_year: number | null
+          lease_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      v_lease_summary: {
+        Row: {
+          annual_charge: number | null
+          base_rent: number | null
+          code: string | null
+          company_id: string | null
+          currency: string | null
+          days_to_expiry: number | null
+          deposit_amount: number | null
+          deposit_expiry_date: string | null
+          end_date: string | null
+          indexation_type: string | null
+          is_archived: boolean | null
+          is_open_ended: boolean | null
+          lease_id: string | null
+          lease_type: string | null
+          next_break_date: string | null
+          next_break_notice_deadline: string | null
+          next_review_date: string | null
+          notice_period_days: number | null
+          payment_frequency: string | null
+          primary_tenant_id: string | null
+          property_id: string | null
+          property_name: string | null
+          review_cycle_months: number | null
+          service_charge: number | null
+          start_date: string | null
+          status: string | null
+          tenant_name: string | null
+          title: string | null
+          total_area_m2: number | null
+          total_periodic_charge: number | null
+          unit_count: number | null
+          version_id: string | null
+          version_no: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "leases_primary_tenant_id_fkey"
+            columns: ["primary_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       v_maintenance_job_summary: {
         Row: {
           archived_at: string | null
@@ -10171,6 +12111,43 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_schedules_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+        ]
+      }
+      v_occupancy_metrics: {
+        Row: {
+          company_id: string | null
+          contracted_annual_rent: number | null
+          occupancy_pct: number | null
+          occupied_area_m2: number | null
+          occupied_units: number | null
+          total_area_m2: number | null
+          unit_count: number | null
+          vacancy_pct: number | null
+          vacant_units: number | null
+          wault_years: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -10687,6 +12664,95 @@ export type Database = {
           },
         ]
       }
+      v_rent_roll: {
+        Row: {
+          annual_rent: number | null
+          area_m2: number | null
+          company_id: string | null
+          currency: string | null
+          days_to_expiry: number | null
+          deposit_amount: number | null
+          end_date: string | null
+          lease_code: string | null
+          lease_id: string | null
+          lease_status: string | null
+          next_break_date: string | null
+          next_review_date: string | null
+          occupancy_status: string | null
+          payment_frequency: string | null
+          property_id: string | null
+          property_name: string | null
+          rent: number | null
+          rent_roll_id: string | null
+          service_charge: number | null
+          start_date: string | null
+          tenant_id: string | null
+          tenant_name: string | null
+          unit_code: string | null
+          unit_id: string | null
+          unit_name: string | null
+          version_id: string | null
+          version_no: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lease_units_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lease_units_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "leases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       v_search_index: {
         Row: {
           company_id: string | null
@@ -10922,6 +12988,147 @@ export type Database = {
           },
         ]
       }
+      v_tenant_concentration: {
+        Row: {
+          annual_rent: number | null
+          company_id: string | null
+          lease_count: number | null
+          rent_share_pct: number | null
+          tenant_id: string | null
+          tenant_name: string | null
+          unit_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      v_unit_occupancy: {
+        Row: {
+          area_m2: number | null
+          company_id: string | null
+          lease_id: string | null
+          marketing_status: string | null
+          occupancy_status: string | null
+          property_id: string | null
+          property_name: string | null
+          status_since: string | null
+          target_occupation_date: string | null
+          target_rent: number | null
+          tenant_id: string | null
+          tenant_name: string | null
+          unit_code: string | null
+          unit_id: string | null
+          unit_name: string | null
+          vacancy_id: string | null
+          vacancy_start: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "lease_reminders"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_lease_summary"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["lease_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_rent_roll"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "occupancy_history_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "v_tenant_concentration"
+            referencedColumns: ["tenant_id"]
+          },
+          {
+            foreignKeyName: "property_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_units_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       v_utility_contract_summary: {
         Row: {
           account_number: string | null
@@ -11041,6 +13248,13 @@ export type Database = {
             referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "utility_contracts_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "v_unit_occupancy"
+            referencedColumns: ["unit_id"]
+          },
         ]
       }
     }
@@ -11052,6 +13266,10 @@ export type Database = {
       activate_commitment_schedule_version: {
         Args: { _reason?: string; _version_id: string }
         Returns: number
+      }
+      activate_lease_version: {
+        Args: { p_version_id: string }
+        Returns: undefined
       }
       add_tax_schedule_date: {
         Args: {
@@ -11076,6 +13294,7 @@ export type Database = {
         }
         Returns: string
       }
+      apply_lease_review: { Args: { p_review_id: string }; Returns: string }
       approval_activate_stage: {
         Args: { _request_id: string }
         Returns: undefined
@@ -11159,12 +13378,20 @@ export type Database = {
         Args: { _reason?: string; _version_id: string }
         Returns: undefined
       }
+      archive_lease: {
+        Args: { p_lease_id: string; p_reason?: string }
+        Returns: undefined
+      }
       archive_maintenance_schedule: {
         Args: { _reason?: string; _schedule_id: string }
         Returns: undefined
       }
       archive_operational_record: {
         Args: { _entity_id: string; _entity_type: string; _reason: string }
+        Returns: undefined
+      }
+      archive_tenant_record: {
+        Args: { p_reason?: string; p_tenant_id: string }
         Returns: undefined
       }
       bank_statement_balance_check: {
@@ -11386,6 +13613,8 @@ export type Database = {
         }
         Returns: string
       }
+      create_lease: { Args: { p: Json }; Returns: string }
+      create_lease_version: { Args: { p: Json }; Returns: string }
       create_maintenance_job: {
         Args: {
           _commitment_id?: string
@@ -11525,6 +13754,10 @@ export type Database = {
         Args: { _company_id: string; _through: string }
         Returns: number
       }
+      generate_lease_reminders: {
+        Args: { p_company_id: string; p_horizon_days?: number }
+        Returns: number
+      }
       generate_maintenance_jobs: {
         Args: { _company_id: string; _horizon_months?: number }
         Returns: number
@@ -11556,6 +13789,7 @@ export type Database = {
         Args: { _company_id: string; _user_id: string }
         Returns: boolean
       }
+      lease_assert_record: { Args: { _company_id: string }; Returns: undefined }
       link_operational_commitment: {
         Args: {
           _commitment_id: string
@@ -11662,6 +13896,7 @@ export type Database = {
         }
         Returns: string
       }
+      record_lease_notice: { Args: { p: Json }; Returns: string }
       record_property_event: {
         Args: {
           _amount: number
@@ -11754,6 +13989,19 @@ export type Database = {
         }
         Returns: string
       }
+      set_lease_charges: {
+        Args: { p_charges: Json; p_version_id: string }
+        Returns: undefined
+      }
+      set_lease_tenants: {
+        Args: { p_tenants: Json; p_version_id: string }
+        Returns: undefined
+      }
+      set_lease_units: {
+        Args: { p_units: Json; p_version_id: string }
+        Returns: undefined
+      }
+      set_unit_occupancy: { Args: { p: Json }; Returns: string }
       settle_financial_document: {
         Args: {
           _amount: number
@@ -11832,6 +14080,7 @@ export type Database = {
         Args: { _entry_id: string }
         Returns: undefined
       }
+      terminate_lease: { Args: { p: Json }; Returns: undefined }
       update_budget: {
         Args: {
           _budget_id: string
@@ -11883,6 +14132,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_lease: { Args: { p: Json }; Returns: undefined }
+      update_lease_version: { Args: { p: Json }; Returns: undefined }
       update_maintenance_job: {
         Args: {
           _cancellation_reason?: string
@@ -11975,6 +14226,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_vacancy_period: { Args: { p: Json }; Returns: undefined }
       upsert_approval_workflow_step: {
         Args: {
           _allow_self_approval?: boolean
@@ -12009,6 +14261,8 @@ export type Database = {
         }
         Returns: string
       }
+      upsert_lease_break: { Args: { p: Json }; Returns: string }
+      upsert_lease_review: { Args: { p: Json }; Returns: string }
       upsert_maintenance_schedule: {
         Args: {
           _asset_label?: string
@@ -12046,6 +14300,8 @@ export type Database = {
         }
         Returns: string
       }
+      upsert_tenant_contact: { Args: { p: Json }; Returns: string }
+      upsert_tenant_record: { Args: { p: Json }; Returns: string }
       validate_commitment_schedule: {
         Args: { _version_id: string }
         Returns: Json
