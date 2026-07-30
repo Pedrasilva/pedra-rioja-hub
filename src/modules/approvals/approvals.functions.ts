@@ -138,10 +138,10 @@ export const submitApprovalRequest = createServerFn({ method: "POST" })
       _target_id: data.targetId,
       _reason: data.reason ?? undefined,
       _amount: data.amount ?? undefined,
-      _snapshot: data.snapshot,
+      _snapshot: data.snapshot as never,
       _target_label: data.targetLabel ?? undefined,
       _workflow_id: data.workflowId ?? undefined,
-      _candidates: data.candidates,
+      _candidates: data.candidates as never,
       _threshold_amount: data.thresholdAmount ?? undefined,
       _rule_reference: data.ruleReference ?? undefined,
     });
