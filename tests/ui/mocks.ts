@@ -62,6 +62,10 @@ function builder(table: string) {
   api.limit = (...a: unknown[]) => record("limit", ...a);
   api.or = (...a: unknown[]) => record("or", ...a);
   api.gte = (...a: unknown[]) => record("gte", ...a);
+  api.gt = (c: string, v: unknown) => {
+    rows = rows.filter((r) => Number(r[c] ?? 0) > Number(v));
+    return record("gt", c, v);
+  };
   api.lte = (...a: unknown[]) => record("lte", ...a);
   api.eq = (c: string, v: unknown) => {
     rows = rows.filter((r) => r[c] === v);
