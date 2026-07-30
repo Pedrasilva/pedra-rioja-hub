@@ -12,7 +12,7 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatDate, formatMoneyPrecise } from "@/lib/format";
-import { domainLinkFor } from "@/modules/approvals/adapters";
+import { defaultApprovalDomains, domainLinkFor } from "@/modules/approvals/adapters";
 import type { ApprovalCapabilities } from "@/modules/approvals/capabilities";
 import { labelOf } from "@/modules/approvals/schemas";
 import type { ApprovalActions } from "@/modules/approvals/server";
@@ -86,7 +86,7 @@ export function RequestViewer({
     return <p className="text-sm text-muted-foreground">This approval request was not found.</p>;
   }
 
-  const link = domainLinkFor(request.target_type, request.target_id);
+  const link = domainLinkFor(defaultApprovalDomains, request.target_type, request.target_id);
 
   return (
     <div className="space-y-4">
@@ -109,7 +109,11 @@ export function RequestViewer({
             <div className="flex justify-between gap-4">
               <span className="text-muted-foreground">Amount</span>
               <span className="font-medium">
-                {formatMoneyPrecise(request.requested_amount, request.currency ?? "EUR", "—")}
+                {formatMoneyPrecise(
+                  request.requested_amount,
+                  (request.snapshot?.currency as string) ?? "EUR",
+                  "—",
+                )}
               </span>
             </div>
             <div className="flex justify-between gap-4">
@@ -121,8 +125,8 @@ export function RequestViewer({
               </span>
             </div>
             <div className="flex justify-between gap-4">
-              <span className="text-muted-foreground">Rule</span>
-              <span className="font-medium">{labelOf(request.current_step_rule)}</span>
+              <span className="text-muted-foreground">Workflow version</span>
+              <span className="font-medium">{request.workflow_version_no ?? "—"}</span>
             </div>
             <div className="flex justify-between gap-4">
               <span className="text-muted-foreground">Expires</span>
@@ -184,9 +188,7 @@ export function RequestViewer({
                 return (
                   <li key={c.id} className="flex flex-wrap items-center justify-between gap-2">
                     <span>{m?.full_name ?? m?.email ?? c.user_id}</span>
-                    <span className="text-muted-foreground">
-                      Step {c.step_no} · {labelOf(c.source)}
-                    </span>
+                    <span className="text-muted-foreground">{labelOf(c.source)}</span>
                   </li>
                 );
               })}
@@ -207,7 +209,7 @@ export function RequestViewer({
             <ul className="space-y-2">
               {decisions.map((d) => (
                 <li
-                  key={d.id}
+                  key={d.history_id}
                   className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-sm"
                 >
                   <span className="flex items-center gap-2">
@@ -215,7 +217,7 @@ export function RequestViewer({
                     {d.step_no ? (
                       <span className="text-muted-foreground">Step {d.step_no}</span>
                     ) : null}
-                    {d.origin === "legacy" ? (
+                    {d.source === "legacy" ? (
                       <span className="text-muted-foreground">(historical)</span>
                     ) : null}
                   </span>
