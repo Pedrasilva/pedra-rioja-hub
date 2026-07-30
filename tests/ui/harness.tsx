@@ -29,6 +29,11 @@ import { BookkeepingHostProvider } from "@/packages/bookkeeping-core/host";
 // The pure mocks live in ./mocks so that `vi.mock` factories can import them
 // without pulling this harness (and the app modules it imports) into a cycle.
 export {
+  APPROVAL_FN_NAMES,
+  approvalFnModule,
+  approvalFns,
+  lastApprovalPayload,
+  type ApprovalFnName,
   calls,
   callsFor,
   commitmentFnModule,

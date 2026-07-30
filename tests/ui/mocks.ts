@@ -216,3 +216,38 @@ export function lastOperationsPayload(name: OperationsFnName) {
   const call = operationsFns[name].mock.calls.at(-1);
   return (call?.[0] as { data: unknown } | undefined)?.data;
 }
+
+/* -------------------------------------------- approval server functions */
+
+export const APPROVAL_FN_NAMES = [
+  "createApprovalWorkflow",
+  "archiveApprovalWorkflow",
+  "createApprovalWorkflowVersion",
+  "upsertApprovalWorkflowStep",
+  "deleteApprovalWorkflowStep",
+  "setApprovalStepAssignment",
+  "publishApprovalWorkflowVersion",
+  "submitApprovalRequest",
+  "recordApprovalDecision",
+  "withdrawApprovalRequest",
+  "retryApprovalCallback",
+  "runApprovalMaintenance",
+] as const;
+
+export type ApprovalFnName = (typeof APPROVAL_FN_NAMES)[number];
+
+export const approvalFns = Object.fromEntries(
+  APPROVAL_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<ApprovalFnName, ReturnType<typeof vi.fn>>;
+
+export function approvalFnModule() {
+  return approvalFns;
+}
+
+export function lastApprovalPayload(name: ApprovalFnName) {
+  const call = approvalFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}

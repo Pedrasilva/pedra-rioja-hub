@@ -20,6 +20,8 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCashFlowRouteImport } from './routes/_authenticated/cash-flow'
 import { Route as AuthenticatedBookkeepingRouteImport } from './routes/_authenticated/bookkeeping'
 import { Route as AuthenticatedBankingRouteImport } from './routes/_authenticated/banking'
+import { Route as AuthenticatedApprovalsRouteImport } from './routes/_authenticated/approvals'
+import { Route as AuthenticatedApprovalWorkflowsRouteImport } from './routes/_authenticated/approval-workflows'
 import { Route as AuthenticatedPropertiesIndexRouteImport } from './routes/_authenticated/properties/index'
 import { Route as AuthenticatedCommitmentsIndexRouteImport } from './routes/_authenticated/commitments/index'
 import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
@@ -82,6 +84,17 @@ const AuthenticatedBankingRoute = AuthenticatedBankingRouteImport.update({
   path: '/banking',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedApprovalsRoute = AuthenticatedApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedApprovalWorkflowsRoute =
+  AuthenticatedApprovalWorkflowsRouteImport.update({
+    id: '/approval-workflows',
+    path: '/approval-workflows',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPropertiesIndexRoute =
   AuthenticatedPropertiesIndexRouteImport.update({
     id: '/properties/',
@@ -122,6 +135,8 @@ const AuthenticatedCommitmentsCommitmentIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/approval-workflows': typeof AuthenticatedApprovalWorkflowsRoute
+  '/approvals': typeof AuthenticatedApprovalsRoute
   '/banking': typeof AuthenticatedBankingRoute
   '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
@@ -140,6 +155,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/approval-workflows': typeof AuthenticatedApprovalWorkflowsRoute
+  '/approvals': typeof AuthenticatedApprovalsRoute
   '/banking': typeof AuthenticatedBankingRoute
   '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
@@ -160,6 +177,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/approval-workflows': typeof AuthenticatedApprovalWorkflowsRoute
+  '/_authenticated/approvals': typeof AuthenticatedApprovalsRoute
   '/_authenticated/banking': typeof AuthenticatedBankingRoute
   '/_authenticated/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/_authenticated/cash-flow': typeof AuthenticatedCashFlowRoute
@@ -180,6 +199,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/approval-workflows'
+    | '/approvals'
     | '/banking'
     | '/bookkeeping'
     | '/cash-flow'
@@ -198,6 +219,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/approval-workflows'
+    | '/approvals'
     | '/banking'
     | '/bookkeeping'
     | '/cash-flow'
@@ -217,6 +240,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/approval-workflows'
+    | '/_authenticated/approvals'
     | '/_authenticated/banking'
     | '/_authenticated/bookkeeping'
     | '/_authenticated/cash-flow'
@@ -318,6 +343,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBankingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/approvals': {
+      id: '/_authenticated/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof AuthenticatedApprovalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/approval-workflows': {
+      id: '/_authenticated/approval-workflows'
+      path: '/approval-workflows'
+      fullPath: '/approval-workflows'
+      preLoaderRoute: typeof AuthenticatedApprovalWorkflowsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/properties/': {
       id: '/_authenticated/properties/'
       path: '/properties'
@@ -364,6 +403,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedApprovalWorkflowsRoute: typeof AuthenticatedApprovalWorkflowsRoute
+  AuthenticatedApprovalsRoute: typeof AuthenticatedApprovalsRoute
   AuthenticatedBankingRoute: typeof AuthenticatedBankingRoute
   AuthenticatedBookkeepingRoute: typeof AuthenticatedBookkeepingRoute
   AuthenticatedCashFlowRoute: typeof AuthenticatedCashFlowRoute
@@ -381,6 +422,8 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedApprovalWorkflowsRoute: AuthenticatedApprovalWorkflowsRoute,
+  AuthenticatedApprovalsRoute: AuthenticatedApprovalsRoute,
   AuthenticatedBankingRoute: AuthenticatedBankingRoute,
   AuthenticatedBookkeepingRoute: AuthenticatedBookkeepingRoute,
   AuthenticatedCashFlowRoute: AuthenticatedCashFlowRoute,
@@ -411,3 +454,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
