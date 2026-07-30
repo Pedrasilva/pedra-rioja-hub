@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Archive, ArrowLeft, Building2, ExternalLink, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,6 +30,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { hasAnyRole, useWorkspace } from "@/hooks/use-workspace";
 import { formatMoney, formatPercent, titleCase } from "@/lib/format";
+import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
 import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/modules/realestate/constants";
 import {
   fullAddress,
@@ -69,6 +70,7 @@ export const Route = createFileRoute("/_authenticated/properties/$propertyId")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: validateWorkspaceSearch,
   component: PropertyWorkspace,
 });
 
@@ -85,8 +87,15 @@ const TABS = [
   ["timeline", "Timeline"],
 ] as const;
 
+const TAB_VALUES = TABS.map(([value]) => value) as readonly string[];
+
 function PropertyWorkspace() {
   const { propertyId } = Route.useParams();
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState(() => resolveTab(tabParam, TAB_VALUES, "overview"));
+  useEffect(() => {
+    setTab(resolveTab(tabParam, TAB_VALUES, "overview"));
+  }, [tabParam]);
   const { data: workspace } = useWorkspace();
   const { data, isLoading } = useProperty(propertyId);
   const projects = usePropertyProjects(propertyId);
@@ -208,7 +217,7 @@ function PropertyWorkspace() {
         <SummaryCard label="Active projects" value={String(activeProjects)} />
       </div>
 
-      <Tabs defaultValue="overview">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="mb-5 flex h-auto flex-wrap justify-start">
           {TABS.map(([value, label]) => (
             <TabsTrigger key={value} value={value}>

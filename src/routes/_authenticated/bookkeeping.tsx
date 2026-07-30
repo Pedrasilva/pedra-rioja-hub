@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/app-shell";
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: validateWorkspaceSearch,
   component: BookkeepingPage,
 });
 
@@ -77,7 +79,7 @@ function BookkeepingWorkspace() {
             </AlertDescription>
           </Alert>
         ) : (
-          <Tabs defaultValue="purchases">
+          <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
               <TabsTrigger value="purchases">Purchases</TabsTrigger>
               <TabsTrigger value="sales">Sales</TabsTrigger>
