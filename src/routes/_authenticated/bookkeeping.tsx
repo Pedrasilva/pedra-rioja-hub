@@ -50,11 +50,6 @@ const BOOKKEEPING_TABS = [
 ] as const;
 
 function BookkeepingPage() {
-  const { tab: tabParam } = Route.useSearch();
-  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
-  useEffect(() => {
-    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
-  }, [tabParam]);
   return (
     <PedraRiojaBookkeepingProvider>
       <BookkeepingWorkspace />
@@ -63,9 +58,15 @@ function BookkeepingPage() {
 }
 
 function BookkeepingWorkspace() {
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  useEffect(() => {
+    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  }, [tabParam]);
   const { data: workspace, isLoading } = useWorkspace();
   const companyId = workspace?.company?.id;
   const capabilities = capabilitiesFor(workspace?.roles);
+
 
   return (
     <AppShell
