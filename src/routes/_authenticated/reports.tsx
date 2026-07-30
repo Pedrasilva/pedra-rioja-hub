@@ -172,7 +172,11 @@ function ReportsPage() {
         <TabsContent value="vat" className="mt-4">
           <VatTab companyId={companyId} range={scoped} money={money} />
         </TabsContent>
+        <TabsContent value="metrics" className="mt-4">
+          <MetricsTab companyId={companyId} currency={currency} />
+        </TabsContent>
         <TabsContent value="journal" className="mt-4">
+
           <JournalTab companyId={companyId} range={scoped} money={money} />
         </TabsContent>
       </Tabs>
