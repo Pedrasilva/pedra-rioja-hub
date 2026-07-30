@@ -294,3 +294,38 @@ export function lastApprovalPayload(name: ApprovalFnName) {
   const call = approvalFns[name].mock.calls.at(-1);
   return (call?.[0] as { data: unknown } | undefined)?.data;
 }
+
+/* --------------------------------------------- payment server functions */
+
+export const PAYMENT_FN_NAMES = [
+  "createPaymentRun",
+  "updatePaymentRun",
+  "addPaymentInstruction",
+  "updatePaymentInstruction",
+  "removePaymentInstruction",
+  "failPaymentInstruction",
+  "requestPaymentRunApproval",
+  "exportPaymentRun",
+  "executePaymentRun",
+  "completePaymentRun",
+  "cancelPaymentRun",
+  "archivePaymentRun",
+] as const;
+
+export type PaymentFnName = (typeof PAYMENT_FN_NAMES)[number];
+
+export const paymentFns = Object.fromEntries(
+  PAYMENT_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<PaymentFnName, ReturnType<typeof vi.fn>>;
+
+export function paymentFnModule() {
+  return paymentFns;
+}
+
+export function lastPaymentPayload(name: PaymentFnName) {
+  const call = paymentFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
