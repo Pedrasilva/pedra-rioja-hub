@@ -29,6 +29,7 @@ import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authen
 import { Route as AuthenticatedPropertiesPropertyIdRouteImport } from './routes/_authenticated/properties/$propertyId'
 import { Route as AuthenticatedFinancingAgreementIdRouteImport } from './routes/_authenticated/financing/$agreementId'
 import { Route as AuthenticatedCommitmentsCommitmentIdRouteImport } from './routes/_authenticated/commitments/$commitmentId'
+import { Route as AuthenticatedBudgetsBudgetIdRouteImport } from './routes/_authenticated/budgets/$budgetId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -138,6 +139,12 @@ const AuthenticatedCommitmentsCommitmentIdRoute =
     path: '/commitments/$commitmentId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBudgetsBudgetIdRoute =
+  AuthenticatedBudgetsBudgetIdRouteImport.update({
+    id: '/budgets/$budgetId',
+    path: '/budgets/$budgetId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
   '/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
@@ -173,6 +181,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
   '/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
@@ -196,6 +205,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/_authenticated/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/_authenticated/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/_authenticated/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
   '/_authenticated/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/team'
+    | '/budgets/$budgetId'
     | '/commitments/$commitmentId'
     | '/financing/$agreementId'
     | '/properties/$propertyId'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/team'
+    | '/budgets/$budgetId'
     | '/commitments/$commitmentId'
     | '/financing/$agreementId'
     | '/properties/$propertyId'
@@ -262,6 +274,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/team'
+    | '/_authenticated/budgets/$budgetId'
     | '/_authenticated/commitments/$commitmentId'
     | '/_authenticated/financing/$agreementId'
     | '/_authenticated/properties/$propertyId'
@@ -419,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommitmentsCommitmentIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/budgets/$budgetId': {
+      id: '/_authenticated/budgets/$budgetId'
+      path: '/budgets/$budgetId'
+      fullPath: '/budgets/$budgetId'
+      preLoaderRoute: typeof AuthenticatedBudgetsBudgetIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -433,6 +453,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
+  AuthenticatedBudgetsBudgetIdRoute: typeof AuthenticatedBudgetsBudgetIdRoute
   AuthenticatedCommitmentsCommitmentIdRoute: typeof AuthenticatedCommitmentsCommitmentIdRoute
   AuthenticatedFinancingAgreementIdRoute: typeof AuthenticatedFinancingAgreementIdRoute
   AuthenticatedPropertiesPropertyIdRoute: typeof AuthenticatedPropertiesPropertyIdRoute
@@ -453,6 +474,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
+  AuthenticatedBudgetsBudgetIdRoute: AuthenticatedBudgetsBudgetIdRoute,
   AuthenticatedCommitmentsCommitmentIdRoute:
     AuthenticatedCommitmentsCommitmentIdRoute,
   AuthenticatedFinancingAgreementIdRoute:
