@@ -4,11 +4,11 @@ import {
   Building2,
   ClipboardCheck,
   Landmark,
-
   LayoutDashboard,
   LogOut,
   Receipt,
   Settings,
+  Target,
   Users,
   Wallet,
   Wrench,
@@ -27,12 +27,14 @@ const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/properties", label: "Properties", icon: Building2 },
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
+  { to: "/budgets", label: "Budgets", icon: Target },
   { to: "/commitments", label: "Commitments", icon: ClipboardCheck },
   { to: "/approvals", label: "Approvals", icon: ShieldCheck },
   { to: "/operations", label: "Operations", icon: Wrench },
   { to: "/banking", label: "Banking", icon: Landmark },
   { to: "/bookkeeping", label: "Bookkeeping", icon: Receipt },
   { to: "/reports", label: "Reports", icon: BarChart3 },
+
 
   { to: "/team", label: "Team & roles", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
