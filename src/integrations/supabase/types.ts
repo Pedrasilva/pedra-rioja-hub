@@ -4564,6 +4564,178 @@ export type Database = {
           },
         ]
       }
+      insurance_policies: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          broker_counterparty_id: string | null
+          broker_name: string | null
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          effective_date: string | null
+          excess_amount: number | null
+          expiry_date: string | null
+          id: string
+          insured_assets: string | null
+          insurer_counterparty_id: string | null
+          insurer_name: string | null
+          notes: string | null
+          obligation_id: string | null
+          policy_number: string | null
+          policy_type: string
+          property_id: string | null
+          reminder_lead_days: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          broker_counterparty_id?: string | null
+          broker_name?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          excess_amount?: number | null
+          expiry_date?: string | null
+          id?: string
+          insured_assets?: string | null
+          insurer_counterparty_id?: string | null
+          insurer_name?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          policy_number?: string | null
+          policy_type?: string
+          property_id?: string | null
+          reminder_lead_days?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          broker_counterparty_id?: string | null
+          broker_name?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          excess_amount?: number | null
+          expiry_date?: string | null
+          id?: string
+          insured_assets?: string | null
+          insurer_counterparty_id?: string | null
+          insurer_name?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          policy_number?: string | null
+          policy_type?: string
+          property_id?: string | null
+          reminder_lead_days?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_policies_broker_counterparty_id_fkey"
+            columns: ["broker_counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_insurer_counterparty_id_fkey"
+            columns: ["insurer_counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       maintenance_jobs: {
         Row: {
           archived_at: string | null
@@ -4672,6 +4844,229 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "counterparties"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      operational_obligations: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          notes: string | null
+          obligation_type: string
+          priority: string
+          property_id: string | null
+          recurrence_end_date: string | null
+          recurrence_frequency: string
+          recurrence_interval: number
+          reminder_lead_days: number
+          responsible_name: string | null
+          responsible_user_id: string | null
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          obligation_type: string
+          priority?: string
+          property_id?: string | null
+          recurrence_end_date?: string | null
+          recurrence_frequency?: string
+          recurrence_interval?: number
+          reminder_lead_days?: number
+          responsible_name?: string | null
+          responsible_user_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          obligation_type?: string
+          priority?: string
+          property_id?: string | null
+          recurrence_end_date?: string | null
+          recurrence_frequency?: string
+          recurrence_interval?: number
+          reminder_lead_days?: number
+          responsible_name?: string | null
+          responsible_user_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_obligations_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      operational_reminders: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          due_on: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          notes: string | null
+          reason: string
+          remind_on: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          title: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          due_on?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          notes?: string | null
+          reason: string
+          remind_on: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_on?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          notes?: string | null
+          reason?: string
+          remind_on?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -5410,6 +5805,165 @@ export type Database = {
           },
         ]
       }
+      service_contracts: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          auto_renew: boolean
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          contract_number: string | null
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          end_date: string | null
+          id: string
+          notes: string | null
+          notice_period_days: number | null
+          obligation_id: string | null
+          property_id: string | null
+          reminder_lead_days: number
+          renewal_terms: string | null
+          service_type: string
+          start_date: string | null
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          auto_renew?: boolean
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          contract_number?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          notice_period_days?: number | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reminder_lead_days?: number
+          renewal_terms?: string | null
+          service_type?: string
+          start_date?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          auto_renew?: boolean
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          contract_number?: string | null
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          notice_period_days?: number | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reminder_lead_days?: number
+          renewal_terms?: string | null
+          service_type?: string
+          start_date?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       settings: {
         Row: {
           company_id: string
@@ -5458,6 +6012,223 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
             referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      tax_schedule_dates: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          due_date: string
+          id: string
+          label: string | null
+          notes: string | null
+          reminder_date: string | null
+          sequence_no: number
+          status: string
+          tax_schedule_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          due_date: string
+          id?: string
+          label?: string | null
+          notes?: string | null
+          reminder_date?: string | null
+          sequence_no?: number
+          status?: string
+          tax_schedule_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_date?: string
+          id?: string
+          label?: string | null
+          notes?: string | null
+          reminder_date?: string | null
+          sequence_no?: number
+          status?: string
+          tax_schedule_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_schedule_dates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedule_dates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "tax_schedule_dates_tax_schedule_id_fkey"
+            columns: ["tax_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "tax_schedules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedule_dates_tax_schedule_id_fkey"
+            columns: ["tax_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "v_tax_schedule_summary"
+            referencedColumns: ["schedule_id"]
+          },
+        ]
+      }
+      tax_schedules: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          jurisdiction: string | null
+          notes: string | null
+          obligation_id: string | null
+          property_id: string | null
+          reference: string | null
+          reminder_lead_days: number
+          status: string
+          tax_type: string
+          tax_year: number | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          jurisdiction?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reference?: string | null
+          reminder_lead_days?: number
+          status?: string
+          tax_type?: string
+          tax_year?: number | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          jurisdiction?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reference?: string | null
+          reminder_lead_days?: number
+          status?: string
+          tax_type?: string
+          tax_year?: number | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_schedules_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
           },
         ]
       }
@@ -6016,6 +6787,172 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
             referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      utility_contracts: {
+        Row: {
+          account_number: string | null
+          activation_date: string | null
+          archive_reason: string | null
+          archived_at: string | null
+          code: string | null
+          commitment_id: string | null
+          company_id: string
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          meter_identifier: string | null
+          notes: string | null
+          obligation_id: string | null
+          property_id: string | null
+          reminder_lead_days: number
+          service_address: string | null
+          status: string
+          termination_date: string | null
+          title: string
+          unit_id: string | null
+          updated_at: string
+          updated_by: string | null
+          utility_type: string
+        }
+        Insert: {
+          account_number?: string | null
+          activation_date?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meter_identifier?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reminder_lead_days?: number
+          service_address?: string | null
+          status?: string
+          termination_date?: string | null
+          title: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          utility_type?: string
+        }
+        Update: {
+          account_number?: string | null
+          activation_date?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          code?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meter_identifier?: string | null
+          notes?: string | null
+          obligation_id?: string | null
+          property_id?: string | null
+          reminder_lead_days?: number
+          service_address?: string | null
+          status?: string
+          termination_date?: string | null
+          title?: string
+          unit_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          utility_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "utility_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -7119,6 +8056,129 @@ export type Database = {
           },
         ]
       }
+      v_insurance_policy_summary: {
+        Row: {
+          archived_at: string | null
+          authorised_amount: number | null
+          broker_counterparty_id: string | null
+          broker_name: string | null
+          code: string | null
+          commitment_approval_status: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          committed_amount: number | null
+          company_id: string | null
+          created_at: string | null
+          days_until_expiry: number | null
+          effective_date: string | null
+          excess_amount: number | null
+          expiry_date: string | null
+          insured_assets: string | null
+          insurer_counterparty_id: string | null
+          insurer_name: string | null
+          invoiced_amount: number | null
+          notes: string | null
+          obligation_id: string | null
+          paid_amount: number | null
+          policy_id: string | null
+          policy_number: string | null
+          policy_type: string | null
+          property_id: string | null
+          property_name: string | null
+          remaining_commitment: number | null
+          reminder_lead_days: number | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_policies_broker_counterparty_id_fkey"
+            columns: ["broker_counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_insurer_counterparty_id_fkey"
+            columns: ["insurer_counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "insurance_policies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       v_maintenance_job_summary: {
         Row: {
           archived_at: string | null
@@ -7178,6 +8238,184 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "counterparties"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_operational_obligation_summary: {
+        Row: {
+          archived_at: string | null
+          authorised_amount: number | null
+          code: string | null
+          commitment_approval_status: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          commitment_title: string | null
+          committed_amount: number | null
+          company_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          days_until_due: number | null
+          description: string | null
+          due_date: string | null
+          invoiced_amount: number | null
+          notes: string | null
+          obligation_id: string | null
+          obligation_type: string | null
+          paid_amount: number | null
+          priority: string | null
+          property_id: string | null
+          property_name: string | null
+          recurrence_end_date: string | null
+          recurrence_frequency: string | null
+          recurrence_interval: number | null
+          remaining_commitment: number | null
+          reminder_lead_days: number | null
+          responsible_name: string | null
+          responsible_user_id: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_obligations_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "operational_obligations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_operational_reminders: {
+        Row: {
+          commitment_id: string | null
+          company_id: string | null
+          created_at: string | null
+          days_until_due: number | null
+          days_until_reminder: number | null
+          due_on: string | null
+          entity_id: string | null
+          entity_type: string | null
+          is_overdue: boolean | null
+          notes: string | null
+          reason: string | null
+          remind_on: string | null
+          reminder_id: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+          title: string | null
+        }
+        Insert: {
+          commitment_id?: never
+          company_id?: string | null
+          created_at?: string | null
+          days_until_due?: never
+          days_until_reminder?: never
+          due_on?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          is_overdue?: never
+          notes?: string | null
+          reason?: string | null
+          remind_on?: string | null
+          reminder_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Update: {
+          commitment_id?: never
+          company_id?: string | null
+          created_at?: string | null
+          days_until_due?: never
+          days_until_reminder?: never
+          due_on?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          is_overdue?: never
+          notes?: string | null
+          reason?: string | null
+          remind_on?: string | null
+          reminder_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
           },
         ]
       }
@@ -7529,6 +8767,345 @@ export type Database = {
         }
         Relationships: []
       }
+      v_service_contract_summary: {
+        Row: {
+          archived_at: string | null
+          authorised_amount: number | null
+          auto_renew: boolean | null
+          code: string | null
+          commitment_approval_status: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          committed_amount: number | null
+          company_id: string | null
+          contract_id: string | null
+          contract_number: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          days_until_expiry: number | null
+          end_date: string | null
+          invoiced_amount: number | null
+          notes: string | null
+          notice_period_days: number | null
+          obligation_id: string | null
+          paid_amount: number | null
+          property_id: string | null
+          remaining_commitment: number | null
+          reminder_lead_days: number | null
+          renewal_terms: string | null
+          service_type: string | null
+          start_date: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "service_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_tax_schedule_summary: {
+        Row: {
+          archived_at: string | null
+          authorised_amount: number | null
+          code: string | null
+          commitment_approval_status: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          committed_amount: number | null
+          company_id: string | null
+          created_at: string | null
+          invoiced_amount: number | null
+          jurisdiction: string | null
+          next_due_date: string | null
+          notes: string | null
+          obligation_id: string | null
+          paid_amount: number | null
+          property_id: string | null
+          property_name: string | null
+          reference: string | null
+          remaining_commitment: number | null
+          reminder_lead_days: number | null
+          schedule_id: string | null
+          scheduled_dates: number | null
+          status: string | null
+          tax_type: string | null
+          tax_year: number | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_schedules_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "tax_schedules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      v_utility_contract_summary: {
+        Row: {
+          account_number: string | null
+          activation_date: string | null
+          archived_at: string | null
+          authorised_amount: number | null
+          code: string | null
+          commitment_approval_status: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          committed_amount: number | null
+          company_id: string | null
+          contract_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          created_at: string | null
+          invoiced_amount: number | null
+          meter_identifier: string | null
+          notes: string | null
+          obligation_id: string | null
+          paid_amount: number | null
+          property_id: string | null
+          property_name: string | null
+          remaining_commitment: number | null
+          reminder_lead_days: number | null
+          service_address: string | null
+          status: string | null
+          termination_date: string | null
+          title: string | null
+          unit_id: string | null
+          updated_at: string | null
+          utility_type: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "utility_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "operational_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "v_operational_obligation_summary"
+            referencedColumns: ["obligation_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "utility_contracts_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       activate_commitment: {
@@ -7538,6 +9115,16 @@ export type Database = {
       activate_commitment_schedule_version: {
         Args: { _reason?: string; _version_id: string }
         Returns: number
+      }
+      add_tax_schedule_date: {
+        Args: {
+          _due_date: string
+          _label?: string
+          _notes?: string
+          _reminder_date?: string
+          _schedule_id: string
+        }
+        Returns: string
       }
       apply_financing_schedule: {
         Args: {
@@ -7562,6 +9149,10 @@ export type Database = {
       }
       approve_commitment_variance: {
         Args: { _reason: string; _version_id: string }
+        Returns: undefined
+      }
+      archive_operational_record: {
+        Args: { _entity_id: string; _entity_type: string; _reason: string }
         Returns: undefined
       }
       bank_statement_balance_check: {
@@ -7716,6 +9307,29 @@ export type Database = {
         }
         Returns: string
       }
+      create_insurance_policy: {
+        Args: {
+          _broker_counterparty_id?: string
+          _broker_name?: string
+          _code?: string
+          _commitment_id?: string
+          _company_id: string
+          _effective_date?: string
+          _excess_amount?: number
+          _expiry_date?: string
+          _insured_assets?: string
+          _insurer_counterparty_id?: string
+          _insurer_name?: string
+          _notes?: string
+          _obligation_id?: string
+          _policy_number?: string
+          _policy_type?: string
+          _property_id?: string
+          _reminder_lead_days?: number
+          _title: string
+        }
+        Returns: string
+      }
       create_maintenance_job: {
         Args: {
           _commitment_id?: string
@@ -7727,6 +9341,102 @@ export type Database = {
           _responsible_name?: string
           _target_date?: string
           _title: string
+        }
+        Returns: string
+      }
+      create_operational_commitment: {
+        Args: {
+          _authorised_amount: number
+          _commitment_type: string
+          _counterparty_id?: string
+          _currency?: string
+          _end_date?: string
+          _entity_id: string
+          _entity_type: string
+          _notes?: string
+          _start_date?: string
+          _title: string
+        }
+        Returns: string
+      }
+      create_operational_obligation: {
+        Args: {
+          _code?: string
+          _commitment_id?: string
+          _company_id: string
+          _counterparty_id?: string
+          _description?: string
+          _due_date?: string
+          _notes?: string
+          _obligation_type: string
+          _priority?: string
+          _property_id?: string
+          _recurrence_end_date?: string
+          _recurrence_frequency?: string
+          _recurrence_interval?: number
+          _reminder_lead_days?: number
+          _responsible_name?: string
+          _title: string
+        }
+        Returns: string
+      }
+      create_service_contract: {
+        Args: {
+          _auto_renew?: boolean
+          _code?: string
+          _commitment_id?: string
+          _company_id: string
+          _contract_number?: string
+          _counterparty_id?: string
+          _end_date?: string
+          _notes?: string
+          _notice_period_days?: number
+          _obligation_id?: string
+          _property_id?: string
+          _reminder_lead_days?: number
+          _renewal_terms?: string
+          _service_type?: string
+          _start_date?: string
+          _title: string
+        }
+        Returns: string
+      }
+      create_tax_schedule: {
+        Args: {
+          _code?: string
+          _commitment_id?: string
+          _company_id: string
+          _due_dates?: string[]
+          _jurisdiction?: string
+          _notes?: string
+          _obligation_id?: string
+          _property_id?: string
+          _reference?: string
+          _reminder_lead_days?: number
+          _tax_type?: string
+          _tax_year?: number
+          _title: string
+        }
+        Returns: string
+      }
+      create_utility_contract: {
+        Args: {
+          _account_number?: string
+          _activation_date?: string
+          _code?: string
+          _commitment_id?: string
+          _company_id: string
+          _counterparty_id?: string
+          _meter_identifier?: string
+          _notes?: string
+          _obligation_id?: string
+          _property_id?: string
+          _reminder_lead_days?: number
+          _service_address?: string
+          _termination_date?: string
+          _title: string
+          _unit_id?: string
+          _utility_type?: string
         }
         Returns: string
       }
@@ -7748,6 +9458,10 @@ export type Database = {
       executive_snapshot: { Args: { _company_id: string }; Returns: Json }
       generate_company_cash_flow: {
         Args: { _company_id: string; _through: string }
+        Returns: number
+      }
+      generate_operational_reminders: {
+        Args: { _company_id: string }
         Returns: number
       }
       generate_recurring_cash_flow: {
@@ -7773,6 +9487,14 @@ export type Database = {
         Args: { _company_id: string; _user_id: string }
         Returns: boolean
       }
+      link_operational_commitment: {
+        Args: {
+          _commitment_id: string
+          _entity_id: string
+          _entity_type: string
+        }
+        Returns: undefined
+      }
       liquidity_forecast: {
         Args: { _company_id: string; _scenario?: string }
         Returns: {
@@ -7796,6 +9518,11 @@ export type Database = {
         Args: { _import_id: string; _override_reason?: string }
         Returns: Json
       }
+      next_operational_due_date: {
+        Args: { _due: string; _frequency: string; _interval: number }
+        Returns: string
+      }
+      operational_table_for: { Args: { _entity_type: string }; Returns: string }
       property_profitability: {
         Args: { _company_id: string; _from: string; _to: string }
         Returns: {
@@ -7882,6 +9609,10 @@ export type Database = {
       request_commitment_approval: {
         Args: { _commitment_id: string; _reason?: string }
         Returns: string
+      }
+      resolve_operational_reminder: {
+        Args: { _notes?: string; _reminder_id: string; _status?: string }
+        Returns: undefined
       }
       reverse_bank_match: {
         Args: { _match_id: string; _reason: string }
@@ -7979,6 +9710,28 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_insurance_policy: {
+        Args: {
+          _broker_counterparty_id?: string
+          _broker_name?: string
+          _effective_date?: string
+          _excess_amount?: number
+          _expiry_date?: string
+          _insured_assets?: string
+          _insurer_counterparty_id?: string
+          _insurer_name?: string
+          _notes?: string
+          _obligation_id?: string
+          _policy_id: string
+          _policy_number?: string
+          _policy_type?: string
+          _property_id?: string
+          _reminder_lead_days?: number
+          _status?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
       update_maintenance_job: {
         Args: {
           _cancellation_reason?: string
@@ -7995,6 +9748,95 @@ export type Database = {
           _title?: string
         }
         Returns: undefined
+      }
+      update_operational_obligation: {
+        Args: {
+          _counterparty_id?: string
+          _description?: string
+          _due_date?: string
+          _notes?: string
+          _obligation_id: string
+          _obligation_type?: string
+          _priority?: string
+          _property_id?: string
+          _recurrence_end_date?: string
+          _recurrence_frequency?: string
+          _recurrence_interval?: number
+          _reminder_lead_days?: number
+          _responsible_name?: string
+          _status?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_service_contract: {
+        Args: {
+          _auto_renew?: boolean
+          _contract_id: string
+          _contract_number?: string
+          _counterparty_id?: string
+          _end_date?: string
+          _notes?: string
+          _notice_period_days?: number
+          _obligation_id?: string
+          _reminder_lead_days?: number
+          _renewal_terms?: string
+          _service_type?: string
+          _start_date?: string
+          _status?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_tax_schedule: {
+        Args: {
+          _jurisdiction?: string
+          _notes?: string
+          _obligation_id?: string
+          _property_id?: string
+          _reference?: string
+          _reminder_lead_days?: number
+          _schedule_id: string
+          _status?: string
+          _tax_type?: string
+          _tax_year?: number
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_utility_contract: {
+        Args: {
+          _account_number?: string
+          _activation_date?: string
+          _contract_id: string
+          _counterparty_id?: string
+          _meter_identifier?: string
+          _notes?: string
+          _obligation_id?: string
+          _property_id?: string
+          _reminder_lead_days?: number
+          _service_address?: string
+          _status?: string
+          _termination_date?: string
+          _title?: string
+          _unit_id?: string
+          _utility_type?: string
+        }
+        Returns: undefined
+      }
+      upsert_operational_reminder: {
+        Args: {
+          _company_id: string
+          _due_on?: string
+          _entity_id: string
+          _entity_type: string
+          _notes?: string
+          _reason: string
+          _remind_on: string
+          _severity?: string
+          _title?: string
+        }
+        Returns: string
       }
       validate_commitment_schedule: {
         Args: { _version_id: string }
