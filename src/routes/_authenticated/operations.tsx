@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/app-shell";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
+import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
 import { commitmentCapabilities } from "@/modules/commitments/capabilities";
 import { CapexPanel } from "@/modules/commitments/components/capex-panel";
 import { MaintenancePanel } from "@/modules/commitments/components/maintenance-panel";
@@ -59,10 +61,28 @@ export const Route = createFileRoute("/_authenticated/operations")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: validateWorkspaceSearch,
   component: OperationsPage,
 });
 
+const OPERATIONS_TABS = [
+  "reminders",
+  "obligations",
+  "contracts",
+  "insurance",
+  "utilities",
+  "tax",
+  "preventive",
+  "maintenance",
+  "capex",
+] as const;
+
 function OperationsPage() {
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState(() => resolveTab(tabParam, OPERATIONS_TABS, "reminders"));
+  useEffect(() => {
+    setTab(resolveTab(tabParam, OPERATIONS_TABS, "reminders"));
+  }, [tabParam]);
   const { data: workspace } = useWorkspace();
   const companyId = workspace?.company?.id;
   const capabilities = commitmentCapabilities(workspace?.roles);
@@ -93,7 +113,7 @@ function OperationsPage() {
       title="Operations"
       description="Operational records own the work and the dates; commitments own the money."
     >
-      <Tabs defaultValue="reminders" className="space-y-4">
+      <Tabs value={tab} onValueChange={setTab} className="space-y-4">
         <TabsList className="flex-wrap">
           <TabsTrigger value="reminders">Reminders</TabsTrigger>
           <TabsTrigger value="obligations">Obligations</TabsTrigger>

@@ -10692,8 +10692,12 @@ export type Database = {
           company_id: string | null
           entity_id: string | null
           entity_type: string | null
+          is_archived: boolean | null
+          metadata: Json | null
           occurred_at: string | null
+          property_id: string | null
           search_text: string | null
+          status: string | null
           subtitle: string | null
           title: string | null
           url_path: string | null

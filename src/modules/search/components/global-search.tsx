@@ -2,14 +2,29 @@
  * Phase 8D — global search palette.
  *
  * Presentation only: results, labels and destinations all come from the
- * database search index. Rows without a route render as non-navigable, so an
- * unknown entity type fails closed rather than guessing a link.
+ * database search index. Every indexed row carries a route to a live
+ * workspace, so results are navigable; a row is only disabled when the index
+ * genuinely has no destination for it.
  */
 
 import { useNavigate } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import {
+  Building2,
+  CalendarClock,
+  ClipboardList,
+  FileText,
+  Handshake,
+  Hammer,
+  Landmark,
+  PieChart,
+  Search,
+  Users,
+  Wrench,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -22,11 +37,37 @@ import {
 import { formatDate, titleCase } from "@/lib/format";
 import { useGlobalSearch } from "@/modules/search/queries";
 
+const ENTITY_LABELS: Record<string, string> = {
+  property: "Properties",
+  document: "Documents",
+  financing: "Financing",
+  tenant: "Tenants",
+  project: "Projects",
+  commitment: "Commitments",
+  budget: "Budgets",
+  maintenance_schedule: "Preventive schedules",
+  maintenance_job: "Maintenance jobs",
+  counterparty: "Counterparties",
+};
+
+const ENTITY_ICONS: Record<string, LucideIcon> = {
+  property: Building2,
+  document: FileText,
+  financing: Landmark,
+  tenant: Users,
+  project: Hammer,
+  commitment: Handshake,
+  budget: PieChart,
+  maintenance_schedule: CalendarClock,
+  maintenance_job: Wrench,
+  counterparty: Users,
+};
+
 export function GlobalSearch({ companyId }: { companyId: string | undefined }) {
   const [open, setOpen] = useState(false);
   const [term, setTerm] = useState("");
   const navigate = useNavigate();
-  const { data: hits = [], isFetching } = useGlobalSearch(companyId, term);
+  const { data: hits = [], isFetching, isError } = useGlobalSearch(companyId, term);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -61,7 +102,7 @@ export function GlobalSearch({ companyId }: { companyId: string | undefined }) {
         open={open}
         onOpenChange={setOpen}
         title="Portfolio search"
-        description="Search properties, documents, commitments, budgets and maintenance"
+        description="Search properties, documents, commitments, budgets, maintenance and counterparties"
       >
         <CommandInput
           placeholder="Search properties, documents, commitments, contracts…"
@@ -72,40 +113,53 @@ export function GlobalSearch({ companyId }: { companyId: string | undefined }) {
           <CommandEmpty>
             {term.trim().length < 2
               ? "Type at least two characters."
-              : isFetching
-                ? "Searching…"
-                : "Nothing matched."}
+              : isError
+                ? "Search is unavailable right now."
+                : isFetching
+                  ? "Searching…"
+                  : "Nothing matched."}
           </CommandEmpty>
-          {Object.entries(groups).map(([type, rows]) => (
-            <CommandGroup key={type} heading={titleCase(type)}>
-              {rows.map((hit) => (
-                <CommandItem
-                  key={`${type}-${hit.entity_id}`}
-                  value={`${hit.title ?? ""} ${hit.subtitle ?? ""} ${hit.entity_id ?? ""}`}
-                  disabled={!hit.url_path}
-                  onSelect={() => {
-                    if (!hit.url_path) return;
-                    setOpen(false);
-                    navigate({ to: hit.url_path });
-                  }}
-                >
-                  <div className="flex w-full items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="truncate">{hit.title ?? "Untitled"}</div>
-                      {hit.subtitle ? (
-                        <div className="truncate text-xs text-muted-foreground">
-                          {hit.subtitle}
+          {Object.entries(groups).map(([type, rows]) => {
+            const Icon = ENTITY_ICONS[type] ?? ClipboardList;
+            return (
+              <CommandGroup key={type} heading={ENTITY_LABELS[type] ?? titleCase(type)}>
+                {rows.map((hit) => (
+                  <CommandItem
+                    key={`${type}-${hit.entity_id}`}
+                    value={`${hit.title ?? ""} ${hit.subtitle ?? ""} ${hit.entity_id ?? ""}`}
+                    disabled={!hit.url_path}
+                    onSelect={() => {
+                      if (!hit.url_path) return;
+                      setOpen(false);
+                      navigate({ href: hit.url_path });
+                    }}
+                  >
+                    <div className="flex w-full items-center gap-3">
+                      <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="truncate">{hit.title ?? "Untitled"}</span>
+                          {hit.is_archived ? (
+                            <Badge variant="outline" className="shrink-0 text-[10px]">
+                              Archived
+                            </Badge>
+                          ) : null}
                         </div>
-                      ) : null}
+                        {hit.subtitle ? (
+                          <div className="truncate text-xs text-muted-foreground">
+                            {hit.subtitle}
+                          </div>
+                        ) : null}
+                      </div>
+                      <span className="shrink-0 text-xs text-muted-foreground">
+                        {formatDate(hit.occurred_at, "")}
+                      </span>
                     </div>
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {formatDate(hit.occurred_at, "")}
-                    </span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          ))}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            );
+          })}
         </CommandList>
       </CommandDialog>
     </>

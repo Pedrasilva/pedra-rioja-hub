@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/app-shell";
@@ -5,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
+import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
 import { PedraRiojaBookkeepingProvider } from "@/modules/bookkeeping/host/provider";
 import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 import {
@@ -34,8 +36,18 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: validateWorkspaceSearch,
   component: BookkeepingPage,
 });
+
+const BOOKKEEPING_TABS = [
+  "purchases",
+  "sales",
+  "counterparties",
+  "classifications",
+  "rules",
+  "periods",
+] as const;
 
 function BookkeepingPage() {
   return (
@@ -46,9 +58,15 @@ function BookkeepingPage() {
 }
 
 function BookkeepingWorkspace() {
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  useEffect(() => {
+    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  }, [tabParam]);
   const { data: workspace, isLoading } = useWorkspace();
   const companyId = workspace?.company?.id;
   const capabilities = capabilitiesFor(workspace?.roles);
+
 
   return (
     <AppShell
@@ -77,7 +95,7 @@ function BookkeepingWorkspace() {
             </AlertDescription>
           </Alert>
         ) : (
-          <Tabs defaultValue="purchases">
+          <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
               <TabsTrigger value="purchases">Purchases</TabsTrigger>
               <TabsTrigger value="sales">Sales</TabsTrigger>
