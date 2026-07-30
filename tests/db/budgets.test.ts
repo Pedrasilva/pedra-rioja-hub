@@ -167,7 +167,7 @@ beforeAll(async () => {
 
   const dim = await admin
     .from("dimensions")
-    .insert({ company_id: company.id, code: `qa_bud_${Date.now()}`, name: "QA budget dimension" })
+    .insert({ company_id: company.id, code: `qa_bud_${Date.now()}`, label: "QA budget dimension" })
     .select("id")
     .single();
   expectNoError(dim, "insert dimension");
@@ -188,7 +188,7 @@ beforeAll(async () => {
 
   const foreignDim = await admin
     .from("dimensions")
-    .insert({ company_id: other.id, code: `qa_bud_x_${Date.now()}`, name: "Foreign dimension" })
+    .insert({ company_id: other.id, code: `qa_bud_x_${Date.now()}`, label: "Foreign dimension" })
     .select("id")
     .single();
   expectNoError(foreignDim, "insert foreign dimension");
@@ -470,7 +470,6 @@ describe("derived performance views", () => {
       _planned_amount: 20_000,
       _dimension_id: dimensionId,
       _dimension_value_id: dimensionValueId,
-      _property_id: propertyId,
     });
 
     const created = await rpc<string>("manager", "create_commitment_draft", {
@@ -478,11 +477,21 @@ describe("derived performance views", () => {
       _title: uniq("Roof commitment"),
       _commitment_type: "capex",
       _authorised_amount: 15_000,
-      _property_id: propertyId,
-      _dimension_value_id: dimensionValueId,
-      _expected_start: "2027-05-01",
+      _start_date: "2027-05-01",
     });
     expectNoError(created, "create commitment");
+    // Attribution is Dimensions only (§ dimensions are the single classifier).
+    expectNoError(
+      await admin.from("transaction_dimensions").insert({
+        company_id: company.id,
+        source_type: "commitment",
+        source_id: created.data,
+        dimension_id: dimensionId,
+        dimension_value_id: dimensionValueId,
+        is_primary: true,
+      }),
+      "attribute commitment",
+    );
     expectNoError(
       await rpc("manager", "request_commitment_approval", {
         _commitment_id: created.data,
@@ -554,7 +563,7 @@ describe("approval integration", () => {
 describe("plan vs actual separation (§5F)", () => {
   it("creates no commitment, cash-flow, bookkeeping or bank rows", async () => {
     const before = await Promise.all(
-      ["commitments", "cash_flow_entries", "bookkeeping_documents", "bank_transactions"].map(
+      ["commitments", "cash_flow_entries", "financial_documents", "bank_transactions"].map(
         async (table) => {
           const res = await admin
             .from(table)
@@ -571,7 +580,7 @@ describe("plan vs actual separation (§5F)", () => {
     expectNoError(await rpc("manager", "publish_budget_version", { _version_id: v.id }), "publish");
 
     const after = await Promise.all(
-      ["commitments", "cash_flow_entries", "bookkeeping_documents", "bank_transactions"].map(
+      ["commitments", "cash_flow_entries", "financial_documents", "bank_transactions"].map(
         async (table) => {
           const res = await admin
             .from(table)
