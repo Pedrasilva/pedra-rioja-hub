@@ -14,33 +14,172 @@ export type Database = {
   }
   public: {
     Tables: {
+      approval_callbacks: {
+        Row: {
+          created_at: string
+          event: string
+          function_name: string
+          id: string
+          target_type: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          function_name: string
+          id?: string
+          target_type: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          function_name?: string
+          id?: string
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_callbacks_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
+          },
+        ]
+      }
+      approval_decisions: {
+        Row: {
+          actor_id: string | null
+          company_id: string
+          created_at: string
+          decision: string
+          delegated_to: string | null
+          evidence_document_id: string | null
+          id: string
+          metadata: Json
+          override_reason: string | null
+          reason: string | null
+          request_id: string
+          step_id: string | null
+          step_no: number | null
+        }
+        Insert: {
+          actor_id?: string | null
+          company_id: string
+          created_at?: string
+          decision: string
+          delegated_to?: string | null
+          evidence_document_id?: string | null
+          id?: string
+          metadata?: Json
+          override_reason?: string | null
+          reason?: string | null
+          request_id: string
+          step_id?: string | null
+          step_no?: number | null
+        }
+        Update: {
+          actor_id?: string | null
+          company_id?: string
+          created_at?: string
+          decision?: string
+          delegated_to?: string | null
+          evidence_document_id?: string | null
+          id?: string
+          metadata?: Json
+          override_reason?: string | null
+          reason?: string | null
+          request_id?: string
+          step_id?: string | null
+          step_no?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_decisions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["request_id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["request_id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_steps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_decisions_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["step_id"]
+          },
+        ]
+      }
       approval_events: {
         Row: {
           actor_id: string | null
           comment: string | null
           company_id: string
           created_at: string
+          decision_id: string | null
           event: string
           id: string
+          payload: Json
           request_id: string
+          step_no: number | null
         }
         Insert: {
           actor_id?: string | null
           comment?: string | null
           company_id: string
           created_at?: string
+          decision_id?: string | null
           event: string
           id?: string
+          payload?: Json
           request_id: string
+          step_no?: number | null
         }
         Update: {
           actor_id?: string | null
           comment?: string | null
           company_id?: string
           created_at?: string
+          decision_id?: string | null
           event?: string
           id?: string
+          payload?: Json
           request_id?: string
+          step_no?: number | null
         }
         Relationships: [
           {
@@ -56,6 +195,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
             referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_events_decision_id_fkey"
+            columns: ["decision_id"]
+            isOneToOne: false
+            referencedRelation: "approval_decisions"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "approval_events_request_id_fkey"
@@ -64,68 +210,187 @@ export type Database = {
             referencedRelation: "approval_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "approval_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["request_id"]
+          },
+          {
+            foreignKeyName: "approval_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["request_id"]
+          },
         ]
       }
-      approval_requests: {
+      approval_request_candidates: {
         Row: {
           company_id: string
           created_at: string
           created_by: string | null
-          decided_at: string | null
-          decided_by: string | null
-          decision: string
-          decision_reason: string | null
           id: string
-          reason: string | null
-          requested_amount: number | null
-          requested_at: string
-          requested_by: string
-          rule_reference: string | null
-          target_id: string
-          target_type: string
-          threshold_amount: number | null
-          updated_at: string
-          updated_by: string | null
+          request_id: string
+          source: string
+          user_id: string
         }
         Insert: {
           company_id: string
           created_at?: string
           created_by?: string | null
-          decided_at?: string | null
-          decided_by?: string | null
-          decision?: string
-          decision_reason?: string | null
           id?: string
-          reason?: string | null
-          requested_amount?: number | null
-          requested_at?: string
-          requested_by?: string
-          rule_reference?: string | null
-          target_id: string
-          target_type: string
-          threshold_amount?: number | null
-          updated_at?: string
-          updated_by?: string | null
+          request_id: string
+          source?: string
+          user_id: string
         }
         Update: {
           company_id?: string
           created_at?: string
           created_by?: string | null
+          id?: string
+          request_id?: string
+          source?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_request_candidates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_request_candidates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_request_candidates_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_request_candidates_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["request_id"]
+          },
+          {
+            foreignKeyName: "approval_request_candidates_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["request_id"]
+          },
+        ]
+      }
+      approval_requests: {
+        Row: {
+          callback_at: string | null
+          callback_attempts: number
+          callback_error: string | null
+          callback_status: string
+          company_id: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          current_step_no: number
+          decided_at: string | null
+          decided_by: string | null
+          decision: string
+          decision_reason: string | null
+          escalated_at: string | null
+          expires_at: string | null
+          id: string
+          last_reminder_at: string | null
+          reason: string | null
+          requested_amount: number | null
+          requested_at: string
+          requested_by: string
+          rule_reference: string | null
+          snapshot: Json
+          target_id: string
+          target_label: string | null
+          target_type: string
+          threshold_amount: number | null
+          updated_at: string
+          updated_by: string | null
+          workflow_id: string | null
+          workflow_version_id: string | null
+        }
+        Insert: {
+          callback_at?: string | null
+          callback_attempts?: number
+          callback_error?: string | null
+          callback_status?: string
+          company_id: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_step_no?: number
           decided_at?: string | null
           decided_by?: string | null
           decision?: string
           decision_reason?: string | null
+          escalated_at?: string | null
+          expires_at?: string | null
           id?: string
+          last_reminder_at?: string | null
           reason?: string | null
           requested_amount?: number | null
           requested_at?: string
           requested_by?: string
           rule_reference?: string | null
+          snapshot?: Json
+          target_id: string
+          target_label?: string | null
+          target_type: string
+          threshold_amount?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          workflow_id?: string | null
+          workflow_version_id?: string | null
+        }
+        Update: {
+          callback_at?: string | null
+          callback_attempts?: number
+          callback_error?: string | null
+          callback_status?: string
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_step_no?: number
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string
+          decision_reason?: string | null
+          escalated_at?: string | null
+          expires_at?: string | null
+          id?: string
+          last_reminder_at?: string | null
+          reason?: string | null
+          requested_amount?: number | null
+          requested_at?: string
+          requested_by?: string
+          rule_reference?: string | null
+          snapshot?: Json
           target_id?: string
+          target_label?: string | null
           target_type?: string
           threshold_amount?: number | null
           updated_at?: string
           updated_by?: string | null
+          workflow_id?: string | null
+          workflow_version_id?: string | null
         }
         Relationships: [
           {
@@ -141,6 +406,412 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
             referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_requests_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
+          },
+          {
+            foreignKeyName: "approval_requests_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflows"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_id"]
+          },
+          {
+            foreignKeyName: "approval_requests_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_workflow_overview"
+            referencedColumns: ["workflow_id"]
+          },
+          {
+            foreignKeyName: "approval_requests_workflow_version_id_fkey"
+            columns: ["workflow_version_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_workflow_version_id_fkey"
+            columns: ["workflow_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_version_id"]
+          },
+        ]
+      }
+      approval_step_assignments: {
+        Row: {
+          assignee_type: string
+          candidate_source: string | null
+          capability: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          role: string | null
+          step_id: string
+          user_id: string | null
+        }
+        Insert: {
+          assignee_type: string
+          candidate_source?: string | null
+          capability?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role?: string | null
+          step_id: string
+          user_id?: string | null
+        }
+        Update: {
+          assignee_type?: string
+          candidate_source?: string | null
+          capability?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role?: string | null
+          step_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_step_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_step_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_step_assignments_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_steps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_step_assignments_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["step_id"]
+          },
+        ]
+      }
+      approval_target_types: {
+        Row: {
+          created_at: string
+          description: string | null
+          is_system: boolean
+          label: string
+          target_type: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          is_system?: boolean
+          label: string
+          target_type: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          is_system?: boolean
+          label?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
+      approval_workflow_steps: {
+        Row: {
+          allow_self_approval: boolean
+          company_id: string
+          created_at: string
+          created_by: string | null
+          escalate_after_hours: number | null
+          id: string
+          incompatible_with_step_no: number | null
+          max_amount: number | null
+          min_amount: number | null
+          name: string
+          quorum_count: number | null
+          reminder_after_hours: number | null
+          restrict_creator: boolean
+          rule: string
+          step_no: number
+          updated_at: string
+          updated_by: string | null
+          version_id: string
+        }
+        Insert: {
+          allow_self_approval?: boolean
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          escalate_after_hours?: number | null
+          id?: string
+          incompatible_with_step_no?: number | null
+          max_amount?: number | null
+          min_amount?: number | null
+          name: string
+          quorum_count?: number | null
+          reminder_after_hours?: number | null
+          restrict_creator?: boolean
+          rule?: string
+          step_no: number
+          updated_at?: string
+          updated_by?: string | null
+          version_id: string
+        }
+        Update: {
+          allow_self_approval?: boolean
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          escalate_after_hours?: number | null
+          id?: string
+          incompatible_with_step_no?: number | null
+          max_amount?: number | null
+          min_amount?: number | null
+          name?: string
+          quorum_count?: number | null
+          reminder_after_hours?: number | null
+          restrict_creator?: boolean
+          rule?: string
+          step_no?: number
+          updated_at?: string
+          updated_by?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_workflow_steps_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_steps_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_steps_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_steps_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_version_id"]
+          },
+        ]
+      }
+      approval_workflow_versions: {
+        Row: {
+          archived_at: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          escalation_hours: number | null
+          expiry_hours: number | null
+          id: string
+          notes: string | null
+          published_at: string | null
+          published_by: string | null
+          reminder_hours: number | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          version_no: number
+          workflow_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          escalation_hours?: number | null
+          expiry_hours?: number | null
+          id?: string
+          notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          reminder_hours?: number | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_no: number
+          workflow_id: string
+        }
+        Update: {
+          archived_at?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          escalation_hours?: number | null
+          expiry_hours?: number | null
+          id?: string
+          notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          reminder_hours?: number | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_no?: number
+          workflow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_workflow_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_versions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_versions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflows"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_versions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_id"]
+          },
+          {
+            foreignKeyName: "approval_workflow_versions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_workflow_overview"
+            referencedColumns: ["workflow_id"]
+          },
+        ]
+      }
+      approval_workflows: {
+        Row: {
+          archived_at: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_system: boolean
+          name: string
+          published_version_id: string | null
+          status: string
+          target_type: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archived_at?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          name: string
+          published_version_id?: string | null
+          status?: string
+          target_type: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archived_at?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          name?: string
+          published_version_id?: string | null
+          status?: string
+          target_type?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_workflows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_published_version_fkey"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_published_version_fkey"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_version_id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
           },
         ]
       }
@@ -2213,6 +2884,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "approval_requests"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_inbox"
+            referencedColumns: ["request_id"]
+          },
+          {
+            foreignKeyName: "commitment_schedule_versions_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["request_id"]
           },
           {
             foreignKeyName: "commitment_schedule_versions_commitment_id_fkey"
@@ -6958,6 +7643,185 @@ export type Database = {
       }
     }
     Views: {
+      v_approval_history: {
+        Row: {
+          actor_id: string | null
+          company_id: string | null
+          created_at: string | null
+          decision: string | null
+          delegated_to: string | null
+          history_id: string | null
+          override_reason: string | null
+          reason: string | null
+          request_id: string | null
+          source: string | null
+          step_no: number | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Relationships: []
+      }
+      v_approval_inbox: {
+        Row: {
+          approver_id: string | null
+          company_id: string | null
+          current_step_no: number | null
+          expires_at: string | null
+          request_id: string | null
+          requested_amount: number | null
+          requested_at: string | null
+          requested_by: string | null
+          rule: string | null
+          step_id: string | null
+          step_name: string | null
+          target_id: string | null
+          target_label: string | null
+          target_type: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_requests_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
+          },
+        ]
+      }
+      v_approval_request_detail: {
+        Row: {
+          callback_at: string | null
+          callback_attempts: number | null
+          callback_error: string | null
+          callback_status: string | null
+          company_id: string | null
+          completed_at: string | null
+          current_step_name: string | null
+          current_step_no: number | null
+          decided_at: string | null
+          decided_by: string | null
+          decision: string | null
+          decision_count: number | null
+          decision_reason: string | null
+          escalated_at: string | null
+          event_count: number | null
+          expires_at: string | null
+          is_system: boolean | null
+          last_reminder_at: string | null
+          reason: string | null
+          request_id: string | null
+          requested_amount: number | null
+          requested_at: string | null
+          requested_by: string | null
+          rule_reference: string | null
+          snapshot: Json | null
+          target_id: string | null
+          target_label: string | null
+          target_type: string | null
+          target_type_label: string | null
+          threshold_amount: number | null
+          workflow_code: string | null
+          workflow_id: string | null
+          workflow_name: string | null
+          workflow_version_id: string | null
+          workflow_version_no: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_requests_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
+          },
+        ]
+      }
+      v_approval_workflow_overview: {
+        Row: {
+          archived_at: string | null
+          code: string | null
+          company_id: string | null
+          created_at: string | null
+          description: string | null
+          is_system: boolean | null
+          name: string | null
+          pending_count: number | null
+          published_at: string | null
+          published_version_id: string | null
+          published_version_no: number | null
+          request_count: number | null
+          status: string | null
+          step_count: number | null
+          target_type: string | null
+          version_count: number | null
+          workflow_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_workflows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_published_version_fkey"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "approval_workflow_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_published_version_fkey"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_approval_request_detail"
+            referencedColumns: ["workflow_version_id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_target_type_fkey"
+            columns: ["target_type"]
+            isOneToOne: false
+            referencedRelation: "approval_target_types"
+            referencedColumns: ["target_type"]
+          },
+        ]
+      }
       v_bank_account_balances: {
         Row: {
           account_identifier: string | null
@@ -9139,6 +10003,53 @@ export type Database = {
         }
         Returns: string
       }
+      approval_activate_stage: {
+        Args: { _request_id: string }
+        Returns: undefined
+      }
+      approval_advance: {
+        Args: { _actor: string; _request_id: string }
+        Returns: undefined
+      }
+      approval_cb_commitment_granted: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_commitment_rejected: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_commitment_released: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_commitment_variance_granted: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_finalise: {
+        Args: {
+          _actor: string
+          _decision: string
+          _reason: string
+          _request_id: string
+        }
+        Returns: undefined
+      }
+      approval_run_callback: {
+        Args: { _event: string; _request_id: string }
+        Returns: string
+      }
+      approval_step_applies: {
+        Args: { _amount: number; _max: number; _min: number }
+        Returns: boolean
+      }
+      approval_step_approvers: {
+        Args: { _request_id: string; _step_id: string }
+        Returns: {
+          user_id: string
+        }[]
+      }
       approve_commitment: {
         Args: {
           _comment?: string
@@ -9149,6 +10060,10 @@ export type Database = {
       }
       approve_commitment_variance: {
         Args: { _reason: string; _version_id: string }
+        Returns: undefined
+      }
+      archive_approval_workflow: {
+        Args: { _reason?: string; _workflow_id: string }
         Returns: undefined
       }
       archive_operational_record: {
@@ -9167,6 +10082,7 @@ export type Database = {
       }
       can_approve_company: { Args: { _company_id: string }; Returns: boolean }
       can_manage_company: { Args: { _company_id: string }; Returns: boolean }
+      can_override_approval: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
       cancel_commitment: {
@@ -9265,6 +10181,27 @@ export type Database = {
           _notes?: string
         }
         Returns: Json
+      }
+      create_approval_workflow: {
+        Args: {
+          _code: string
+          _company_id: string
+          _description?: string
+          _name: string
+          _target_type: string
+        }
+        Returns: string
+      }
+      create_approval_workflow_version: {
+        Args: {
+          _copy_from?: string
+          _escalation_hours?: number
+          _expiry_hours?: number
+          _notes?: string
+          _reminder_hours?: number
+          _workflow_id: string
+        }
+        Returns: string
       }
       create_commitment_draft: {
         Args: {
@@ -9441,6 +10378,14 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      delete_approval_workflow_step: {
+        Args: { _step_id: string }
+        Returns: undefined
+      }
+      ensure_default_approval_workflow: {
+        Args: { _company_id: string; _target_type: string }
+        Returns: string
+      }
       executive_alerts: {
         Args: { _company_id: string }
         Returns: {
@@ -9546,6 +10491,10 @@ export type Database = {
           taxes: number
         }[]
       }
+      publish_approval_workflow_version: {
+        Args: { _version_id: string }
+        Returns: string
+      }
       recompute_document_payment_state: {
         Args: { _document_id: string }
         Returns: undefined
@@ -9562,6 +10511,18 @@ export type Database = {
       recompute_transaction_reconciliation: {
         Args: { _tx_id: string }
         Returns: undefined
+      }
+      record_approval_decision: {
+        Args: {
+          _decision: string
+          _delegate_to?: string
+          _evidence_document_id?: string
+          _override_reason?: string
+          _reason?: string
+          _request_id: string
+          _step_id?: string
+        }
+        Returns: string
       }
       record_property_event: {
         Args: {
@@ -9614,6 +10575,10 @@ export type Database = {
         Args: { _notes?: string; _reminder_id: string; _status?: string }
         Returns: undefined
       }
+      retry_approval_callback: {
+        Args: { _request_id: string }
+        Returns: string
+      }
       reverse_bank_match: {
         Args: { _match_id: string; _reason: string }
         Returns: Json
@@ -9626,6 +10591,7 @@ export type Database = {
         Args: { _payment_id: string; _reason: string }
         Returns: string
       }
+      run_approval_maintenance: { Args: { _company_id: string }; Returns: Json }
       seed_company_dimensions: {
         Args: { _company_id: string }
         Returns: undefined
@@ -9633,6 +10599,18 @@ export type Database = {
       seed_company_scenarios: {
         Args: { _company_id: string }
         Returns: undefined
+      }
+      set_approval_step_assignment: {
+        Args: {
+          _assignee_type: string
+          _candidate_source?: string
+          _capability?: string
+          _remove_id?: string
+          _role?: string
+          _step_id: string
+          _user_id?: string
+        }
+        Returns: string
       }
       settle_financial_document: {
         Args: {
@@ -9648,6 +10626,22 @@ export type Database = {
       shares_company_with: {
         Args: { _target: string; _viewer: string }
         Returns: boolean
+      }
+      submit_approval_request: {
+        Args: {
+          _amount?: number
+          _candidates?: Json
+          _company_id: string
+          _reason?: string
+          _rule_reference?: string
+          _snapshot?: Json
+          _target_id: string
+          _target_label?: string
+          _target_type: string
+          _threshold_amount?: number
+          _workflow_id?: string
+        }
+        Returns: string
       }
       suggest_bank_classification: {
         Args: { _bank_transaction_id: string }
@@ -9824,6 +10818,22 @@ export type Database = {
         }
         Returns: undefined
       }
+      upsert_approval_workflow_step: {
+        Args: {
+          _allow_self_approval?: boolean
+          _incompatible_with_step_no?: number
+          _max_amount?: number
+          _min_amount?: number
+          _name: string
+          _quorum_count?: number
+          _restrict_creator?: boolean
+          _rule?: string
+          _step_id?: string
+          _step_no: number
+          _version_id: string
+        }
+        Returns: string
+      }
       upsert_operational_reminder: {
         Args: {
           _company_id: string
@@ -9853,6 +10863,10 @@ export type Database = {
           vat_code: string
           vat_rate: number
         }[]
+      }
+      withdraw_approval_request: {
+        Args: { _reason?: string; _request_id: string }
+        Returns: undefined
       }
     }
     Enums: {
