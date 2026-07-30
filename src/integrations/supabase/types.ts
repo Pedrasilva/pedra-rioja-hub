@@ -7922,6 +7922,479 @@ export type Database = {
           },
         ]
       }
+      payment_batches: {
+        Row: {
+          bank_account_id: string | null
+          company_id: string
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          execution_order: number
+          export_format: string | null
+          export_reference: string | null
+          export_status: string
+          exported_at: string | null
+          id: string
+          notes: string | null
+          payment_run_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bank_account_id?: string | null
+          company_id: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          execution_order?: number
+          export_format?: string | null
+          export_reference?: string | null
+          export_status?: string
+          exported_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_run_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bank_account_id?: string | null
+          company_id?: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          execution_order?: number
+          export_format?: string | null
+          export_reference?: string | null
+          export_status?: string
+          exported_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_run_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_batches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "payment_batches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "payment_batches_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "payment_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_run_summary"
+            referencedColumns: ["payment_run_id"]
+          },
+        ]
+      }
+      payment_instructions: {
+        Row: {
+          bank_account_id: string | null
+          batch_id: string
+          company_id: string
+          counterparty_id: string | null
+          created_at: string
+          created_by: string | null
+          document_id: string
+          executed_at: string | null
+          failure_reason: string | null
+          id: string
+          notes: string | null
+          payment_method: string
+          payment_reference: string | null
+          payment_run_id: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bank_account_id?: string | null
+          batch_id: string
+          company_id: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id: string
+          executed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          payment_reference?: string | null
+          payment_run_id: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bank_account_id?: string | null
+          batch_id?: string
+          company_id?: string
+          counterparty_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id?: string
+          executed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          payment_reference?: string | null
+          payment_run_id?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_instructions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "payment_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_batch_summary"
+            referencedColumns: ["batch_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "payment_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_run_summary"
+            referencedColumns: ["payment_run_id"]
+          },
+        ]
+      }
+      payment_run_exports: {
+        Row: {
+          batch_id: string | null
+          company_id: string
+          content_hash: string | null
+          created_at: string
+          created_by: string | null
+          document_id: string | null
+          file_name: string | null
+          format: string
+          generated_at: string
+          generated_by: string | null
+          id: string
+          instruction_count: number
+          notes: string | null
+          payment_run_id: string
+          provider: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          company_id: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id?: string | null
+          file_name?: string | null
+          format: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          instruction_count?: number
+          notes?: string | null
+          payment_run_id: string
+          provider?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          company_id?: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id?: string | null
+          file_name?: string | null
+          format?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          instruction_count?: number
+          notes?: string | null
+          payment_run_id?: string
+          provider?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_run_exports_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "payment_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_batch_summary"
+            referencedColumns: ["batch_id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "payment_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_run_exports_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_run_summary"
+            referencedColumns: ["payment_run_id"]
+          },
+        ]
+      }
+      payment_runs: {
+        Row: {
+          actual_execution_date: string | null
+          approval_request_id: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          archived_at: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          completion_notes: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          executed_at: string | null
+          executed_by: string | null
+          exported_at: string | null
+          exported_by: string | null
+          id: string
+          notes: string | null
+          reference: string
+          scheduled_execution_date: string | null
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actual_execution_date?: string | null
+          approval_request_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          archived_at?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_notes?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          exported_at?: string | null
+          exported_by?: string | null
+          id?: string
+          notes?: string | null
+          reference: string
+          scheduled_execution_date?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actual_execution_date?: string | null
+          approval_request_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          archived_at?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_notes?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          exported_at?: string | null
+          exported_by?: string | null
+          id?: string
+          notes?: string | null
+          reference?: string
+          scheduled_execution_date?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -12329,6 +12802,237 @@ export type Database = {
           },
         ]
       }
+      v_payment_batch_summary: {
+        Row: {
+          bank_account_id: string | null
+          batch_id: string | null
+          company_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          currency: string | null
+          execution_order: number | null
+          export_format: string | null
+          export_reference: string | null
+          export_status: string | null
+          exported_at: string | null
+          instruction_count: number | null
+          outstanding_total: number | null
+          payable_total: number | null
+          payment_run_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_batches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "payment_batches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "payment_batches_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "payment_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_batches_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_run_summary"
+            referencedColumns: ["payment_run_id"]
+          },
+        ]
+      }
+      v_payment_instruction_detail: {
+        Row: {
+          bank_account_id: string | null
+          bank_account_name: string | null
+          batch_id: string | null
+          company_id: string | null
+          counterparty_id: string | null
+          counterparty_name: string | null
+          currency: string | null
+          doc_type: string | null
+          document_id: string | null
+          document_number: string | null
+          document_status: string | null
+          due_date: string | null
+          executed_at: string | null
+          failure_reason: string | null
+          instruction_id: string | null
+          issue_date: string | null
+          notes: string | null
+          outstanding_amount: number | null
+          paid_amount: number | null
+          payable_amount: number | null
+          payment_method: string | null
+          payment_reference: string | null
+          payment_run_id: string | null
+          payment_state: string | null
+          series: string | null
+          status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_instructions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "v_bank_account_balances"
+            referencedColumns: ["bank_account_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "payment_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_batch_summary"
+            referencedColumns: ["batch_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_counterparty_id_fkey"
+            columns: ["counterparty_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "financial_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_document_journal"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "v_income_statement"
+            referencedColumns: ["document_id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "payment_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_instructions_payment_run_id_fkey"
+            columns: ["payment_run_id"]
+            isOneToOne: false
+            referencedRelation: "v_payment_run_summary"
+            referencedColumns: ["payment_run_id"]
+          },
+        ]
+      }
+      v_payment_run_summary: {
+        Row: {
+          actual_execution_date: string | null
+          approval_request_id: string | null
+          approval_status: string | null
+          approved_by: string | null
+          archived_at: string | null
+          batch_count: number | null
+          cancellation_reason: string | null
+          company_id: string | null
+          completed_at: string | null
+          completion_notes: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          executed_at: string | null
+          executed_count: number | null
+          exported_at: string | null
+          failed_count: number | null
+          instruction_count: number | null
+          outstanding_total: number | null
+          payable_total: number | null
+          payment_run_id: string | null
+          reference: string | null
+          scheduled_execution_date: string | null
+          status: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       v_portfolio_summary: {
         Row: {
           acquisition_total: number | null
@@ -13271,6 +13975,16 @@ export type Database = {
         Args: { p_version_id: string }
         Returns: undefined
       }
+      add_payment_instruction: {
+        Args: {
+          _bank_account_id?: string
+          _document_id: string
+          _payment_method?: string
+          _payment_reference?: string
+          _run_id: string
+        }
+        Returns: string
+      }
       add_tax_schedule_date: {
         Args: {
           _due_date: string
@@ -13328,6 +14042,18 @@ export type Database = {
         Returns: undefined
       }
       approval_cb_commitment_variance_granted: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_payment_run_granted: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_payment_run_rejected: {
+        Args: { _request_id: string; _target_id: string }
+        Returns: undefined
+      }
+      approval_cb_payment_run_released: {
         Args: { _request_id: string; _target_id: string }
         Returns: undefined
       }
@@ -13390,6 +14116,10 @@ export type Database = {
         Args: { _entity_id: string; _entity_type: string; _reason: string }
         Returns: undefined
       }
+      archive_payment_run: {
+        Args: { _reason?: string; _run_id: string }
+        Returns: undefined
+      }
       archive_tenant_record: {
         Args: { p_reason?: string; p_tenant_id: string }
         Returns: undefined
@@ -13411,6 +14141,10 @@ export type Database = {
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
       cancel_commitment: {
         Args: { _commitment_id: string; _reason: string }
+        Returns: undefined
+      }
+      cancel_payment_run: {
+        Args: { _reason: string; _run_id: string }
         Returns: undefined
       }
       cash_flow_entry_from_transaction: {
@@ -13496,6 +14230,10 @@ export type Database = {
       commitment_summary: { Args: { _commitment_id: string }; Returns: Json }
       complete_commitment: {
         Args: { _commitment_id: string; _notes?: string }
+        Returns: undefined
+      }
+      complete_payment_run: {
+        Args: { _notes?: string; _run_id: string }
         Returns: undefined
       }
       confirm_bank_match: {
@@ -13665,6 +14403,16 @@ export type Database = {
         }
         Returns: string
       }
+      create_payment_run: {
+        Args: {
+          _company_id: string
+          _description?: string
+          _reference?: string
+          _scheduled_execution_date?: string
+          _title: string
+        }
+        Returns: string
+      }
       create_service_contract: {
         Args: {
           _auto_renew?: boolean
@@ -13735,6 +14483,10 @@ export type Database = {
         Args: { _company_id: string; _target_type: string }
         Returns: string
       }
+      execute_payment_run: {
+        Args: { _execution_date?: string; _run_id: string }
+        Returns: undefined
+      }
       executive_alerts: {
         Args: { _company_id: string }
         Returns: {
@@ -13750,6 +14502,22 @@ export type Database = {
         }[]
       }
       executive_snapshot: { Args: { _company_id: string }; Returns: Json }
+      export_payment_run: {
+        Args: {
+          _batch_id?: string
+          _content_hash?: string
+          _file_name?: string
+          _format: string
+          _notes?: string
+          _provider?: string
+          _run_id: string
+        }
+        Returns: string
+      }
+      fail_payment_instruction: {
+        Args: { _instruction_id: string; _reason: string }
+        Returns: undefined
+      }
       generate_company_cash_flow: {
         Args: { _company_id: string; _through: string }
         Returns: number
@@ -13915,6 +14683,10 @@ export type Database = {
         Args: { _commitment_id: string; _reason: string }
         Returns: undefined
       }
+      remove_payment_instruction: {
+        Args: { _instruction_id: string }
+        Returns: undefined
+      }
       reopen_financial_period: {
         Args: { _period_id: string; _reason: string }
         Returns: {
@@ -13946,6 +14718,10 @@ export type Database = {
       }
       request_commitment_approval: {
         Args: { _commitment_id: string; _reason?: string }
+        Returns: string
+      }
+      request_payment_run_approval: {
+        Args: { _reason?: string; _run_id: string }
         Returns: string
       }
       resolve_operational_reminder: {
@@ -14167,6 +14943,26 @@ export type Database = {
           _reminder_lead_days?: number
           _responsible_name?: string
           _status?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_payment_instruction: {
+        Args: {
+          _bank_account_id?: string
+          _instruction_id: string
+          _notes?: string
+          _payment_method?: string
+          _payment_reference?: string
+        }
+        Returns: undefined
+      }
+      update_payment_run: {
+        Args: {
+          _description?: string
+          _notes?: string
+          _run_id: string
+          _scheduled_execution_date?: string
           _title?: string
         }
         Returns: undefined

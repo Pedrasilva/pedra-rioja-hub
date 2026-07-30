@@ -62,6 +62,10 @@ function builder(table: string) {
   api.limit = (...a: unknown[]) => record("limit", ...a);
   api.or = (...a: unknown[]) => record("or", ...a);
   api.gte = (...a: unknown[]) => record("gte", ...a);
+  api.gt = (c: string, v: unknown) => {
+    rows = rows.filter((r) => Number(r[c] ?? 0) > Number(v));
+    return record("gt", c, v);
+  };
   api.lte = (...a: unknown[]) => record("lte", ...a);
   api.eq = (c: string, v: unknown) => {
     rows = rows.filter((r) => r[c] === v);
@@ -292,5 +296,40 @@ export function approvalFnModule() {
 
 export function lastApprovalPayload(name: ApprovalFnName) {
   const call = approvalFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
+
+/* --------------------------------------------- payment server functions */
+
+export const PAYMENT_FN_NAMES = [
+  "createPaymentRun",
+  "updatePaymentRun",
+  "addPaymentInstruction",
+  "updatePaymentInstruction",
+  "removePaymentInstruction",
+  "failPaymentInstruction",
+  "requestPaymentRunApproval",
+  "exportPaymentRun",
+  "executePaymentRun",
+  "completePaymentRun",
+  "cancelPaymentRun",
+  "archivePaymentRun",
+] as const;
+
+export type PaymentFnName = (typeof PAYMENT_FN_NAMES)[number];
+
+export const paymentFns = Object.fromEntries(
+  PAYMENT_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<PaymentFnName, ReturnType<typeof vi.fn>>;
+
+export function paymentFnModule() {
+  return paymentFns;
+}
+
+export function lastPaymentPayload(name: PaymentFnName) {
+  const call = paymentFns[name].mock.calls.at(-1);
   return (call?.[0] as { data: unknown } | undefined)?.data;
 }
