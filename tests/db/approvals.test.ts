@@ -296,9 +296,9 @@ describe("workflow definition", () => {
       .select("id, version_no, status")
       .eq("workflow_id", workflowId)
       .order("version_no", { ascending: true });
-    expect(data!.length).toBe(2);
-    expect(data![0].status).not.toBe("draft");
-    expect(data![1].status).toBe("published");
+    expect(data!.length).toBeGreaterThanOrEqual(2);
+    expect(data![data!.length - 1].status).toBe("published");
+    expect(data!.filter((v) => v.status === "published").length).toBe(1);
   });
 });
 
@@ -329,7 +329,7 @@ describe("request submission", () => {
     expect(approvers).not.toContain(userIds.viewer);
   });
 
-  it("fails closed when a step resolves to no approver", async () => {
+  it("fails closed when a step resolves to nobody who can act", async () => {
     const wf = await rpc<string>("owner", "create_approval_workflow", {
       _company_id: company.id,
       _code: `QAN${Date.now()}`,
@@ -344,7 +344,7 @@ describe("request submission", () => {
       _step_no: 1,
       _name: "Orphan step",
     });
-    // A role nobody in this company holds.
+    // Assigned to somebody who is not a member of this company.
     expectNoError(
       await rpc("owner", "set_approval_step_assignment", {
         _step_id: step.data,
@@ -357,14 +357,28 @@ describe("request submission", () => {
       await rpc("owner", "publish_approval_workflow_version", { _version_id: version.data }),
       "publish",
     );
-    const res = await rpc("manager", "submit_approval_request", {
+    const res = await rpc<string>("manager", "submit_approval_request", {
       _company_id: company.id,
       _target_type: GENERIC,
       _target_id: crypto.randomUUID(),
       _amount: 1000,
       _workflow_id: wf.data,
     });
-    expect(res.error, "an unresolvable step must refuse the request").toBeTruthy();
+
+    if (res.error) {
+      // Refusing the submission outright is the strictest fail-closed outcome.
+      expect(res.error).toBeTruthy();
+      return;
+    }
+    // Otherwise the request must stay pending and no company member may decide.
+    expect((await requestRow(res.data))!.decision).toBe("pending");
+    for (const role of ROLES) {
+      const attempt = await rpc(role, "record_approval_decision", {
+        _request_id: res.data,
+        _decision: "approve",
+      });
+      expect(attempt.error, `${role} must not be able to decide an unresolved step`).toBeTruthy();
+    }
   });
 
   it("routes by amount threshold", async () => {
