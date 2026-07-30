@@ -916,6 +916,227 @@ Stop and report before creating migrations if implementation would require:
 
 
 
+## 5E. FROZEN ARCHITECTURAL CONTRACT — Generic Approval Principle
+
+**Status: FROZEN. Binding for Phase 8C and all later phases.**
+
+§5E does **not** override §5C or §5D. It defines how a generic approval engine
+may orchestrate decisions while preserving domain ownership and the canonical
+financial lifecycle. Where §5E appears to touch a rule owned by §5C or §5D, the
+earlier contract wins.
+
+### 5E.1 Approval engine purpose
+
+The approval engine is a reusable orchestration service. It owns: workflow
+definitions; workflow versions; approval requests; approval steps; approver
+assignments; decisions; delegation; escalation; quorum; deadlines; status;
+audit history.
+
+It does **not** own the business object being approved. It must never become
+the source of truth for commitment values, contract values, budget values,
+invoice values, payment values, bank values, project status, maintenance
+status, lease status, procurement status, or any other domain-specific
+business fact.
+
+### 5E.2 Generic target contract
+
+The engine may reference a target only through: `target_type`; `target_id`;
+`company_id`; workflow definition and version; an optional immutable request
+snapshot; an optional domain callback or server contract.
+
+The engine must not import or depend directly on domain tables, domain
+clients, domain components or domain-specific row types. A workflow must be
+able to approve future domain types without schema redesign.
+
+Initial target types may include: commitment; commitment variation; commitment
+schedule replacement; service contract; insurance policy; lease; procurement
+request; budget; capex project decision; financial document; other future
+domain records. These are typed references, not ownership transfers.
+
+### 5E.3 Domain ownership
+
+The owning domain remains authoritative for: whether approval is required;
+which workflow applies; the business value under review; validation of the
+target; lifecycle transition after approval; rejection and cancellation
+consequences; whether a decision may be overridden; what constitutes a
+material change; what evidence is required; whether the target remains
+eligible for decision.
+
+The engine orchestrates the decision process only. It must not duplicate
+domain lifecycle rules.
+
+### 5E.4 Request snapshots
+
+An approval request may store an immutable snapshot of the information
+presented to approvers. The snapshot exists for audit and decision context
+only. It must not become an editable or competing source of truth.
+
+A snapshot should support: target label; summary; submitted values; currency
+where applicable; requester; requested action; evidence references; relevant
+dimensions; material-change explanation; domain-provided metadata.
+
+Later changes to the source record must not silently alter the historical
+request snapshot. If the underlying business record changes materially while
+approval is pending, the owning domain decides whether to invalidate the
+request, withdraw it, create a new request, or require reapproval.
+
+### 5E.5 Workflow definitions
+
+Workflow definitions must be versioned. A definition may support: one or more
+ordered steps; parallel steps; sequential steps; individual approvers;
+role-based approvers; group-based approvers; threshold-based routing;
+unanimous approval; majority approval; minimum quorum; any-one approval;
+escalation; delegation; reminders; expiry; withdrawal; rejection;
+cancellation.
+
+A request remains bound to the workflow version active when it was submitted.
+Later workflow edits must not change historical or in-flight requests unless
+an explicit migration or restart action is performed.
+
+### 5E.6 Approver resolution
+
+Approvers may be resolved from: named users; company roles; capability groups;
+management hierarchy; dimension ownership; project responsibility; value
+thresholds; domain-provided approver candidates.
+
+Approver resolution must be company-scoped and fail-closed. An unresolved
+approver blocks the request from progressing. The system must not silently
+skip a required step.
+
+### 5E.7 Segregation of duties
+
+The engine must support: requester cannot approve own request; record creator
+cannot approve where prohibited; prior-step approver cannot approve a later
+incompatible step; delegated approver must have equivalent authority; override
+approval requires explicit permission; override reason is mandatory;
+higher-value requests may require additional approval levels.
+
+Self-approval exceptions must be explicit, authorised and audited. The default
+is fail-closed.
+
+### 5E.8 Decisions
+
+Decision types may include: approve; reject; return for changes; abstain;
+delegate; withdraw; cancel; expire; override approve; override reject.
+
+Every decision must record: request; step; approver; decision; timestamp;
+reason or comment where required; delegation or override context; evidence
+where applicable; audit metadata.
+
+Historical decisions are immutable. Corrections use a new event, reversal,
+withdrawal or superseding request.
+
+### 5E.9 Domain callbacks
+
+The engine must not directly update target-domain records. After a workflow
+reaches a terminal state it may invoke an approved domain callback or server
+contract such as `onApprovalGranted`, `onApprovalRejected`,
+`onApprovalReturned`, `onApprovalWithdrawn`, `onApprovalExpired`.
+
+The owning domain validates the target again before applying any lifecycle
+change. The callback must be server-side; company-scoped; permission-checked;
+idempotent; auditable; safe under retries; safe under concurrent execution.
+
+If the callback fails, the approval decision remains recorded, but the request
+must expose a clear integration or application status instead of pretending
+the domain transition succeeded.
+
+### 5E.10 Approval status versus domain status
+
+Approval status and domain lifecycle status are separate facts. A request may
+be approved while the domain callback is still pending; a commitment may
+remain pending activation after approval; a contract may be approved but not
+yet active; a rejected request returns the business record to draft only
+through the owning domain; an expired request must not automatically cancel
+the business record.
+
+Do not collapse workflow state and domain state into one field.
+
+### 5E.11 Minimal Phase 8A approval migration
+
+The narrow approval mechanism introduced in Phase 8A remains valid until Phase
+8C provides a safe migration path. Phase 8C may generalise it, but must not:
+break existing commitment approvals; rewrite historical decisions; lose
+approval events; weaken self-approval restrictions; change approval outcomes;
+invalidate audit history; create duplicate active approval requests.
+
+The migration strategy must be additive. Historical Phase 8A approvals must
+remain queryable, migrated or exposed through compatibility views without
+destructive rewriting.
+
+### 5E.12 Permissions and security
+
+Use the existing six-role capability model and fail-closed RLS. Distinguish
+capabilities for: view workflows; configure workflows; publish workflow
+versions; submit requests; withdraw requests; decide; delegate; escalate;
+override; retry failed callbacks; inspect audit history.
+
+Requirements: anonymous access denied; missing company denied; missing
+capability denied; cross-company references denied; direct execution revoked
+where appropriate; privileged actions use server functions; UI-only
+restrictions are insufficient; no fail-open default.
+
+### 5E.13 Audit and immutability
+
+Audit: workflow creation; workflow version publication; request submission;
+approver resolution; step activation; decision; delegation; escalation;
+reminder; expiry; withdrawal; override; callback attempt; callback success;
+callback failure; request completion.
+
+Do not delete workflow history. Use archive-not-delete where applicable.
+Published workflow versions, submitted requests and decisions are immutable.
+
+### 5E.14 Evidence and documents
+
+Use the existing documents model and Drive adapter. Evidence may link to:
+workflow definition; workflow version; request; step; decision; override;
+callback failure. Do not introduce a separate file-storage model.
+
+### 5E.15 No financial ownership
+
+The engine must not: create cash-flow entries; create commitments; change
+commitment amounts; create financial documents; change invoice values; create
+payments; create bank transactions; reconcile transactions; own budgets;
+calculate authoritative financial totals.
+
+It may display an immutable domain-provided snapshot for decision context.
+
+### 5E.16 No direct domain coupling
+
+The generic approval core must not directly import or reference: commitment
+tables; bookkeeping tables; banking tables; cash-flow tables; financing
+tables; operational tables; project tables; lease tables; property tables;
+domain-specific Supabase clients; host-specific route or workspace context.
+
+All domain interaction passes through typed adapters, callbacks or server
+contracts.
+
+### 5E.17 Concurrency and idempotency
+
+The engine must safely handle: two approvers deciding at the same time;
+duplicate requests; repeated callbacks; repeated delegation; workflow expiry
+racing with a decision; withdrawal racing with approval; workflow publication
+while requests are in flight; retries after network failure.
+
+No request may reach contradictory terminal states. No step may be satisfied
+twice. No callback may apply the same domain transition twice.
+
+### 5E.18 Phase 8C implementation stop conditions
+
+Before creating schema or migrations, verify that the proposed approval engine
+preserves §5C, §5D and §5E. Stop and report before implementation if the
+design would require: direct approval-engine writes into domain tables;
+duplicated domain lifecycle logic; duplicated financial ownership; mutable
+historical decisions; fail-open approver resolution; implicit self-approval;
+silent skipping of required steps; workflow edits changing historical
+requests; collapse of approval state into domain state; destructive rewriting
+of Phase 8A approval history; bypassing server-side callbacks; weakening RLS
+or audit.
+
+Do not reinterpret or weaken the frozen contracts to proceed.
+
+---
+
 ## 6. Team, roles and approvals
 
 **What exists.** Six roles (`owner`, `manager`, `bookkeeper`, `assistant`,
