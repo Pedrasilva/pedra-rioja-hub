@@ -29,12 +29,14 @@ import { useWorkspace } from "@/hooks/use-workspace";
 import { formatDate, formatMoney, formatNumber, formatPercent, titleCase } from "@/lib/format";
 import { useCashFlowMonthly } from "@/modules/cashflow/queries";
 import { EmptyHint, Kpi } from "@/modules/executive/components/kpi";
+import { InvestmentMetricsPanel } from "@/modules/executive/components/investment-metrics";
 import {
   useCapexSummary,
   useCounterpartyAgeing,
   useDebtSummary,
   useDocumentJournal,
   useIncomeStatement,
+  useInvestmentMetrics,
   usePropertyProfitability,
   useVatSummary,
 } from "@/modules/executive/queries";
@@ -145,6 +147,7 @@ function ReportsPage() {
           <TabsTrigger value="capex">CapEx</TabsTrigger>
           <TabsTrigger value="ageing">Ageing</TabsTrigger>
           <TabsTrigger value="vat">VAT</TabsTrigger>
+          <TabsTrigger value="metrics">Metrics</TabsTrigger>
           <TabsTrigger value="journal">Journal</TabsTrigger>
         </TabsList>
 
