@@ -904,3 +904,11 @@ function JournalTab({
     </Panel>
   );
 }
+
+/** Phase 8D — DSCR, LTV and cash-on-cash, all derived in the database. */
+function MetricsTab({ companyId, currency }: { companyId: string; currency: string }) {
+  const q = useInvestmentMetrics(companyId);
+  return (
+    <InvestmentMetricsPanel rows={q.data ?? []} currency={currency} isLoading={q.isLoading} />
+  );
+}
