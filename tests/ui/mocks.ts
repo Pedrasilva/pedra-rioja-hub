@@ -333,3 +333,41 @@ export function lastPaymentPayload(name: PaymentFnName) {
   const call = paymentFns[name].mock.calls.at(-1);
   return (call?.[0] as { data: unknown } | undefined)?.data;
 }
+
+/* ----------------------------------------- acquisition server functions */
+
+export const ACQUISITION_FN_NAMES = [
+  "createOpportunity",
+  "updateOpportunity",
+  "moveOpportunityStage",
+  "archiveOpportunity",
+  "restoreOpportunity",
+  "recordAcquisitionActivity",
+  "createAcquisitionTask",
+  "setAcquisitionTaskStatus",
+  "recordAcquisitionValuation",
+  "recordAcquisitionOffer",
+  "decideAcquisitionOffer",
+  "linkAcquisitionCommitment",
+  "unlinkAcquisitionCommitment",
+  "createAcquisitionCommitment",
+] as const;
+
+export type AcquisitionFnName = (typeof ACQUISITION_FN_NAMES)[number];
+
+export const acquisitionFns = Object.fromEntries(
+  ACQUISITION_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<AcquisitionFnName, ReturnType<typeof vi.fn>>;
+
+export function acquisitionFnModule() {
+  return acquisitionFns;
+}
+
+export function lastAcquisitionPayload(name: AcquisitionFnName) {
+  const call = acquisitionFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
+
