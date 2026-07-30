@@ -30,6 +30,9 @@ vi.mock("@tanstack/react-router", async (orig) => ({
   },
 }));
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
+vi.mock("@/modules/bookkeeping/bookkeeping.functions", async () =>
+  (await import("./mocks")).serverFnModule(),
+);
 vi.mock("@/modules/acquisitions/acquisitions.functions", async () =>
   (await import("./mocks")).acquisitionFnModule(),
 );
