@@ -14,6 +14,695 @@ export type Database = {
   }
   public: {
     Tables: {
+      acquisition_activities: {
+        Row: {
+          activity_type: string
+          author_id: string | null
+          body: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          occurred_at: string
+          opportunity_id: string
+          summary: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          activity_type?: string
+          author_id?: string | null
+          body?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          occurred_at?: string
+          opportunity_id: string
+          summary: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          activity_type?: string
+          author_id?: string | null
+          body?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          occurred_at?: string
+          opportunity_id?: string
+          summary?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_activities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_activities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_activities_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_activities_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      acquisition_commitment_links: {
+        Row: {
+          commitment_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          link_reason: string | null
+          linked_at: string
+          linked_by: string | null
+          opportunity_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          commitment_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          link_reason?: string | null
+          linked_at?: string
+          linked_by?: string | null
+          opportunity_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          commitment_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          link_reason?: string | null
+          linked_at?: string
+          linked_by?: string | null
+          opportunity_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_commitment_links_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      acquisition_offers: {
+        Row: {
+          amount: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          decided_by: string | null
+          decided_on: string | null
+          decision_notes: string | null
+          expires_on: string | null
+          id: string
+          negotiation_notes: string | null
+          offer_no: number
+          opportunity_id: string
+          status: string
+          submitted_on: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decided_by?: string | null
+          decided_on?: string | null
+          decision_notes?: string | null
+          expires_on?: string | null
+          id?: string
+          negotiation_notes?: string | null
+          offer_no: number
+          opportunity_id: string
+          status?: string
+          submitted_on?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decided_by?: string | null
+          decided_on?: string | null
+          decision_notes?: string | null
+          expires_on?: string | null
+          id?: string
+          negotiation_notes?: string | null
+          offer_no?: number
+          opportunity_id?: string
+          status?: string
+          submitted_on?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_offers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_offers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_offers_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_offers_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      acquisition_opportunities: {
+        Row: {
+          address: string | null
+          archive_reason: string | null
+          archived_at: string | null
+          archived_by: string | null
+          asking_price: number | null
+          assigned_to: string | null
+          broker_id: string | null
+          company_id: string
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          decided_at: string | null
+          decided_by: string | null
+          decision: string | null
+          decision_reason: string | null
+          expected_closing_date: string | null
+          id: string
+          indicative_offer: number | null
+          link_kind: string
+          location: string | null
+          notes: string | null
+          opportunity_type: string
+          probability: number
+          property_id: string | null
+          property_name: string | null
+          reference: string
+          seller_id: string | null
+          source: string | null
+          stage: string
+          target_acquisition_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+          valuation_amount: number | null
+        }
+        Insert: {
+          address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          asking_price?: number | null
+          assigned_to?: string | null
+          broker_id?: string | null
+          company_id: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string | null
+          decision_reason?: string | null
+          expected_closing_date?: string | null
+          id?: string
+          indicative_offer?: number | null
+          link_kind?: string
+          location?: string | null
+          notes?: string | null
+          opportunity_type?: string
+          probability?: number
+          property_id?: string | null
+          property_name?: string | null
+          reference: string
+          seller_id?: string | null
+          source?: string | null
+          stage?: string
+          target_acquisition_date?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          valuation_amount?: number | null
+        }
+        Update: {
+          address?: string | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          asking_price?: number | null
+          assigned_to?: string | null
+          broker_id?: string | null
+          company_id?: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string | null
+          decision_reason?: string | null
+          expected_closing_date?: string | null
+          id?: string
+          indicative_offer?: number | null
+          link_kind?: string
+          location?: string | null
+          notes?: string | null
+          opportunity_type?: string
+          probability?: number
+          property_id?: string | null
+          property_name?: string | null
+          reference?: string
+          seller_id?: string | null
+          source?: string | null
+          stage?: string
+          target_acquisition_date?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          valuation_amount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_opportunities_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      acquisition_stage_events: {
+        Row: {
+          actor_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          from_stage: string | null
+          id: string
+          is_reopen: boolean
+          occurred_at: string
+          opportunity_id: string
+          reason: string | null
+          to_stage: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          from_stage?: string | null
+          id?: string
+          is_reopen?: boolean
+          occurred_at?: string
+          opportunity_id: string
+          reason?: string | null
+          to_stage: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          from_stage?: string | null
+          id?: string
+          is_reopen?: boolean
+          occurred_at?: string
+          opportunity_id?: string
+          reason?: string | null
+          to_stage?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_stage_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_stage_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_stage_events_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_stage_events_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      acquisition_stage_transitions: {
+        Row: {
+          created_at: string
+          from_stage: string
+          id: string
+          is_reopen: boolean
+          requires_manage: boolean
+          to_stage: string
+        }
+        Insert: {
+          created_at?: string
+          from_stage: string
+          id?: string
+          is_reopen?: boolean
+          requires_manage?: boolean
+          to_stage: string
+        }
+        Update: {
+          created_at?: string
+          from_stage?: string
+          id?: string
+          is_reopen?: boolean
+          requires_manage?: boolean
+          to_stage?: string
+        }
+        Relationships: []
+      }
+      acquisition_tasks: {
+        Row: {
+          assignee_id: string | null
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          due_date: string | null
+          id: string
+          opportunity_id: string
+          priority: string
+          reminder_at: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          assignee_id?: string | null
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          due_date?: string | null
+          id?: string
+          opportunity_id: string
+          priority?: string
+          reminder_at?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          assignee_id?: string | null
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          due_date?: string | null
+          id?: string
+          opportunity_id?: string
+          priority?: string
+          reminder_at?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_tasks_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_tasks_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      acquisition_valuations: {
+        Row: {
+          author_id: string | null
+          comments: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          estimated_value: number
+          id: string
+          method: string
+          opportunity_id: string
+          updated_at: string
+          updated_by: string | null
+          valued_on: string
+        }
+        Insert: {
+          author_id?: string | null
+          comments?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          estimated_value: number
+          id?: string
+          method?: string
+          opportunity_id: string
+          updated_at?: string
+          updated_by?: string | null
+          valued_on?: string
+        }
+        Update: {
+          author_id?: string | null
+          comments?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          estimated_value?: number
+          id?: string
+          method?: string
+          opportunity_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          valued_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_valuations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_valuations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_valuations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_valuations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
       approval_callbacks: {
         Row: {
           created_at: string
@@ -10609,6 +11298,194 @@ export type Database = {
           },
         ]
       }
+      v_acquisition_commitment_link: {
+        Row: {
+          authorised_amount: number | null
+          commitment_code: string | null
+          commitment_currency: string | null
+          commitment_id: string | null
+          commitment_status: string | null
+          commitment_title: string | null
+          company_id: string | null
+          link_id: string | null
+          link_reason: string | null
+          linked_at: string | null
+          opportunity_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_commitment_links_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_commitment_links_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+        ]
+      }
+      v_acquisition_pipeline: {
+        Row: {
+          activity_count: number | null
+          address: string | null
+          archived_at: string | null
+          asking_price: number | null
+          assigned_to: string | null
+          broker_id: string | null
+          broker_name: string | null
+          company_id: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          decision: string | null
+          decision_reason: string | null
+          expected_closing_date: string | null
+          indicative_offer: number | null
+          is_archived: boolean | null
+          latest_offer_amount: number | null
+          latest_valuation: number | null
+          link_kind: string | null
+          linked_commitment_count: number | null
+          location: string | null
+          notes: string | null
+          offer_count: number | null
+          open_task_count: number | null
+          opportunity_id: string | null
+          opportunity_type: string | null
+          probability: number | null
+          property_id: string | null
+          property_name: string | null
+          reference: string | null
+          seller_id: string | null
+          seller_name: string | null
+          source: string | null
+          stage: string | null
+          target_acquisition_date: string | null
+          title: string | null
+          updated_at: string | null
+          valuation_amount: number | null
+          weighted_estimate: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_opportunities_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "counterparties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_acquisition_stage_summary: {
+        Row: {
+          company_id: string | null
+          estimate_total: number | null
+          opportunity_count: number | null
+          stage: string | null
+          weighted_total: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acquisition_opportunities_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       v_approval_history: {
         Row: {
           actor_id: string | null
@@ -14092,6 +14969,10 @@ export type Database = {
         Args: { _reason: string; _version_id: string }
         Returns: undefined
       }
+      archive_acquisition_opportunity: {
+        Args: { _opportunity_id: string; _reason?: string }
+        Returns: undefined
+      }
       archive_approval_workflow: {
         Args: { _reason?: string; _workflow_id: string }
         Returns: undefined
@@ -14243,6 +15124,59 @@ export type Database = {
           _notes?: string
         }
         Returns: Json
+      }
+      create_acquisition_commitment: {
+        Args: {
+          _authorised_amount?: number
+          _commitment_type?: string
+          _counterparty_id?: string
+          _end_date?: string
+          _notes?: string
+          _opportunity_id: string
+          _start_date?: string
+          _title: string
+        }
+        Returns: string
+      }
+      create_acquisition_opportunity: {
+        Args: {
+          _address?: string
+          _asking_price?: number
+          _assigned_to?: string
+          _broker_id?: string
+          _company_id: string
+          _contact_email?: string
+          _contact_name?: string
+          _contact_phone?: string
+          _currency?: string
+          _expected_closing_date?: string
+          _indicative_offer?: number
+          _link_kind?: string
+          _location?: string
+          _notes?: string
+          _opportunity_type?: string
+          _probability?: number
+          _property_id?: string
+          _property_name?: string
+          _reference?: string
+          _seller_id?: string
+          _source?: string
+          _target_acquisition_date?: string
+          _title: string
+          _valuation_amount?: number
+        }
+        Returns: string
+      }
+      create_acquisition_task: {
+        Args: {
+          _assignee_id?: string
+          _description: string
+          _due_date?: string
+          _opportunity_id: string
+          _priority?: string
+          _reminder_at?: string
+        }
+        Returns: string
       }
       create_approval_workflow: {
         Args: {
@@ -14474,6 +15408,15 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      decide_acquisition_offer: {
+        Args: {
+          _decided_on?: string
+          _decision: string
+          _notes?: string
+          _offer_id: string
+        }
+        Returns: undefined
+      }
       delete_approval_workflow_step: {
         Args: { _step_id: string }
         Returns: undefined
@@ -14558,6 +15501,14 @@ export type Database = {
         Returns: boolean
       }
       lease_assert_record: { Args: { _company_id: string }; Returns: undefined }
+      link_acquisition_commitment: {
+        Args: {
+          _commitment_id: string
+          _opportunity_id: string
+          _reason?: string
+        }
+        Returns: string
+      }
       link_operational_commitment: {
         Args: {
           _commitment_id: string
@@ -14588,6 +15539,15 @@ export type Database = {
       mark_statement_batch_reconciled: {
         Args: { _import_id: string; _override_reason?: string }
         Returns: Json
+      }
+      move_acquisition_stage: {
+        Args: {
+          _opportunity_id: string
+          _probability?: number
+          _reason?: string
+          _stage: string
+        }
+        Returns: string
       }
       next_operational_due_date: {
         Args: { _due: string; _frequency: string; _interval: number }
@@ -14641,6 +15601,36 @@ export type Database = {
       recompute_transaction_reconciliation: {
         Args: { _tx_id: string }
         Returns: undefined
+      }
+      record_acquisition_activity: {
+        Args: {
+          _activity_type: string
+          _body?: string
+          _occurred_at?: string
+          _opportunity_id: string
+          _summary: string
+        }
+        Returns: string
+      }
+      record_acquisition_offer: {
+        Args: {
+          _amount: number
+          _expires_on?: string
+          _negotiation_notes?: string
+          _opportunity_id: string
+          _submitted_on?: string
+        }
+        Returns: string
+      }
+      record_acquisition_valuation: {
+        Args: {
+          _comments?: string
+          _estimated_value: number
+          _method?: string
+          _opportunity_id: string
+          _valued_on?: string
+        }
+        Returns: string
       }
       record_approval_decision: {
         Args: {
@@ -14728,6 +15718,10 @@ export type Database = {
         Args: { _notes?: string; _reminder_id: string; _status?: string }
         Returns: undefined
       }
+      restore_acquisition_opportunity: {
+        Args: { _opportunity_id: string }
+        Returns: undefined
+      }
       retry_approval_callback: {
         Args: { _request_id: string }
         Returns: string
@@ -14751,6 +15745,10 @@ export type Database = {
       }
       seed_company_scenarios: {
         Args: { _company_id: string }
+        Returns: undefined
+      }
+      set_acquisition_task_status: {
+        Args: { _reason?: string; _status: string; _task_id: string }
         Returns: undefined
       }
       set_approval_step_assignment: {
@@ -14857,6 +15855,37 @@ export type Database = {
         Returns: undefined
       }
       terminate_lease: { Args: { p: Json }; Returns: undefined }
+      unlink_acquisition_commitment: {
+        Args: { _link_id: string }
+        Returns: undefined
+      }
+      update_acquisition_opportunity: {
+        Args: {
+          _address?: string
+          _asking_price?: number
+          _assigned_to?: string
+          _broker_id?: string
+          _contact_email?: string
+          _contact_name?: string
+          _contact_phone?: string
+          _expected_closing_date?: string
+          _indicative_offer?: number
+          _link_kind?: string
+          _location?: string
+          _notes?: string
+          _opportunity_id: string
+          _opportunity_type?: string
+          _probability?: number
+          _property_id?: string
+          _property_name?: string
+          _seller_id?: string
+          _source?: string
+          _target_acquisition_date?: string
+          _title?: string
+          _valuation_amount?: number
+        }
+        Returns: undefined
+      }
       update_budget: {
         Args: {
           _budget_id: string
