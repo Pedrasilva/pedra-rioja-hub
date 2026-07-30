@@ -37,11 +37,15 @@ function hit(overrides: Record<string, unknown>) {
   };
 }
 
-async function openPalette() {
+/**
+ * cmdk filters rendered items against the typed value, so tests that assert on
+ * results leave the input empty and let the mocked index supply the rows.
+ */
+async function openPalette(term = "") {
   const user = userEvent.setup();
   renderWithProviders(<GlobalSearch companyId="c1" />);
   await user.click(screen.getByRole("button", { name: /search the portfolio/i }));
-  await user.type(screen.getByPlaceholderText(/search properties/i), "mar");
+  if (term) await user.type(screen.getByPlaceholderText(/search properties/i), term);
   return user;
 }
 
@@ -127,7 +131,7 @@ describe("global search palette", () => {
 
   it("explains an empty result set without pretending nothing matched", async () => {
     searchState.isError = true;
-    await openPalette();
+    await openPalette("mar");
     expect(await screen.findByText(/search is unavailable/i)).toBeInTheDocument();
   });
 });
