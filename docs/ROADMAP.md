@@ -158,19 +158,32 @@ management reporting (7B), bookkeeping completion (7C) and operational
 intelligence (7D), with database contract tests for the new views and RPCs,
 helper tests for the reporting maths, and UI tests for document attachments.
 
-Deliberately left out of Phase 7 (and now sequenced below): editable capex
-project workspace, scenario comparison, per-account liquidity thresholds, and
-the accountant PDF pack.
+## Phase 8 — closed (8A–8E)
 
-## Proposed next phase
+- **8A** — commitment layer: commitments, schedule versioning, drawdowns,
+  editable capex workspace, maintenance jobs, contractor overlay.
+- **8B** — operating the income: indexation and end dates on recurring rules,
+  obligations register, service contracts, vacancy records, rent roll.
+- **8C** — governance: generic approval and workflow engine (replacing the
+  narrow 8A mechanism), approval inbox, team management.
+- **8D** — planning and hardening: budgets and forecast vs plan, DSCR / LTV /
+  cash-on-cash, preventive maintenance schedules, import framework,
+  cross-entity search, production hardening.
+- **8E** — lease and asset management: versioned leases, tenants, occupancy,
+  rent roll, rent reviews, WAULT and expiry reporting.
 
-**Phase 8 — Operational completeness (remaining P0 items)**, sequenced:
+Deferred out of Phase 8 and now frozen as Phase 8F: payment run, acquisition
+pipeline, due-diligence checklist. Disposal pipeline stays **[P2]**.
 
-1. Banking closing-balance control + unreconcile UI.
-2. Cash-flow double-count collapse in the chart + scenario comparison.
-3. Editable capex project workspace with commitments.
-4. Recurring rule editor: indexation and end dates.
-5. Team management screen and the approver capability in reconciliation and
-   period close.
-6. Property/unit import, Drive folder provisioning retry.
-7. Performance pass, auth hardening, per-route metadata, end-to-end smoke.
+## Next phase — Phase 8F (scope frozen)
+
+Authoritative scope: `PHASE8-OPERATIONAL-DESIGN.md` §13. Sequenced:
+
+1. **[P1]** Payment run — batch approved, due, outstanding items into one
+   settlement session, authorised through the 8C approval engine.
+2. **[P1]** Acquisition pipeline — stages, offer, agent, decision; converts to
+   a property on completion. Excluded from portfolio value.
+3. **[P1]** Due-diligence checklist — templates and per-deal instances with
+   Drive evidence; blocking items gate completion.
+
+No new frozen contract is required; §5C, §5D and §5E already govern 8F.
