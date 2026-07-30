@@ -155,7 +155,7 @@ describe("creating and describing an opportunity", () => {
       .eq("id", res.data as string)
       .single();
     expect(row.data!.stage).toBe("lead");
-    expect(String(row.data!.reference)).toMatch(/^AO-/);
+    expect(String(row.data!.reference)).toMatch(/^AQ-/);
     expect(row.data!.archived_at).toBeNull();
     // The deal holds indicative estimates only — never a posted amount.
     const columns = Object.keys(row.data!);
@@ -222,8 +222,10 @@ describe("the stage flow", () => {
       .select("from_stage, to_stage")
       .eq("opportunity_id", id)
       .order("occurred_at", { ascending: true });
-    expect(events.data!).toHaveLength(5);
-    expect(events.data![0].from_stage).toBe("lead");
+    // The creation event, then one per move.
+    expect(events.data!).toHaveLength(6);
+    expect(events.data![0].from_stage).toBeNull();
+    expect(events.data![1].from_stage).toBe("lead");
   });
 
   it("refuses a jump the flow does not allow", async () => {
