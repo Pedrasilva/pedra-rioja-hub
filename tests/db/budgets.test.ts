@@ -475,7 +475,7 @@ describe("derived performance views", () => {
     const created = await rpc<string>("manager", "create_commitment_draft", {
       _company_id: company.id,
       _title: uniq("Roof commitment"),
-      _commitment_type: "capex",
+      _commitment_type: "capex_contract",
       _authorised_amount: 15_000,
       _start_date: "2027-05-01",
     });
