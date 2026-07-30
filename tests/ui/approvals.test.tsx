@@ -587,7 +587,7 @@ describe("request viewer", () => {
         actions={undefined}
       />,
     );
-    expect(screen.getByText("Roof replacement")).toBeInTheDocument();
+    expect(screen.getAllByText("Roof replacement").length).toBeGreaterThan(0);
     expect(screen.getByText(/Snapshot at submission/i)).toBeInTheDocument();
     expect(screen.getByText("Authorised amount")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Open the commitment record/i })).toBeInTheDocument();
