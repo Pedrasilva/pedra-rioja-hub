@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
+import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
 import { PedraRiojaBookkeepingProvider } from "@/modules/bookkeeping/host/provider";
 import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 import {
@@ -39,7 +40,21 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
   component: BookkeepingPage,
 });
 
+const BOOKKEEPING_TABS = [
+  "purchases",
+  "sales",
+  "counterparties",
+  "classifications",
+  "rules",
+  "periods",
+] as const;
+
 function BookkeepingPage() {
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  useEffect(() => {
+    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  }, [tabParam]);
   return (
     <PedraRiojaBookkeepingProvider>
       <BookkeepingWorkspace />
