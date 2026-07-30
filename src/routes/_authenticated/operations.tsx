@@ -12,7 +12,11 @@ import {
   useMaintenanceJobs,
 } from "@/modules/commitments/queries";
 import { useCommitmentActions } from "@/modules/commitments/server";
+import { MaintenanceSchedulesPanel } from "@/modules/maintenance/components/schedules-panel";
+import { useMaintenanceSchedules } from "@/modules/maintenance/queries";
+import { useMaintenanceActions } from "@/modules/maintenance/server";
 import { RegisterPanel, type RegisterRow } from "@/modules/operations/components/register-panel";
+
 import {
   insuranceRegister,
   obligationRegister,
