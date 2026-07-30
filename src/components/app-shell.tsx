@@ -16,6 +16,7 @@ import {
   FileSignature,
   Contact,
   ScrollText,
+  Handshake,
   DoorOpen,
 } from "lucide-react";
 import type { ReactNode } from "react";
