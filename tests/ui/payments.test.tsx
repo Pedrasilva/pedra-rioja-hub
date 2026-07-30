@@ -59,7 +59,7 @@ import {
   seed,
 } from "./harness";
 
-const COMPANY = "c1";
+const COMPANY = "11111111-1111-4111-8111-111111111111";
 const manager = paymentCapabilities(["manager"]);
 const bookkeeper = paymentCapabilities(["bookkeeper"]);
 const viewer = paymentCapabilities(["viewer"]);
