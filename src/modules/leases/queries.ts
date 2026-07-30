@@ -31,6 +31,7 @@ export const LEASE_KEYS = [
   "lease-expiry-profile",
   "tenant-concentration",
   "lease-reminders",
+  "lease-documents",
 ] as const;
 
 export type LeaseSummary = {
@@ -521,6 +522,25 @@ export function useTenantConcentration(companyId: string | undefined) {
         annual_rent: number | null;
         rent_share_pct: number | null;
       }[];
+    },
+  });
+}
+
+/** Documents attached to a lease through the unified document model. */
+export function useLeaseDocuments(leaseId: string | undefined) {
+  return useQuery({
+    queryKey: ["lease-documents", leaseId],
+    enabled: Boolean(leaseId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("document_links")
+        .select("document_id, documents(id, title, category, issue_date, status)")
+        .eq("entity_type", "lease")
+        .eq("entity_id", leaseId!);
+      if (error) throw new Error(error.message);
+      return (data ?? [])
+        .map((link) => (link as { documents: unknown }).documents)
+        .filter(Boolean) as Row[];
     },
   });
 }
