@@ -39,6 +39,7 @@ const NAV: NavItem[] = [
   { to: "/cash-flow", label: "Cash flow", icon: Wallet },
   { to: "/budgets", label: "Budgets", icon: Target },
   { to: "/commitments", label: "Commitments", icon: ClipboardCheck },
+  { to: "/acquisitions", label: "Acquisitions", icon: Handshake },
   { to: "/approvals", label: "Approvals", icon: ShieldCheck },
   { to: "/operations", label: "Operations", icon: Wrench },
   { to: "/payments", label: "Payments", icon: Wallet },
