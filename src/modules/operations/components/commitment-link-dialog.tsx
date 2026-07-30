@@ -92,7 +92,8 @@ export function CommitmentLinkDialog({
 
   async function draft() {
     setError(null);
-    const parsed = Number(amount);
+    // An empty box is not zero: a commitment must state what it authorises.
+    const parsed = amount.trim() === "" ? NaN : Number(amount);
     if (!Number.isFinite(parsed) || parsed < 0) {
       setError("Enter the amount the commitment authorises");
       return;

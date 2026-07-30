@@ -45,11 +45,16 @@ export {
   serverFnModule,
   serverFns,
   supabaseProxy,
+  lastOperationsPayload,
+  OPERATIONS_FN_NAMES,
+  operationsFnModule,
+  operationsFns,
   toastMock,
   toasts,
   type CommitmentFnName,
   type RecordedCall,
   type Row,
+  type OperationsFnName,
   type ServerFnName,
 } from "./mocks";
 
