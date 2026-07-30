@@ -503,6 +503,19 @@ describe("derived performance views", () => {
       await rpc("approver", "approve_commitment", { _commitment_id: created.data, _comment: "ok" }),
       "approve",
     );
+    // Committed spend is the ACTIVE schedule on the commitment, never a stored
+    // budget figure.
+    const version = await rpc<string>("manager", "create_commitment_schedule_version", {
+      _commitment_id: created.data,
+      _effective_from: "2027-01-01",
+      _lines: [{ expected_date: "2027-05-01", amount: 15_000 }],
+      _schedule_type: "milestone",
+    });
+    expectNoError(version, "create schedule version");
+    expectNoError(
+      await rpc("manager", "activate_commitment_schedule_version", { _version_id: version.data }),
+      "activate schedule",
+    );
 
     const perf = await clients.manager
       .from("v_budget_line_performance")
