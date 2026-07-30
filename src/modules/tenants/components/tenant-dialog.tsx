@@ -2,7 +2,7 @@
  * New tenant dialog.
  */
 
-import { useState } from "react";
+import { cloneElement, isValidElement, useState, type ReactElement } from "react";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -165,10 +165,15 @@ export function TenantDialog({
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  const id = `tenant-field-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
   return (
     <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
+      <Label htmlFor={id} className="mb-1.5 block text-sm">
+        {label}
+      </Label>
+      {isValidElement(children)
+        ? cloneElement(children as ReactElement<{ id?: string }>, { id })
+        : children}
     </div>
   );
 }

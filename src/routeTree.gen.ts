@@ -15,18 +15,24 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedRentRollRouteImport } from './routes/_authenticated/rent-roll'
 import { Route as AuthenticatedOperationsRouteImport } from './routes/_authenticated/operations'
+import { Route as AuthenticatedOccupancyRouteImport } from './routes/_authenticated/occupancy'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCashFlowRouteImport } from './routes/_authenticated/cash-flow'
 import { Route as AuthenticatedBookkeepingRouteImport } from './routes/_authenticated/bookkeeping'
 import { Route as AuthenticatedBankingRouteImport } from './routes/_authenticated/banking'
 import { Route as AuthenticatedApprovalsRouteImport } from './routes/_authenticated/approvals'
 import { Route as AuthenticatedApprovalWorkflowsRouteImport } from './routes/_authenticated/approval-workflows'
+import { Route as AuthenticatedTenantsIndexRouteImport } from './routes/_authenticated/tenants/index'
 import { Route as AuthenticatedPropertiesIndexRouteImport } from './routes/_authenticated/properties/index'
+import { Route as AuthenticatedLeasesIndexRouteImport } from './routes/_authenticated/leases/index'
 import { Route as AuthenticatedCommitmentsIndexRouteImport } from './routes/_authenticated/commitments/index'
 import { Route as AuthenticatedBudgetsIndexRouteImport } from './routes/_authenticated/budgets/index'
+import { Route as AuthenticatedTenantsTenantIdRouteImport } from './routes/_authenticated/tenants/$tenantId'
 import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
 import { Route as AuthenticatedPropertiesPropertyIdRouteImport } from './routes/_authenticated/properties/$propertyId'
+import { Route as AuthenticatedLeasesLeaseIdRouteImport } from './routes/_authenticated/leases/$leaseId'
 import { Route as AuthenticatedFinancingAgreementIdRouteImport } from './routes/_authenticated/financing/$agreementId'
 import { Route as AuthenticatedCommitmentsCommitmentIdRouteImport } from './routes/_authenticated/commitments/$commitmentId'
 import { Route as AuthenticatedBudgetsBudgetIdRouteImport } from './routes/_authenticated/budgets/$budgetId'
@@ -60,9 +66,19 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRentRollRoute = AuthenticatedRentRollRouteImport.update({
+  id: '/rent-roll',
+  path: '/rent-roll',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOperationsRoute = AuthenticatedOperationsRouteImport.update({
   id: '/operations',
   path: '/operations',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOccupancyRoute = AuthenticatedOccupancyRouteImport.update({
+  id: '/occupancy',
+  path: '/occupancy',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -97,10 +113,22 @@ const AuthenticatedApprovalWorkflowsRoute =
     path: '/approval-workflows',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTenantsIndexRoute =
+  AuthenticatedTenantsIndexRouteImport.update({
+    id: '/tenants/',
+    path: '/tenants/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPropertiesIndexRoute =
   AuthenticatedPropertiesIndexRouteImport.update({
     id: '/properties/',
     path: '/properties/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLeasesIndexRoute =
+  AuthenticatedLeasesIndexRouteImport.update({
+    id: '/leases/',
+    path: '/leases/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedCommitmentsIndexRoute =
@@ -115,6 +143,12 @@ const AuthenticatedBudgetsIndexRoute =
     path: '/budgets/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTenantsTenantIdRoute =
+  AuthenticatedTenantsTenantIdRouteImport.update({
+    id: '/tenants/$tenantId',
+    path: '/tenants/$tenantId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPropertiesNewRoute =
   AuthenticatedPropertiesNewRouteImport.update({
     id: '/properties/new',
@@ -125,6 +159,12 @@ const AuthenticatedPropertiesPropertyIdRoute =
   AuthenticatedPropertiesPropertyIdRouteImport.update({
     id: '/properties/$propertyId',
     path: '/properties/$propertyId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLeasesLeaseIdRoute =
+  AuthenticatedLeasesLeaseIdRouteImport.update({
+    id: '/leases/$leaseId',
+    path: '/leases/$leaseId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedFinancingAgreementIdRoute =
@@ -155,18 +195,24 @@ export interface FileRoutesByFullPath {
   '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/occupancy': typeof AuthenticatedOccupancyRoute
   '/operations': typeof AuthenticatedOperationsRoute
+  '/rent-roll': typeof AuthenticatedRentRollRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/team': typeof AuthenticatedTeamRoute
   '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
+  '/leases/$leaseId': typeof AuthenticatedLeasesLeaseIdRoute
   '/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/budgets/': typeof AuthenticatedBudgetsIndexRoute
   '/commitments/': typeof AuthenticatedCommitmentsIndexRoute
+  '/leases/': typeof AuthenticatedLeasesIndexRoute
   '/properties/': typeof AuthenticatedPropertiesIndexRoute
+  '/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -177,18 +223,24 @@ export interface FileRoutesByTo {
   '/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/occupancy': typeof AuthenticatedOccupancyRoute
   '/operations': typeof AuthenticatedOperationsRoute
+  '/rent-roll': typeof AuthenticatedRentRollRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/team': typeof AuthenticatedTeamRoute
   '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
+  '/leases/$leaseId': typeof AuthenticatedLeasesLeaseIdRoute
   '/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/budgets': typeof AuthenticatedBudgetsIndexRoute
   '/commitments': typeof AuthenticatedCommitmentsIndexRoute
+  '/leases': typeof AuthenticatedLeasesIndexRoute
   '/properties': typeof AuthenticatedPropertiesIndexRoute
+  '/tenants': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -201,18 +253,24 @@ export interface FileRoutesById {
   '/_authenticated/bookkeeping': typeof AuthenticatedBookkeepingRoute
   '/_authenticated/cash-flow': typeof AuthenticatedCashFlowRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/occupancy': typeof AuthenticatedOccupancyRoute
   '/_authenticated/operations': typeof AuthenticatedOperationsRoute
+  '/_authenticated/rent-roll': typeof AuthenticatedRentRollRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
   '/_authenticated/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/_authenticated/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
+  '/_authenticated/leases/$leaseId': typeof AuthenticatedLeasesLeaseIdRoute
   '/_authenticated/properties/$propertyId': typeof AuthenticatedPropertiesPropertyIdRoute
   '/_authenticated/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/_authenticated/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/_authenticated/budgets/': typeof AuthenticatedBudgetsIndexRoute
   '/_authenticated/commitments/': typeof AuthenticatedCommitmentsIndexRoute
+  '/_authenticated/leases/': typeof AuthenticatedLeasesIndexRoute
   '/_authenticated/properties/': typeof AuthenticatedPropertiesIndexRoute
+  '/_authenticated/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -225,18 +283,24 @@ export interface FileRouteTypes {
     | '/bookkeeping'
     | '/cash-flow'
     | '/dashboard'
+    | '/occupancy'
     | '/operations'
+    | '/rent-roll'
     | '/reports'
     | '/settings'
     | '/team'
     | '/budgets/$budgetId'
     | '/commitments/$commitmentId'
     | '/financing/$agreementId'
+    | '/leases/$leaseId'
     | '/properties/$propertyId'
     | '/properties/new'
+    | '/tenants/$tenantId'
     | '/budgets/'
     | '/commitments/'
+    | '/leases/'
     | '/properties/'
+    | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -247,18 +311,24 @@ export interface FileRouteTypes {
     | '/bookkeeping'
     | '/cash-flow'
     | '/dashboard'
+    | '/occupancy'
     | '/operations'
+    | '/rent-roll'
     | '/reports'
     | '/settings'
     | '/team'
     | '/budgets/$budgetId'
     | '/commitments/$commitmentId'
     | '/financing/$agreementId'
+    | '/leases/$leaseId'
     | '/properties/$propertyId'
     | '/properties/new'
+    | '/tenants/$tenantId'
     | '/budgets'
     | '/commitments'
+    | '/leases'
     | '/properties'
+    | '/tenants'
   id:
     | '__root__'
     | '/'
@@ -270,18 +340,24 @@ export interface FileRouteTypes {
     | '/_authenticated/bookkeeping'
     | '/_authenticated/cash-flow'
     | '/_authenticated/dashboard'
+    | '/_authenticated/occupancy'
     | '/_authenticated/operations'
+    | '/_authenticated/rent-roll'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/team'
     | '/_authenticated/budgets/$budgetId'
     | '/_authenticated/commitments/$commitmentId'
     | '/_authenticated/financing/$agreementId'
+    | '/_authenticated/leases/$leaseId'
     | '/_authenticated/properties/$propertyId'
     | '/_authenticated/properties/new'
+    | '/_authenticated/tenants/$tenantId'
     | '/_authenticated/budgets/'
     | '/_authenticated/commitments/'
+    | '/_authenticated/leases/'
     | '/_authenticated/properties/'
+    | '/_authenticated/tenants/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -334,11 +410,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rent-roll': {
+      id: '/_authenticated/rent-roll'
+      path: '/rent-roll'
+      fullPath: '/rent-roll'
+      preLoaderRoute: typeof AuthenticatedRentRollRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/operations': {
       id: '/_authenticated/operations'
       path: '/operations'
       fullPath: '/operations'
       preLoaderRoute: typeof AuthenticatedOperationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/occupancy': {
+      id: '/_authenticated/occupancy'
+      path: '/occupancy'
+      fullPath: '/occupancy'
+      preLoaderRoute: typeof AuthenticatedOccupancyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -383,11 +473,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedApprovalWorkflowsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/tenants/': {
+      id: '/_authenticated/tenants/'
+      path: '/tenants'
+      fullPath: '/tenants/'
+      preLoaderRoute: typeof AuthenticatedTenantsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/properties/': {
       id: '/_authenticated/properties/'
       path: '/properties'
       fullPath: '/properties/'
       preLoaderRoute: typeof AuthenticatedPropertiesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/leases/': {
+      id: '/_authenticated/leases/'
+      path: '/leases'
+      fullPath: '/leases/'
+      preLoaderRoute: typeof AuthenticatedLeasesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/commitments/': {
@@ -404,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBudgetsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/tenants/$tenantId': {
+      id: '/_authenticated/tenants/$tenantId'
+      path: '/tenants/$tenantId'
+      fullPath: '/tenants/$tenantId'
+      preLoaderRoute: typeof AuthenticatedTenantsTenantIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/properties/new': {
       id: '/_authenticated/properties/new'
       path: '/properties/new'
@@ -416,6 +527,13 @@ declare module '@tanstack/react-router' {
       path: '/properties/$propertyId'
       fullPath: '/properties/$propertyId'
       preLoaderRoute: typeof AuthenticatedPropertiesPropertyIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/leases/$leaseId': {
+      id: '/_authenticated/leases/$leaseId'
+      path: '/leases/$leaseId'
+      fullPath: '/leases/$leaseId'
+      preLoaderRoute: typeof AuthenticatedLeasesLeaseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/financing/$agreementId': {
@@ -449,18 +567,24 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBookkeepingRoute: typeof AuthenticatedBookkeepingRoute
   AuthenticatedCashFlowRoute: typeof AuthenticatedCashFlowRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedOccupancyRoute: typeof AuthenticatedOccupancyRoute
   AuthenticatedOperationsRoute: typeof AuthenticatedOperationsRoute
+  AuthenticatedRentRollRoute: typeof AuthenticatedRentRollRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedBudgetsBudgetIdRoute: typeof AuthenticatedBudgetsBudgetIdRoute
   AuthenticatedCommitmentsCommitmentIdRoute: typeof AuthenticatedCommitmentsCommitmentIdRoute
   AuthenticatedFinancingAgreementIdRoute: typeof AuthenticatedFinancingAgreementIdRoute
+  AuthenticatedLeasesLeaseIdRoute: typeof AuthenticatedLeasesLeaseIdRoute
   AuthenticatedPropertiesPropertyIdRoute: typeof AuthenticatedPropertiesPropertyIdRoute
   AuthenticatedPropertiesNewRoute: typeof AuthenticatedPropertiesNewRoute
+  AuthenticatedTenantsTenantIdRoute: typeof AuthenticatedTenantsTenantIdRoute
   AuthenticatedBudgetsIndexRoute: typeof AuthenticatedBudgetsIndexRoute
   AuthenticatedCommitmentsIndexRoute: typeof AuthenticatedCommitmentsIndexRoute
+  AuthenticatedLeasesIndexRoute: typeof AuthenticatedLeasesIndexRoute
   AuthenticatedPropertiesIndexRoute: typeof AuthenticatedPropertiesIndexRoute
+  AuthenticatedTenantsIndexRoute: typeof AuthenticatedTenantsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -470,7 +594,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBookkeepingRoute: AuthenticatedBookkeepingRoute,
   AuthenticatedCashFlowRoute: AuthenticatedCashFlowRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedOccupancyRoute: AuthenticatedOccupancyRoute,
   AuthenticatedOperationsRoute: AuthenticatedOperationsRoute,
+  AuthenticatedRentRollRoute: AuthenticatedRentRollRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
@@ -479,12 +605,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedCommitmentsCommitmentIdRoute,
   AuthenticatedFinancingAgreementIdRoute:
     AuthenticatedFinancingAgreementIdRoute,
+  AuthenticatedLeasesLeaseIdRoute: AuthenticatedLeasesLeaseIdRoute,
   AuthenticatedPropertiesPropertyIdRoute:
     AuthenticatedPropertiesPropertyIdRoute,
   AuthenticatedPropertiesNewRoute: AuthenticatedPropertiesNewRoute,
+  AuthenticatedTenantsTenantIdRoute: AuthenticatedTenantsTenantIdRoute,
   AuthenticatedBudgetsIndexRoute: AuthenticatedBudgetsIndexRoute,
   AuthenticatedCommitmentsIndexRoute: AuthenticatedCommitmentsIndexRoute,
+  AuthenticatedLeasesIndexRoute: AuthenticatedLeasesIndexRoute,
   AuthenticatedPropertiesIndexRoute: AuthenticatedPropertiesIndexRoute,
+  AuthenticatedTenantsIndexRoute: AuthenticatedTenantsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -498,3 +628,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

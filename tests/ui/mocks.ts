@@ -139,6 +139,49 @@ export const toastMock = {
   error: (m: string) => toasts.push({ kind: "error", message: m }),
 };
 
+/* ------------------------------------------------ lease server functions */
+
+export const LEASE_FN_NAMES = [
+  "upsertTenant",
+  "upsertTenantContact",
+  "archiveTenant",
+  "createLease",
+  "updateLease",
+  "updateLeaseVersion",
+  "createLeaseVersion",
+  "activateLeaseVersion",
+  "setLeaseUnits",
+  "setLeaseTenants",
+  "setLeaseCharges",
+  "upsertLeaseReview",
+  "applyLeaseReview",
+  "upsertLeaseBreak",
+  "recordLeaseNotice",
+  "terminateLease",
+  "archiveLease",
+  "setUnitOccupancy",
+  "updateVacancyPeriod",
+  "generateLeaseReminders",
+] as const;
+
+export type LeaseFnName = (typeof LEASE_FN_NAMES)[number];
+
+export const leaseFns = Object.fromEntries(
+  LEASE_FN_NAMES.map((name) => [
+    name,
+    vi.fn(async (_opts: { data: unknown }) => ({ id: `${name}-result-id` })),
+  ]),
+) as Record<LeaseFnName, ReturnType<typeof vi.fn>>;
+
+export function leaseFnModule() {
+  return leaseFns;
+}
+
+export function lastLeasePayload(name: LeaseFnName) {
+  const call = leaseFns[name].mock.calls.at(-1);
+  return (call?.[0] as { data: unknown } | undefined)?.data;
+}
+
 /* -------------------------------------------- commitment server functions */
 
 export const COMMITMENT_FN_NAMES = [
