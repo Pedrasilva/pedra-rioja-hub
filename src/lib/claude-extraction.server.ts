@@ -121,7 +121,7 @@ export async function extractDocumentFields(opts: {
     },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: 4000,
+      max_tokens: 8000,
       system: EXTRACTION_SYSTEM_PROMPT,
       messages: [
         {
@@ -131,6 +131,7 @@ export async function extractDocumentFields(opts: {
             { type: "text", text: `File name: ${opts.fileName}\n\nExtract this document now.` },
           ],
         },
+        { role: "assistant", content: "{" },
       ],
     }),
   });
@@ -141,18 +142,35 @@ export async function extractDocumentFields(opts: {
   }
 
   const data = (await res.json()) as { content: Array<{ type: string; text?: string }> };
-  const text = data.content
-    .filter((b) => b.type === "text" && b.text)
-    .map((b) => b.text)
-    .join("\n");
+  // The prefilled "{" is not echoed back, so put it back before parsing.
+  const text =
+    "{" +
+    data.content
+      .filter((b) => b.type === "text" && b.text)
+      .map((b) => b.text)
+      .join("\n");
 
+  const cleaned = stripJsonFences(text);
   let parsed: ClaudeExtractionResult;
   try {
-    parsed = JSON.parse(stripJsonFences(text));
+    parsed = JSON.parse(cleaned);
   } catch {
-    throw new Error(
-      "Claude did not return valid JSON for this document. Try re-running extraction.",
-    );
+    const first = cleaned.indexOf("{");
+    const last = cleaned.lastIndexOf("}");
+    let fallback: ClaudeExtractionResult | null = null;
+    if (first !== -1 && last > first) {
+      try {
+        fallback = JSON.parse(cleaned.slice(first, last + 1)) as ClaudeExtractionResult;
+      } catch {
+        fallback = null;
+      }
+    }
+    if (!fallback) {
+      throw new Error(
+        "Claude did not return valid JSON for this document. Try re-running extraction.",
+      );
+    }
+    parsed = fallback;
   }
 
   return parsed;
