@@ -167,7 +167,7 @@ export const attachDocument = createServerFn({ method: "POST" })
         drive_folder_id: parentFolderId,
         drive_url: webViewLink ?? `https://drive.google.com/file/d/${driveFileId}/view`,
         drive_web_view_link: webViewLink,
-        sync_status: "synced",
+        sync_status: "linked",
         status: "active",
         last_synced_at: new Date().toISOString(),
       })
