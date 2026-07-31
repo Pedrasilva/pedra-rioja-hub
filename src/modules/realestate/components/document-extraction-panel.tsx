@@ -128,6 +128,13 @@ export function DocumentExtractionButton({
       }
     | undefined;
 
+  // Only lease schedules feed the financing schedule for now.
+  const leaseInstallments: ExtractedInstallment[] =
+    result?.document_kind === "lease_schedule" && Array.isArray(result.details?.installments)
+      ? (result.details.installments as ExtractedInstallment[])
+      : [];
+
+
   return (
     <>
       <Button size="sm" variant="ghost" disabled={disabled} onClick={() => setOpen(true)}>
