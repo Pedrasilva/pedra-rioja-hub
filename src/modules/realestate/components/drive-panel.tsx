@@ -433,6 +433,7 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                 <TableHead>Expires</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Drive</TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -464,7 +465,16 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                     ) : (
                       <Badge variant="outline">{titleCase(d.sync_status)}</Badge>
                     )}
-                  </TableCell>
+                  </TableCell
+                  <TableCell>
+                  {props.canEdit ? (
+                    <DocumentExtractionButton
+                      companyId={props.companyId}
+                      documentId={d.id}
+                      currency={d.currency ?? props.currency}
+                    />
+                  ) : null}
+                </TableCell>
                 </TableRow>
               ))}
             </TableBody>
