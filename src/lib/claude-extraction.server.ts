@@ -131,7 +131,6 @@ export async function extractDocumentFields(opts: {
             { type: "text", text: `File name: ${opts.fileName}\n\nExtract this document now.` },
           ],
         },
-        { role: "assistant", content: "{" },
       ],
     }),
   });
@@ -142,13 +141,10 @@ export async function extractDocumentFields(opts: {
   }
 
   const data = (await res.json()) as { content: Array<{ type: string; text?: string }> };
-  // The prefilled "{" is not echoed back, so put it back before parsing.
-  const text =
-    "{" +
-    data.content
-      .filter((b) => b.type === "text" && b.text)
-      .map((b) => b.text)
-      .join("\n");
+  const text = data.content
+    .filter((b) => b.type === "text" && b.text)
+    .map((b) => b.text)
+    .join("\n");
 
   const cleaned = stripJsonFences(text);
   let parsed: ClaudeExtractionResult;
