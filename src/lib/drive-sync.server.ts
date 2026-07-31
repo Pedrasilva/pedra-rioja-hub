@@ -95,7 +95,7 @@ export async function ensurePath(
       const synced = {
         drive_folder_id: folder.id,
         drive_url: folder.webViewLink ?? folderUrl(folder.id),
-        sync_status: "synced",
+        sync_status: "created",
         last_synced_at: new Date().toISOString(),
       };
 
