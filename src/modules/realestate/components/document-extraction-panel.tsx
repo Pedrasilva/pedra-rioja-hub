@@ -278,6 +278,18 @@ export function DocumentExtractionButton({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {importOpen ? (
+        <LeaseScheduleImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          companyId={companyId}
+          propertyId={propertyId}
+          currency={form.currency || currency}
+          installments={leaseInstallments}
+          sourceLabel={form.title || "Document extraction"}
+        />
+      ) : null}
     </>
+
   );
 }
