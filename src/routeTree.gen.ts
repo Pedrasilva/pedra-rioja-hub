@@ -41,6 +41,7 @@ import { Route as AuthenticatedLeasesLeaseIdRouteImport } from './routes/_authen
 import { Route as AuthenticatedFinancingAgreementIdRouteImport } from './routes/_authenticated/financing/$agreementId'
 import { Route as AuthenticatedDueDiligenceCaseIdRouteImport } from './routes/_authenticated/due-diligence/$caseId'
 import { Route as AuthenticatedCommitmentsCommitmentIdRouteImport } from './routes/_authenticated/commitments/$commitmentId'
+import { Route as AuthenticatedClosingsClosingIdRouteImport } from './routes/_authenticated/closings/$closingId'
 import { Route as AuthenticatedBudgetsBudgetIdRouteImport } from './routes/_authenticated/budgets/$budgetId'
 import { Route as AuthenticatedAcquisitionsOpportunityIdRouteImport } from './routes/_authenticated/acquisitions/$opportunityId'
 
@@ -222,6 +223,12 @@ const AuthenticatedCommitmentsCommitmentIdRoute =
     path: '/commitments/$commitmentId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedClosingsClosingIdRoute =
+  AuthenticatedClosingsClosingIdRouteImport.update({
+    id: '/closings/$closingId',
+    path: '/closings/$closingId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBudgetsBudgetIdRoute =
   AuthenticatedBudgetsBudgetIdRouteImport.update({
     id: '/budgets/$budgetId',
@@ -252,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof AuthenticatedTeamRoute
   '/acquisitions/$opportunityId': typeof AuthenticatedAcquisitionsOpportunityIdRoute
   '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
+  '/closings/$closingId': typeof AuthenticatedClosingsClosingIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/due-diligence/$caseId': typeof AuthenticatedDueDiligenceCaseIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
@@ -287,6 +295,7 @@ export interface FileRoutesByTo {
   '/team': typeof AuthenticatedTeamRoute
   '/acquisitions/$opportunityId': typeof AuthenticatedAcquisitionsOpportunityIdRoute
   '/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
+  '/closings/$closingId': typeof AuthenticatedClosingsClosingIdRoute
   '/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/due-diligence/$caseId': typeof AuthenticatedDueDiligenceCaseIdRoute
   '/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
@@ -324,6 +333,7 @@ export interface FileRoutesById {
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/acquisitions/$opportunityId': typeof AuthenticatedAcquisitionsOpportunityIdRoute
   '/_authenticated/budgets/$budgetId': typeof AuthenticatedBudgetsBudgetIdRoute
+  '/_authenticated/closings/$closingId': typeof AuthenticatedClosingsClosingIdRoute
   '/_authenticated/commitments/$commitmentId': typeof AuthenticatedCommitmentsCommitmentIdRoute
   '/_authenticated/due-diligence/$caseId': typeof AuthenticatedDueDiligenceCaseIdRoute
   '/_authenticated/financing/$agreementId': typeof AuthenticatedFinancingAgreementIdRoute
@@ -361,6 +371,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/acquisitions/$opportunityId'
     | '/budgets/$budgetId'
+    | '/closings/$closingId'
     | '/commitments/$commitmentId'
     | '/due-diligence/$caseId'
     | '/financing/$agreementId'
@@ -396,6 +407,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/acquisitions/$opportunityId'
     | '/budgets/$budgetId'
+    | '/closings/$closingId'
     | '/commitments/$commitmentId'
     | '/due-diligence/$caseId'
     | '/financing/$agreementId'
@@ -432,6 +444,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team'
     | '/_authenticated/acquisitions/$opportunityId'
     | '/_authenticated/budgets/$budgetId'
+    | '/_authenticated/closings/$closingId'
     | '/_authenticated/commitments/$commitmentId'
     | '/_authenticated/due-diligence/$caseId'
     | '/_authenticated/financing/$agreementId'
@@ -683,6 +696,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommitmentsCommitmentIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/closings/$closingId': {
+      id: '/_authenticated/closings/$closingId'
+      path: '/closings/$closingId'
+      fullPath: '/closings/$closingId'
+      preLoaderRoute: typeof AuthenticatedClosingsClosingIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/budgets/$budgetId': {
       id: '/_authenticated/budgets/$budgetId'
       path: '/budgets/$budgetId'
@@ -715,6 +735,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedAcquisitionsOpportunityIdRoute: typeof AuthenticatedAcquisitionsOpportunityIdRoute
   AuthenticatedBudgetsBudgetIdRoute: typeof AuthenticatedBudgetsBudgetIdRoute
+  AuthenticatedClosingsClosingIdRoute: typeof AuthenticatedClosingsClosingIdRoute
   AuthenticatedCommitmentsCommitmentIdRoute: typeof AuthenticatedCommitmentsCommitmentIdRoute
   AuthenticatedDueDiligenceCaseIdRoute: typeof AuthenticatedDueDiligenceCaseIdRoute
   AuthenticatedFinancingAgreementIdRoute: typeof AuthenticatedFinancingAgreementIdRoute
@@ -750,6 +771,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAcquisitionsOpportunityIdRoute:
     AuthenticatedAcquisitionsOpportunityIdRoute,
   AuthenticatedBudgetsBudgetIdRoute: AuthenticatedBudgetsBudgetIdRoute,
+  AuthenticatedClosingsClosingIdRoute: AuthenticatedClosingsClosingIdRoute,
   AuthenticatedCommitmentsCommitmentIdRoute:
     AuthenticatedCommitmentsCommitmentIdRoute,
   AuthenticatedDueDiligenceCaseIdRoute: AuthenticatedDueDiligenceCaseIdRoute,
