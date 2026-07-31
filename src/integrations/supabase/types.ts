@@ -3654,6 +3654,454 @@ export type Database = {
           },
         ]
       }
+      closing_cases: {
+        Row: {
+          actual_completion_date: string | null
+          agreed_price: number | null
+          archive_reason: string | null
+          archived_at: string | null
+          archived_by: string | null
+          cancel_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          commitment_id: string | null
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deed_date: string | null
+          due_diligence_case_id: string | null
+          handover_status: string
+          id: string
+          notary_name: string | null
+          notary_reference: string | null
+          notes: string | null
+          opportunity_id: string
+          possession_date: string | null
+          property_id: string | null
+          reference: string
+          status: string
+          target_completion_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          agreed_price?: number | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          commitment_id?: string | null
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deed_date?: string | null
+          due_diligence_case_id?: string | null
+          handover_status?: string
+          id?: string
+          notary_name?: string | null
+          notary_reference?: string | null
+          notes?: string | null
+          opportunity_id: string
+          possession_date?: string | null
+          property_id?: string | null
+          reference: string
+          status?: string
+          target_completion_date?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actual_completion_date?: string | null
+          agreed_price?: number | null
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          commitment_id?: string | null
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deed_date?: string | null
+          due_diligence_case_id?: string | null
+          handover_status?: string
+          id?: string
+          notary_name?: string | null
+          notary_reference?: string | null
+          notes?: string | null
+          opportunity_id?: string
+          possession_date?: string | null
+          property_id?: string | null
+          reference?: string
+          status?: string
+          target_completion_date?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "closing_cases_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_due_diligence_case_id_fkey"
+            columns: ["due_diligence_case_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_due_diligence_case_id_fkey"
+            columns: ["due_diligence_case_id"]
+            isOneToOne: false
+            referencedRelation: "v_due_diligence_case"
+            referencedColumns: ["case_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      closing_conditions: {
+        Row: {
+          category: string
+          closing_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          is_blocking: boolean
+          notes: string | null
+          owner_id: string | null
+          responsible_party: string
+          satisfied_at: string | null
+          satisfied_by: string | null
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+          waiver_reason: string | null
+        }
+        Insert: {
+          category?: string
+          closing_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_blocking?: boolean
+          notes?: string | null
+          owner_id?: string | null
+          responsible_party?: string
+          satisfied_at?: string | null
+          satisfied_by?: string | null
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          waiver_reason?: string | null
+        }
+        Update: {
+          category?: string
+          closing_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_blocking?: boolean
+          notes?: string | null
+          owner_id?: string | null
+          responsible_party?: string
+          satisfied_at?: string | null
+          satisfied_by?: string | null
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          waiver_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "closing_conditions_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "closing_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_conditions_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "v_closing_case"
+            referencedColumns: ["closing_id"]
+          },
+          {
+            foreignKeyName: "closing_conditions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_conditions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      closing_events: {
+        Row: {
+          actor_id: string | null
+          closing_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          from_status: string | null
+          id: string
+          occurred_at: string
+          reason: string | null
+          to_status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          closing_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          from_status?: string | null
+          id?: string
+          occurred_at?: string
+          reason?: string | null
+          to_status: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          closing_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          from_status?: string | null
+          id?: string
+          occurred_at?: string
+          reason?: string | null
+          to_status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "closing_events_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "closing_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_events_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "v_closing_case"
+            referencedColumns: ["closing_id"]
+          },
+          {
+            foreignKeyName: "closing_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      closing_handover_tasks: {
+        Row: {
+          category: string
+          closing_id: string
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          notes: string | null
+          owner_id: string | null
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string
+          closing_id: string
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string
+          closing_id?: string
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "closing_handover_tasks_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "closing_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_handover_tasks_closing_id_fkey"
+            columns: ["closing_id"]
+            isOneToOne: false
+            referencedRelation: "v_closing_case"
+            referencedColumns: ["closing_id"]
+          },
+          {
+            foreignKeyName: "closing_handover_tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_handover_tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
       commitment_drawdowns: {
         Row: {
           amount: number
@@ -4900,6 +5348,422 @@ export type Database = {
           },
           {
             foreignKeyName: "drive_folders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      due_diligence_cases: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          archived_by: string | null
+          assigned_to: string | null
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          opportunity_id: string
+          recommendation: string
+          recommendation_notes: string | null
+          reference: string
+          started_on: string | null
+          status: string
+          summary: string | null
+          target_date: string | null
+          template_id: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          assigned_to?: string | null
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          opportunity_id: string
+          recommendation?: string
+          recommendation_notes?: string | null
+          reference: string
+          started_on?: string | null
+          status?: string
+          summary?: string | null
+          target_date?: string | null
+          template_id?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          assigned_to?: string | null
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          opportunity_id?: string
+          recommendation?: string
+          recommendation_notes?: string | null
+          reference?: string
+          started_on?: string | null
+          status?: string
+          summary?: string | null
+          target_date?: string | null
+          template_id?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      due_diligence_events: {
+        Row: {
+          actor_id: string | null
+          case_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          from_status: string | null
+          id: string
+          occurred_at: string
+          reason: string | null
+          recommendation: string | null
+          to_status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          case_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          from_status?: string | null
+          id?: string
+          occurred_at?: string
+          reason?: string | null
+          recommendation?: string | null
+          to_status: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          case_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          from_status?: string | null
+          id?: string
+          occurred_at?: string
+          reason?: string | null
+          recommendation?: string | null
+          to_status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_events_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_events_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "v_due_diligence_case"
+            referencedColumns: ["case_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      due_diligence_items: {
+        Row: {
+          assignee_id: string | null
+          case_id: string
+          company_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          findings: string | null
+          id: string
+          is_blocking: boolean
+          risk_level: string
+          section: string
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+          waiver_reason: string | null
+        }
+        Insert: {
+          assignee_id?: string | null
+          case_id: string
+          company_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          findings?: string | null
+          id?: string
+          is_blocking?: boolean
+          risk_level?: string
+          section?: string
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          waiver_reason?: string | null
+        }
+        Update: {
+          assignee_id?: string | null
+          case_id?: string
+          company_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          findings?: string | null
+          id?: string
+          is_blocking?: boolean
+          risk_level?: string
+          section?: string
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          waiver_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_items_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "v_due_diligence_case"
+            referencedColumns: ["case_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      due_diligence_template_items: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_blocking: boolean
+          section: string
+          sort_order: number
+          template_id: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_blocking?: boolean
+          section?: string
+          sort_order?: number
+          template_id: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_blocking?: boolean
+          section?: string
+          sort_order?: number
+          template_id?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_template_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_template_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_template_items_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      due_diligence_templates: {
+        Row: {
+          archived_at: string | null
+          archived_by: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          deal_type: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          deal_type?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          archived_at?: string | null
+          archived_by?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          deal_type?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_templates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_templates_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
@@ -12549,6 +13413,134 @@ export type Database = {
           },
         ]
       }
+      v_closing_case: {
+        Row: {
+          actual_completion_date: string | null
+          agreed_price: number | null
+          archived_at: string | null
+          blocking_outstanding: number | null
+          cancel_reason: string | null
+          closing_id: string | null
+          commitment_id: string | null
+          company_id: string | null
+          condition_count: number | null
+          conditions_met: number | null
+          created_at: string | null
+          currency: string | null
+          deed_date: string | null
+          diligence_ready: boolean | null
+          diligence_recommendation: string | null
+          diligence_reference: string | null
+          diligence_status: string | null
+          due_diligence_case_id: string | null
+          failed_conditions: number | null
+          handover_status: string | null
+          handover_task_count: number | null
+          handover_tasks_done: number | null
+          is_archived: boolean | null
+          is_ready: boolean | null
+          notary_name: string | null
+          notary_reference: string | null
+          notes: string | null
+          opportunity_id: string | null
+          opportunity_reference: string | null
+          opportunity_title: string | null
+          possession_date: string | null
+          property_id: string | null
+          property_name: string | null
+          reference: string | null
+          status: string | null
+          target_completion_date: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "closing_cases_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "commitments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_commitment_id_fkey"
+            columns: ["commitment_id"]
+            isOneToOne: false
+            referencedRelation: "v_commitment_summary"
+            referencedColumns: ["commitment_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_due_diligence_case_id_fkey"
+            columns: ["due_diligence_case_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_due_diligence_case_id_fkey"
+            columns: ["due_diligence_case_id"]
+            isOneToOne: false
+            referencedRelation: "v_due_diligence_case"
+            referencedColumns: ["case_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_acquisition_totals"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_occupancy"
+            referencedColumns: ["property_id"]
+          },
+          {
+            foreignKeyName: "closing_cases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "v_property_summary"
+            referencedColumns: ["property_id"]
+          },
+        ]
+      }
       v_commitment_summary: {
         Row: {
           approval_status: string | null
@@ -12740,6 +13732,127 @@ export type Database = {
           },
           {
             foreignKeyName: "financial_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+        ]
+      }
+      v_due_diligence_case: {
+        Row: {
+          archived_at: string | null
+          assigned_to: string | null
+          blocking_count: number | null
+          blocking_outstanding: number | null
+          case_id: string | null
+          company_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          done_count: number | null
+          failed_count: number | null
+          is_archived: boolean | null
+          item_count: number | null
+          opportunity_id: string | null
+          opportunity_reference: string | null
+          opportunity_stage: string | null
+          opportunity_title: string | null
+          permits_completion: boolean | null
+          progress_pct: number | null
+          recommendation: string | null
+          recommendation_notes: string | null
+          reference: string | null
+          started_on: string | null
+          status: string | null
+          summary: string | null
+          target_date: string | null
+          template_id: string | null
+          template_name: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "acquisition_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "v_acquisition_pipeline"
+            referencedColumns: ["opportunity_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_cases_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_due_diligence_item: {
+        Row: {
+          assignee_id: string | null
+          case_id: string | null
+          company_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          evidence_count: number | null
+          findings: string | null
+          is_blocking: boolean | null
+          item_id: string | null
+          risk_level: string | null
+          section: string | null
+          sort_order: number | null
+          status: string | null
+          title: string | null
+          waiver_reason: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_items_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "due_diligence_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "v_due_diligence_case"
+            referencedColumns: ["case_id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_items_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "v_bookkeeping_overview"
@@ -14852,6 +15965,56 @@ export type Database = {
         Args: { p_version_id: string }
         Returns: undefined
       }
+      add_closing_condition: {
+        Args: {
+          _category?: string
+          _closing_id: string
+          _description?: string
+          _due_date?: string
+          _is_blocking?: boolean
+          _owner_id?: string
+          _responsible_party?: string
+          _sort_order?: number
+          _title: string
+        }
+        Returns: string
+      }
+      add_closing_handover_task: {
+        Args: {
+          _category?: string
+          _closing_id: string
+          _description?: string
+          _due_date?: string
+          _owner_id?: string
+          _sort_order?: number
+          _title: string
+        }
+        Returns: string
+      }
+      add_due_diligence_item: {
+        Args: {
+          _assignee_id?: string
+          _case_id: string
+          _description?: string
+          _due_date?: string
+          _is_blocking?: boolean
+          _section?: string
+          _sort_order?: number
+          _title: string
+        }
+        Returns: string
+      }
+      add_due_diligence_template_item: {
+        Args: {
+          _description?: string
+          _is_blocking?: boolean
+          _section?: string
+          _sort_order?: number
+          _template_id: string
+          _title: string
+        }
+        Returns: string
+      }
       add_payment_instruction: {
         Args: {
           _bank_account_id?: string
@@ -14985,6 +16148,18 @@ export type Database = {
         Args: { _reason?: string; _version_id: string }
         Returns: undefined
       }
+      archive_closing_case: {
+        Args: { _closing_id: string; _reason?: string }
+        Returns: undefined
+      }
+      archive_due_diligence_case: {
+        Args: { _case_id: string; _reason?: string }
+        Returns: undefined
+      }
+      archive_due_diligence_template: {
+        Args: { _template_id: string }
+        Returns: undefined
+      }
       archive_lease: {
         Args: { p_lease_id: string; p_reason?: string }
         Returns: undefined
@@ -15020,6 +16195,10 @@ export type Database = {
       can_override_approval: { Args: { _company_id: string }; Returns: boolean }
       can_record_company: { Args: { _company_id: string }; Returns: boolean }
       can_view_company: { Args: { _company_id: string }; Returns: boolean }
+      cancel_closing_case: {
+        Args: { _closing_id: string; _reason: string }
+        Returns: undefined
+      }
       cancel_commitment: {
         Args: { _commitment_id: string; _reason: string }
         Returns: undefined
@@ -15096,6 +16275,16 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      closing_readiness: {
+        Args: { _closing_id: string }
+        Returns: {
+          blocking_outstanding: number
+          diligence_linked: boolean
+          diligence_ready: boolean
+          failed_conditions: number
+          is_ready: boolean
+        }[]
+      }
       commit_bank_statement_import: {
         Args: { _import_id: string }
         Returns: Json
@@ -15109,8 +16298,27 @@ export type Database = {
         }[]
       }
       commitment_summary: { Args: { _commitment_id: string }; Returns: Json }
+      complete_closing_case: {
+        Args: {
+          _actual_completion_date?: string
+          _closing_id: string
+          _deed_date?: string
+          _notes?: string
+          _possession_date?: string
+        }
+        Returns: undefined
+      }
       complete_commitment: {
         Args: { _commitment_id: string; _notes?: string }
+        Returns: undefined
+      }
+      complete_due_diligence_case: {
+        Args: {
+          _case_id: string
+          _recommendation: string
+          _recommendation_notes?: string
+          _summary?: string
+        }
         Returns: undefined
       }
       complete_payment_run: {
@@ -15221,6 +16429,17 @@ export type Database = {
         }
         Returns: string
       }
+      create_closing_case: {
+        Args: {
+          _agreed_price?: number
+          _due_diligence_case_id?: string
+          _opportunity_id: string
+          _reference?: string
+          _target_completion_date?: string
+          _title?: string
+        }
+        Returns: string
+      }
       create_commitment_draft: {
         Args: {
           _authorised_amount?: number
@@ -15259,6 +16478,27 @@ export type Database = {
           _notes?: string
           _reason?: string
           _schedule_type?: string
+        }
+        Returns: string
+      }
+      create_due_diligence_case: {
+        Args: {
+          _assigned_to?: string
+          _opportunity_id: string
+          _reference?: string
+          _target_date?: string
+          _template_id?: string
+          _title?: string
+        }
+        Returns: string
+      }
+      create_due_diligence_template: {
+        Args: {
+          _code?: string
+          _company_id: string
+          _deal_type?: string
+          _description?: string
+          _name: string
         }
         Returns: string
       }
@@ -15347,6 +16587,22 @@ export type Database = {
         }
         Returns: string
       }
+      create_property_from_closing: {
+        Args: {
+          _address_line1?: string
+          _area_m2?: number
+          _city?: string
+          _closing_id: string
+          _code?: string
+          _district?: string
+          _name?: string
+          _notes?: string
+          _postal_code?: string
+          _property_type?: string
+          _status?: string
+        }
+        Returns: string
+      }
       create_service_contract: {
         Args: {
           _auto_renew?: boolean
@@ -15422,6 +16678,10 @@ export type Database = {
         Returns: undefined
       }
       delete_budget_line: { Args: { _line_id: string }; Returns: undefined }
+      due_diligence_permits_completion: {
+        Args: { _case_id: string }
+        Returns: boolean
+      }
       ensure_default_approval_workflow: {
         Args: { _company_id: string; _target_type: string }
         Returns: string
@@ -15528,6 +16788,7 @@ export type Database = {
           projected_balance: number
         }[]
       }
+      mark_closing_ready: { Args: { _closing_id: string }; Returns: undefined }
       mark_internal_transfer: {
         Args: {
           _from_transaction_id: string
@@ -15722,6 +16983,14 @@ export type Database = {
         Args: { _opportunity_id: string }
         Returns: undefined
       }
+      restore_closing_case: {
+        Args: { _closing_id: string }
+        Returns: undefined
+      }
+      restore_due_diligence_case: {
+        Args: { _case_id: string }
+        Returns: undefined
+      }
       retry_approval_callback: {
         Args: { _request_id: string }
         Returns: string
@@ -15762,6 +17031,33 @@ export type Database = {
           _user_id?: string
         }
         Returns: string
+      }
+      set_closing_condition_status: {
+        Args: {
+          _condition_id: string
+          _notes?: string
+          _status: string
+          _waiver_reason?: string
+        }
+        Returns: undefined
+      }
+      set_closing_handover_task_status: {
+        Args: { _notes?: string; _status: string; _task_id: string }
+        Returns: undefined
+      }
+      set_due_diligence_case_status: {
+        Args: { _case_id: string; _reason?: string; _status: string }
+        Returns: string
+      }
+      set_due_diligence_item_status: {
+        Args: {
+          _findings?: string
+          _item_id: string
+          _risk_level?: string
+          _status: string
+          _waiver_reason?: string
+        }
+        Returns: undefined
       }
       set_lease_charges: {
         Args: { p_charges: Json; p_version_id: string }
@@ -15901,6 +17197,22 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_closing_case: {
+        Args: {
+          _agreed_price?: number
+          _closing_id: string
+          _commitment_id?: string
+          _deed_date?: string
+          _due_diligence_case_id?: string
+          _notary_name?: string
+          _notary_reference?: string
+          _notes?: string
+          _possession_date?: string
+          _target_completion_date?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
       update_commitment_draft: {
         Args: {
           _authorised_amount?: number
@@ -15911,6 +17223,16 @@ export type Database = {
           _end_date?: string
           _notes?: string
           _start_date?: string
+          _title?: string
+        }
+        Returns: undefined
+      }
+      update_due_diligence_case: {
+        Args: {
+          _assigned_to?: string
+          _case_id: string
+          _summary?: string
+          _target_date?: string
           _title?: string
         }
         Returns: undefined
