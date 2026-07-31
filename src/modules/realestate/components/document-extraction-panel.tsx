@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { AlertTriangle, Loader2, Sparkles } from "lucide-react";
+import { AlertTriangle, ListPlus, Loader2, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,13 +22,19 @@ import {
   getLatestExtraction,
   requestDocumentExtraction,
 } from "@/modules/realestate/extraction.functions";
+import {
+  LeaseScheduleImportDialog,
+  type ExtractedInstallment,
+} from "@/modules/realestate/components/lease-schedule-import-dialog";
 
 type Props = {
   companyId: string;
   documentId: string;
   currency: string;
+  propertyId?: string;
   disabled?: boolean;
 };
+
 
 /**
  * Per-document "Extract with Claude" button. Runs extraction on demand
@@ -39,7 +45,15 @@ type Props = {
  * instalments, loan terms) are shown read-only for now — they're reference
  * material, not yet wired into banking or financing records.
  */
-export function DocumentExtractionButton({ companyId, documentId, currency, disabled }: Props) {
+export function DocumentExtractionButton({
+  companyId,
+  documentId,
+  currency,
+  propertyId,
+  disabled,
+}: Props) {
+  const [importOpen, setImportOpen] = useState(false);
+
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const requestFn = useServerFn(requestDocumentExtraction);
@@ -113,6 +127,13 @@ export function DocumentExtractionButton({ companyId, documentId, currency, disa
         details: Record<string, unknown>;
       }
     | undefined;
+
+  // Only lease schedules feed the financing schedule for now.
+  const leaseInstallments: ExtractedInstallment[] =
+    result?.document_kind === "lease_schedule" && Array.isArray(result.details?.installments)
+      ? (result.details.installments as ExtractedInstallment[])
+      : [];
+
 
   return (
     <>
@@ -223,6 +244,11 @@ export function DocumentExtractionButton({ companyId, documentId, currency, disa
               ) : null}
 
               <div className="flex justify-end gap-2">
+                {leaseInstallments.length ? (
+                  <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
+                    <ListPlus className="size-4" /> Import instalments to financing schedule
+                  </Button>
+                ) : null}
                 <Button
                   variant="outline"
                   size="sm"
@@ -237,6 +263,7 @@ export function DocumentExtractionButton({ companyId, documentId, currency, disa
                   Re-run
                 </Button>
               </div>
+
             </div>
           )}
 
@@ -251,6 +278,18 @@ export function DocumentExtractionButton({ companyId, documentId, currency, disa
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {importOpen ? (
+        <LeaseScheduleImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          companyId={companyId}
+          propertyId={propertyId}
+          currency={form.currency || currency}
+          installments={leaseInstallments}
+          sourceLabel={form.title || "Document extraction"}
+        />
+      ) : null}
     </>
+
   );
 }

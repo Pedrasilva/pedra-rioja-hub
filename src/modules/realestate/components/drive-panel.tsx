@@ -472,7 +472,9 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                       companyId={props.companyId}
                       documentId={d.id}
                       currency={d.currency ?? props.currency}
+                      propertyId={props.entityType === "properties" ? props.entityId : undefined}
                     />
+
                   ) : null}
                 </TableCell>
                 </TableRow>
