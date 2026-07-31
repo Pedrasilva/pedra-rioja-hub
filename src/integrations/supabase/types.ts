@@ -5080,6 +5080,82 @@ export type Database = {
           },
         ]
       }
+      document_extractions: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          document_id: string
+          document_kind: string | null
+          error_message: string | null
+          extracted_json: Json | null
+          id: string
+          model: string
+          raw_text: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          document_id: string
+          document_kind?: string | null
+          error_message?: string | null
+          extracted_json?: Json | null
+          id?: string
+          model?: string
+          raw_text?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          document_id?: string
+          document_kind?: string | null
+          error_message?: string | null
+          extracted_json?: Json | null
+          id?: string
+          model?: string
+          raw_text?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_extractions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_extractions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "document_extractions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_links: {
         Row: {
           company_id: string
