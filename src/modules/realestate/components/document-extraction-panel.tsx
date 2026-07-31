@@ -22,13 +22,19 @@ import {
   getLatestExtraction,
   requestDocumentExtraction,
 } from "@/modules/realestate/extraction.functions";
+import {
+  LeaseScheduleImportDialog,
+  type ExtractedInstallment,
+} from "@/modules/realestate/components/lease-schedule-import-dialog";
 
 type Props = {
   companyId: string;
   documentId: string;
   currency: string;
+  propertyId?: string;
   disabled?: boolean;
 };
+
 
 /**
  * Per-document "Extract with Claude" button. Runs extraction on demand
