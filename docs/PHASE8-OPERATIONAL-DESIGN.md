@@ -1561,3 +1561,38 @@ contract being amended.
 Ready. Every dependency (approval engine, settlements, dimensions, Drive
 adapter, reminders, search index) is shipped and tested. Nothing in 8F
 requires a migration to an existing owned table beyond additive columns.
+
+## 14. Version 1 Closure
+
+This section closes Version 1. It changes nothing above it.
+
+- **Payment Runs complete the financial execution workflow.** Approved,
+  outstanding items are batched, authorised, exported and marked executed. The
+  chain forecast → commitment → financial document → payment → reconciliation
+  is complete end to end.
+- **The Acquisition Register provides sufficient acquisition tracking for
+  current business needs.** Opportunities, stages, offers, agents and decisions
+  are recorded and kept out of portfolio value.
+- **Due Diligence and Closing & Handover are intentionally deferred.** They add
+  little value at Pedra Rioja's current scale. The architecture supports adding
+  them later without redesign; they are not required for Version 1.
+- **Existing ownership boundaries remain unchanged.** Operational records never
+  own amounts; financial documents, payments and the ledger do.
+- **§5C and §5D remain the governing architectural contracts**, alongside §5E
+  for approvals.
+
+### 14.1 Future Ideas
+
+Backlog only — nothing here is designed or committed.
+
+- Due Diligence workflow
+- Closing & Handover
+- Disposal pipeline
+- Executive dashboard enhancements
+- Portfolio KPI dashboards
+- Scenario modelling
+- AI insights
+- Document intelligence
+- Mobile optimisation
+- Additional bank export providers
+- Investor portal
