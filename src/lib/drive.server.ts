@@ -136,12 +136,55 @@ export async function uploadFile(opts: {
   return (await res.json()) as DriveFile & { size?: string };
 }
 
+/**
+ * Downloads a file's raw bytes from Drive (base64-encoded) plus its mime
+ * type, for handing to something that needs the actual content — currently
+ * only the Claude extraction pipeline. Rejects anything above
+ * `maxBytes` before downloading, since Drive reports size up front.
+ */
+export async function downloadFile(
+  fileId: string,
+  opts: { maxBytes?: number } = {},
+): Promise<{ contentBase64: string; mimeType: string; name: string; sizeBytes: number }> {
+  const maxBytes = opts.maxBytes ?? 20 * 1024 * 1024;
+
+  const metaRes = await driveFetch(
+    `/drive/v3/files/${encodeURIComponent(fileId)}?fields=${FILE_FIELDS},size&supportsAllDrives=true`,
+  );
+  const meta = (await metaRes.json()) as DriveFile & { size?: string };
+  const sizeBytes = meta.size ? Number(meta.size) : 0;
+  if (sizeBytes > maxBytes) {
+    throw new Error(
+      `File is ${(sizeBytes / (1024 * 1024)).toFixed(1)}MB, above the ${(maxBytes / (1024 * 1024)).toFixed(0)}MB extraction limit.`,
+    );
+  }
+
+  const contentRes = await driveFetch(
+    `/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&supportsAllDrives=true`,
+  );
+  const buffer = new Uint8Array(await contentRes.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < buffer.length; i += 0x8000) {
+    binary += String.fromCharCode(...buffer.subarray(i, i + 0x8000));
+  }
+  return {
+    contentBase64: btoa(binary),
+    mimeType: meta.mimeType ?? "application/octet-stream",
+    name: meta.name,
+    sizeBytes,
+  };
+}
+
 /** Extracts a Drive file/folder id from any of the common Drive URL shapes. */
 export function parseDriveId(input: string): string | null {
   const value = input.trim();
   if (!value) return null;
   if (!value.includes("/") && !value.includes("?")) return value;
-  const patterns = [/\/folders\/([a-zA-Z0-9_-]+)/, /\/file\/d\/([a-zA-Z0-9_-]+)/, /[?&]id=([a-zA-Z0-9_-]+)/];
+  const patterns = [
+    /\/folders\/([a-zA-Z0-9_-]+)/,
+    /\/file\/d\/([a-zA-Z0-9_-]+)/,
+    /[?&]id=([a-zA-Z0-9_-]+)/,
+  ];
   for (const p of patterns) {
     const m = value.match(p);
     if (m) return m[1];
