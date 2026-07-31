@@ -172,18 +172,91 @@ helper tests for the reporting maths, and UI tests for document attachments.
 - **8E** — lease and asset management: versioned leases, tenants, occupancy,
   rent roll, rent reviews, WAULT and expiry reporting.
 
-Deferred out of Phase 8 and now frozen as Phase 8F: payment run, acquisition
-pipeline, due-diligence checklist. Disposal pipeline stays **[P2]**.
+Disposal pipeline stays **[P2]**.
 
-## Next phase — Phase 8F (scope frozen)
+## Phase 8F — closed (8F.1, 8F.2)
 
-Authoritative scope: `PHASE8-OPERATIONAL-DESIGN.md` §13. Sequenced:
+- **8F.1** — payment runs: batches, instructions, approval through the 8C
+  engine, bank-export abstraction, execution lifecycle. Orchestration only,
+  never accounting values.
+- **8F.2** — acquisition register: opportunities, stages, offers, agents and
+  decisions, excluded from portfolio value.
 
-1. **[P1]** Payment run — batch approved, due, outstanding items into one
-   settlement session, authorised through the 8C approval engine.
-2. **[P1]** Acquisition pipeline — stages, offer, agent, decision; converts to
-   a property on completion. Excluded from portfolio value.
-3. **[P1]** Due-diligence checklist — templates and per-deal instances with
-   Drive evidence; blocking items gate completion.
+## Version 1 — complete
 
-No new frozen contract is required; §5C, §5D and §5E already govern 8F.
+**Pedra Rioja Hub Version 1 is functionally complete.**
+
+Phases marked COMPLETE: Phase 1, Phase 2, Phase 3, Phase 4, Phase 5, Phase 6,
+Phase 7, Phase 8A, Phase 8B, Phase 8C, Phase 8D, Phase 8E, Phase 8F.1,
+Phase 8F.2.
+
+The platform delivers companies, properties, ownership, dimensions, documents,
+financing, mortgage schedules, banking, transaction import, reconciliation,
+bookkeeping, financial documents, cash flow, commitments, maintenance, service
+contracts, insurance, utilities, tax schedules, payment runs and the
+acquisition register. These modules satisfy the original objectives of Pedra
+Rioja. No architectural redesign was required to close Version 1; §5C and §5D
+remain the governing contracts.
+
+## What Pedra Rioja Hub v1 delivers
+
+**Own and describe the portfolio.** Multiple companies, properties and units,
+ownership shares, and a single dimension model that attributes every figure to
+a property, project or cost centre. Google Drive stays the document source of
+truth; the Hub holds the metadata, links and folder structure.
+
+**Fund and service the assets.** Financing agreements with versioned repayment
+schedules, immutable historical instalments, and future projections that flow
+straight into cash flow with principal, interest, VAT and commissions split
+out.
+
+**Run the money.** Bank accounts with opening balances, CSV/XLSX statement
+import with duplicate detection and a review-and-confirm step, and manual
+reconciliation supporting partial, one-to-many and many-to-one settlement with
+full reversal audit.
+
+**Keep the books.** Canonical bookkeeping: counterparties, financial documents
+and lines, classifications, payments and settlement, VAT summaries, period
+close and reopen, counterparty ageing, and evidence linked to Drive.
+
+**See the cash.** A forecast-to-actual cash-flow engine over four statuses,
+recurring rules, scenarios and multi-horizon projections, always consuming
+other modules through linked source records.
+
+**Operate the estate.** Commitments as the primary operational record,
+drawdowns and capex, maintenance jobs and preventive schedules, service
+contracts, insurance, utilities and tax schedules, with reminders and an
+obligations register.
+
+**Let tenants pay the rent.** Versioned leases, tenants and contacts, occupancy
+and vacancy tracking, live rent roll, rent reviews and indexation, expiry and
+break profiles, WAULT and concentration reporting.
+
+**Decide and execute.** A generic approval and workflow engine with sequential
+or parallel steps and an approval inbox; payment runs that batch approved,
+outstanding items into a single authorised settlement session with a bank
+export abstraction.
+
+**Look ahead.** Budgets as planning-only, forecast vs actual, investment
+metrics (DSCR, LTV, cash-on-cash), an executive dashboard with proactive
+alerts, a management reporting suite with drill-down and CSV export, and
+cross-entity search.
+
+## Future Ideas (Deferred)
+
+These workflows were intentionally deferred because they add little value to
+Pedra Rioja at its current scale. The architecture already supports adding them
+later without redesign. They are **not** required for Version 1.
+
+- Due Diligence workflow
+- Closing & Handover
+- Disposal pipeline
+- Executive dashboard enhancements
+- Portfolio KPI dashboards
+- Scenario modelling
+- AI insights
+- Document intelligence
+- Mobile optimisation
+- Additional bank export providers
+- Investor portal
+
