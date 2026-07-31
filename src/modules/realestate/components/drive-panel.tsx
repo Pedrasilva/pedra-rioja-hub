@@ -465,7 +465,7 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                     ) : (
                       <Badge variant="outline">{titleCase(d.sync_status)}</Badge>
                     )}
-                  </TableCell
+                  </TableCell>
                   <TableCell>
                   {props.canEdit ? (
                     <DocumentExtractionButton
