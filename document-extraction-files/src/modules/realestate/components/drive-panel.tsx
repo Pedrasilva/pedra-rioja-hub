@@ -72,7 +72,13 @@ const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
 
 /* ------------------------------------------------------------ drive settings */
 
-export function DriveSettingsCard({ companyId, canManage }: { companyId?: string; canManage: boolean }) {
+export function DriveSettingsCard({
+  companyId,
+  canManage,
+}: {
+  companyId?: string;
+  canManage: boolean;
+}) {
   const queryClient = useQueryClient();
   const status = useDriveStatus(companyId);
   const connectFn = useServerFn(connectDriveRoot);
@@ -98,7 +104,9 @@ export function DriveSettingsCard({ companyId, canManage }: { companyId?: string
   const sync = useMutation({
     mutationFn: () => syncFn({ data: { companyId: companyId! } }),
     onSuccess: (r) => {
-      toast.success(r.created ? `${r.created} folder(s) created in Drive` : "Everything is already in sync");
+      toast.success(
+        r.created ? `${r.created} folder(s) created in Drive` : "Everything is already in sync",
+      );
       queryClient.invalidateQueries({ queryKey: ["drive-status", companyId] });
       queryClient.invalidateQueries({ queryKey: ["property-drive-folders"] });
     },
@@ -161,13 +169,19 @@ export function DriveSettingsCard({ companyId, canManage }: { companyId?: string
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Or let the app create a fresh “Pedra Rioja” root folder in the connected Drive account.
+                Or let the app create a fresh “Pedra Rioja” root folder in the connected Drive
+                account.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Button variant="secondary" disabled={connect.isPending} onClick={() => connect.mutate(false)}>
-                {connect.isPending ? <Loader2 className="size-4 animate-spin" /> : null} Create root folder
+              <Button
+                variant="secondary"
+                disabled={connect.isPending}
+                onClick={() => connect.mutate(false)}
+              >
+                {connect.isPending ? <Loader2 className="size-4 animate-spin" /> : null} Create root
+                folder
               </Button>
               <Button
                 variant="outline"
@@ -184,7 +198,9 @@ export function DriveSettingsCard({ companyId, canManage }: { companyId?: string
             </div>
           </>
         ) : (
-          <p className="text-sm text-muted-foreground">Only owners and managers can change the Drive setup.</p>
+          <p className="text-sm text-muted-foreground">
+            Only owners and managers can change the Drive setup.
+          </p>
         )}
       </CardContent>
     </Card>
@@ -229,14 +245,24 @@ export function AttachDocumentDialog({
   const reset = () => {
     setFile(null);
     setDriveRef("");
-    setForm({ title: "", category: folderKind ?? "other", docType: "", issueDate: "", expiryDate: "", amount: "", notes: "" });
+    setForm({
+      title: "",
+      category: folderKind ?? "other",
+      docType: "",
+      issueDate: "",
+      expiryDate: "",
+      amount: "",
+      notes: "",
+    });
   };
 
   const attach = useMutation({
     mutationFn: async () => {
       if (!form.title.trim()) throw new Error("A title is required");
-      if (!file && !driveRef.trim()) throw new Error("Choose a file to upload or paste a Drive link");
-      if (file && file.size > MAX_UPLOAD_BYTES) throw new Error("Files larger than 15 MB must be added in Drive and linked here");
+      if (!file && !driveRef.trim())
+        throw new Error("Choose a file to upload or paste a Drive link");
+      if (file && file.size > MAX_UPLOAD_BYTES)
+        throw new Error("Files larger than 15 MB must be added in Drive and linked here");
 
       return attachFn({
         data: {
@@ -253,7 +279,13 @@ export function AttachDocumentDialog({
           currency: form.amount ? currency : undefined,
           notes: form.notes.trim() || undefined,
           ...(file
-            ? { file: { name: file.name, mimeType: file.type || "application/octet-stream", contentBase64: await fileToBase64(file) } }
+            ? {
+                file: {
+                  name: file.name,
+                  mimeType: file.type || "application/octet-stream",
+                  contentBase64: await fileToBase64(file),
+                },
+              }
             : { driveFileRef: driveRef.trim() }),
         },
       });
@@ -284,7 +316,11 @@ export function AttachDocumentDialog({
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="doc-file">Upload a file</Label>
-            <Input id="doc-file" type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+            <Input
+              id="doc-file"
+              type="file"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="doc-link">…or link a file already in Drive</Label>
@@ -310,7 +346,10 @@ export function AttachDocumentDialog({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label>Category</Label>
-              <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
+              <Select
+                value={form.category}
+                onValueChange={(v) => setForm({ ...form, category: v })}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -378,7 +417,11 @@ export function AttachDocumentDialog({
             Cancel
           </Button>
           <Button onClick={() => attach.mutate()} disabled={attach.isPending}>
-            {attach.isPending ? <Loader2 className="size-4 animate-spin" /> : <HardDriveUpload className="size-4" />}
+            {attach.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <HardDriveUpload className="size-4" />
+            )}
             Attach
           </Button>
         </DialogFooter>
@@ -450,7 +493,9 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                   <TableCell>{formatDate(d.issue_date)}</TableCell>
                   <TableCell>{formatDate(d.expiry_date)}</TableCell>
                   <TableCell className="text-right">
-                    {d.amount == null ? "—" : formatMoney(Number(d.amount), d.currency ?? props.currency)}
+                    {d.amount == null
+                      ? "—"
+                      : formatMoney(Number(d.amount), d.currency ?? props.currency)}
                   </TableCell>
                   <TableCell>
                     {d.drive_url ? (
@@ -465,16 +510,16 @@ export function DocumentsPanel(props: DocumentsPanelProps) {
                     ) : (
                       <Badge variant="outline">{titleCase(d.sync_status)}</Badge>
                     )}
-                  </TableCell
+                  </TableCell>
                   <TableCell>
-                  {props.canEdit ? (
-                    <DocumentExtractionButton
-                      companyId={props.companyId}
-                      documentId={d.id}
-                      currency={d.currency ?? props.currency}
-                    />
-                  ) : null}
-                </TableCell>
+                    {props.canEdit ? (
+                      <DocumentExtractionButton
+                        companyId={props.companyId}
+                        documentId={d.id}
+                        currency={d.currency ?? props.currency}
+                      />
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
