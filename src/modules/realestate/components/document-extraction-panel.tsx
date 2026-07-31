@@ -45,7 +45,15 @@ type Props = {
  * instalments, loan terms) are shown read-only for now — they're reference
  * material, not yet wired into banking or financing records.
  */
-export function DocumentExtractionButton({ companyId, documentId, currency, disabled }: Props) {
+export function DocumentExtractionButton({
+  companyId,
+  documentId,
+  currency,
+  propertyId,
+  disabled,
+}: Props) {
+  const [importOpen, setImportOpen] = useState(false);
+
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const requestFn = useServerFn(requestDocumentExtraction);
