@@ -237,6 +237,11 @@ export function DocumentExtractionButton({
               ) : null}
 
               <div className="flex justify-end gap-2">
+                {leaseInstallments.length ? (
+                  <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
+                    <ListPlus className="size-4" /> Import instalments to financing schedule
+                  </Button>
+                ) : null}
                 <Button
                   variant="outline"
                   size="sm"
@@ -251,6 +256,7 @@ export function DocumentExtractionButton({
                   Re-run
                 </Button>
               </div>
+
             </div>
           )}
 
