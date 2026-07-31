@@ -46,6 +46,7 @@ import {
   DOCUMENT_ENTITY_LABELS,
   type DocumentEntityType,
 } from "@/modules/realestate/drive-schemas";
+import { DocumentExtractionButton } from "@/modules/realestate/components/document-extraction-panel";
 
 /* ------------------------------------------------------------------- helpers */
 
