@@ -41,6 +41,7 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
 });
 
 const BOOKKEEPING_TABS = [
+  "review-queue",
   "purchases",
   "sales",
   "counterparties",
