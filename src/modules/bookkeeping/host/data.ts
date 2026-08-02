@@ -60,6 +60,7 @@ export const pedraRiojaData: BookkeepingDataAdapter = {
       .order("issue_date", { ascending: false });
     if (filters.direction) q = q.eq("direction", filters.direction);
     if (filters.status) q = q.eq("status", filters.status);
+    if (filters.reviewStatus) q = q.eq("review_status", filters.reviewStatus);
     if (filters.paymentState) q = q.eq("payment_state", filters.paymentState);
     if (filters.counterpartyId) q = q.eq("counterparty_id", filters.counterpartyId);
     if (filters.classificationId) q = q.eq("classification_id", filters.classificationId);
