@@ -21,77 +21,8 @@ export const requestDocumentExtraction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => requestExtractionSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { downloadFile } = await import("@/lib/drive.server");
-    const { extractDocumentFields, isExtractableMimeType } =
-      await import("@/lib/claude-extraction.server");
-
-    const { data: doc, error: docError } = await context.supabase
-      .from("documents")
-      .select("id, company_id, drive_file_id, mime_type, original_filename")
-      .eq("id", data.documentId)
-      .eq("company_id", data.companyId)
-      .single();
-    if (docError || !doc) throw new Error(docError?.message ?? "Document not found");
-    if (!doc.drive_file_id) throw new Error("This document has no linked Drive file to read.");
-
-    const { data: row, error: insertError } = await context.supabase
-      .from("document_extractions")
-      .insert({ company_id: data.companyId, document_id: data.documentId, status: "pending" })
-      .select("id")
-      .single();
-    if (insertError || !row) throw new Error(insertError?.message ?? "Could not start extraction");
-
-    try {
-      const file = await downloadFile(doc.drive_file_id);
-      if (!isExtractableMimeType(file.mimeType)) {
-        throw new Error(
-          `Cannot extract from ${file.mimeType || "this file type"}. Supported: PDF, PNG, JPEG, WEBP.`,
-        );
-      }
-
-      // The company's own taxonomy goes along for the ride so invoices come
-      // back with a suggested code — a prefill for the review queue, never
-      // an auto-applied classification.
-      const { data: classifications } = await context.supabase
-        .from("financial_classifications")
-        .select("code, name_en, nature")
-        .eq("company_id", data.companyId)
-        .eq("is_active", true)
-        .order("sort_order");
-
-      const result = await extractDocumentFields({
-        contentBase64: file.contentBase64,
-        mimeType: file.mimeType,
-        fileName: doc.original_filename ?? file.name,
-        classifications: (classifications ?? []).map((c) => ({
-          code: c.code,
-          label: c.name_en,
-          nature: c.nature,
-        })),
-      });
-
-      const { error: updateError } = await context.supabase
-        .from("document_extractions")
-        .update({
-          status: "completed",
-          document_kind: result.document_kind,
-          extracted_json: result as unknown as import("@/integrations/supabase/types").Json,
-          summary: result.summary,
-          raw_text: result.raw_text,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", row.id);
-      if (updateError) throw new Error(updateError.message);
-
-      return { extractionId: row.id, ...result };
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Extraction failed";
-      await context.supabase
-        .from("document_extractions")
-        .update({ status: "failed", error_message: message, updated_at: new Date().toISOString() })
-        .eq("id", row.id);
-      throw new Error(message);
-    }
+    const { runDocumentExtraction } = await import("@/modules/realestate/extraction-core");
+    return runDocumentExtraction(context.supabase, data);
   });
 
 /** Latest extraction attempt for a document, if any. */

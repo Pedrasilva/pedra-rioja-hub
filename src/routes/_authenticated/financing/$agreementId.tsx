@@ -21,6 +21,7 @@ import {
   useScheduleImports,
 } from "@/modules/realestate/financing-queries";
 import { setInstalmentState } from "@/modules/realestate/financing.functions";
+import { GmailSyncDialog } from "@/modules/realestate/components/gmail-sync-dialog";
 import { ScheduleImportDialog } from "@/modules/realestate/components/schedule-import-dialog";
 
 export const Route = createFileRoute("/_authenticated/financing/$agreementId")({
@@ -127,6 +128,7 @@ function AgreementWorkspace() {
               <ExternalLink className="size-4" /> Drive folder
             </Button>
           ) : null}
+          {canManage ? <GmailSyncDialog agreement={agreement} /> : null}
           {canManage ? <ScheduleImportDialog agreement={agreement} /> : null}
         </>
       }
