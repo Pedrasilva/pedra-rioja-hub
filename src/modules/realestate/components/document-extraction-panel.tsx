@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   applyDocumentExtraction,
@@ -23,9 +30,16 @@ import {
   requestDocumentExtraction,
 } from "@/modules/realestate/extraction.functions";
 import {
+  applyBankStatementExtraction,
+  applyInvoiceExtraction,
+} from "@/modules/bookkeeping/extraction-bridge.functions";
+import { StatementImportDialog } from "@/modules/banking/components/statement-import-dialog";
+import { useBankAccountsList } from "@/modules/banking/queries";
+import {
   LeaseScheduleImportDialog,
   type ExtractedInstallment,
 } from "@/modules/realestate/components/lease-schedule-import-dialog";
+
 
 type Props = {
   companyId: string;
