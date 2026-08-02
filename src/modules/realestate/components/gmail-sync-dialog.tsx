@@ -44,8 +44,10 @@ export function GmailSyncDialog({ agreement }: { agreement: AgreementRow }) {
     enabled: open,
   });
 
+  const syncFn = useServerFn(syncInvoicesFromGmail);
   const sync = useMutation({
-    mutationFn: useServerFn(syncInvoicesFromGmail),
+    mutationFn: (input: { data: SyncGmailInvoicesInput }) =>
+      syncFn(input) as Promise<SyncGmailInvoicesResult>,
     onSuccess: (data) => {
       setResult(data);
       queryClient.invalidateQueries({ queryKey: ["financing-agreement", agreement.id] });
