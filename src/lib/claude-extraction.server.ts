@@ -47,7 +47,9 @@ Read it carefully and respond with ONLY a single JSON object — no prose, no ma
     "amount": number or null,
     "currency": "3-letter code or null",
     "counterparty_name": "string or null",
-    "counterparty_nif": "the counterparty's tax number (NIF/VAT/EIN, whatever's printed) or null"
+    "counterparty_nif": "the counterparty's tax number (NIF/VAT/EIN, whatever's printed) or null",
+    "suggested_classification_code": "if a classification list was provided below, the single best-matching code, or null if none fit or none was provided",
+    "classification_confidence": "0-100, how confident you are in that classification suggestion; omit or null if no list was provided"
   },
   "details": { ... kind-specific fields, see below ... },
   "raw_text": "a faithful plain-text transcription of the document's key content (not necessarily every word, but every figure, date, name and clause that matters)"
