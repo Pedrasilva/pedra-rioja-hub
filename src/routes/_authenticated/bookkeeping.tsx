@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
 import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
+import { ReviewQueuePanel } from "@/modules/bookkeeping/components/review-queue-panel";
 import { PedraRiojaBookkeepingProvider } from "@/modules/bookkeeping/host/provider";
 import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 import {
