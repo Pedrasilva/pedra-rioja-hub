@@ -19,7 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AgreementRow } from "@/modules/realestate/financing-queries";
 import { getGmailStatus, syncInvoicesFromGmail } from "@/modules/realestate/gmail-sync.functions";
-import type { SyncGmailInvoicesResult } from "@/modules/realestate/gmail-sync-schemas";
+import type {
+  SyncGmailInvoicesInput,
+  SyncGmailInvoicesResult,
+} from "@/modules/realestate/gmail-sync-schemas";
 
 const STATUS_LABEL: Record<SyncGmailInvoicesResult["items"][number]["status"], string> = {
   created: "Attached + queued",
