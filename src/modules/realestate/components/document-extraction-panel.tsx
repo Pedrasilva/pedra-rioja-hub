@@ -138,6 +138,58 @@ export function DocumentExtractionButton({
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const applyInvoiceFn = useServerFn(applyInvoiceExtraction);
+  const applyBankStatementFn = useServerFn(applyBankStatementExtraction);
+
+  const applyInvoice = useMutation({
+    mutationFn: () => {
+      if (!extraction) throw new Error("Nothing to apply yet");
+      return applyInvoiceFn({ data: { companyId, extractionId: extraction.id, propertyId } });
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["financial-documents"] });
+      queryClient.invalidateQueries({ queryKey: ["counterparties"] });
+      if (result.counterpartyMatch === "matched") {
+        toast.success(
+          `Draft financial document created — matched to ${result.counterpartyName ?? "existing counterparty"} by tax number.`,
+        );
+      } else if (result.counterpartyMatch === "no_match") {
+        toast.warning(
+          `Draft created, but no counterparty matched tax number ${result.counterpartyNif ?? "?"} — create or link one in Bookkeeping.`,
+        );
+      } else if (result.counterpartyMatch === "ambiguous") {
+        toast.warning(
+          "Draft created, but multiple counterparties share that tax number — resolve in Bookkeeping.",
+        );
+      } else {
+        toast.warning("Draft created, but no tax number was readable — set the counterparty manually.");
+      }
+      if (!result.directionConfirmed) {
+        toast.info('Direction defaulted to "inbound" — neither party matched this company\'s tax number.');
+      }
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const applyBankStatement = useMutation({
+    mutationFn: () => {
+      if (!extraction) throw new Error("Nothing to apply yet");
+      if (!bankAccountId) throw new Error("Choose a bank account first");
+      return applyBankStatementFn({
+        data: { companyId, extractionId: extraction.id, bankAccountId },
+      });
+    },
+    onSuccess: (result) => {
+      setStagedImportId(result.importId);
+      setStatementDialogOpen(true);
+      toast.success(
+        `${result.rowCount} line(s) staged${result.duplicateCount ? `, ${result.duplicateCount} suspected duplicate(s)` : ""} — review and confirm below.`,
+      );
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+
   const result = (run.data ?? extraction?.extracted_json) as
     | {
         document_kind: string;
