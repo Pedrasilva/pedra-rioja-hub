@@ -127,6 +127,7 @@ function AgreementWorkspace() {
               <ExternalLink className="size-4" /> Drive folder
             </Button>
           ) : null}
+          {canManage ? <GmailSyncDialog agreement={agreement} /> : null}
           {canManage ? <ScheduleImportDialog agreement={agreement} /> : null}
         </>
       }
