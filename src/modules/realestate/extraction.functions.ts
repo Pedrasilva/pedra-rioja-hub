@@ -49,10 +49,25 @@ export const requestDocumentExtraction = createServerFn({ method: "POST" })
         );
       }
 
+      // The company's own taxonomy goes along for the ride so invoices come
+      // back with a suggested code — a prefill for the review queue, never
+      // an auto-applied classification.
+      const { data: classifications } = await context.supabase
+        .from("financial_classifications")
+        .select("code, name_en, nature")
+        .eq("company_id", data.companyId)
+        .eq("is_active", true)
+        .order("sort_order");
+
       const result = await extractDocumentFields({
         contentBase64: file.contentBase64,
         mimeType: file.mimeType,
         fileName: doc.original_filename ?? file.name,
+        classifications: (classifications ?? []).map((c) => ({
+          code: c.code,
+          label: c.name_en,
+          nature: c.nature,
+        })),
       });
 
       const { error: updateError } = await context.supabase

@@ -196,6 +196,8 @@ export type CounterpartyQuery = {
 export type DocumentFilters = {
   direction?: "inbound" | "outbound";
   status?: string;
+  /** Review-queue state: pending | approved | rejected | ignored. */
+  reviewStatus?: string;
   paymentState?: string;
   counterpartyId?: string | null;
   classificationId?: string | null;

@@ -47,7 +47,9 @@ Read it carefully and respond with ONLY a single JSON object — no prose, no ma
     "amount": number or null,
     "currency": "3-letter code or null",
     "counterparty_name": "string or null",
-    "counterparty_nif": "the counterparty's tax number (NIF/VAT/EIN, whatever's printed) or null"
+    "counterparty_nif": "the counterparty's tax number (NIF/VAT/EIN, whatever's printed) or null",
+    "suggested_classification_code": "if a classification list was provided below, the single best-matching code, or null if none fit or none was provided",
+    "classification_confidence": "0-100, how confident you are in that classification suggestion; omit or null if no list was provided"
   },
   "details": { ... kind-specific fields, see below ... },
   "raw_text": "a faithful plain-text transcription of the document's key content (not necessarily every word, but every figure, date, name and clause that matters)"
@@ -78,6 +80,8 @@ export type ClaudeExtractionResult = {
     currency: string | null;
     counterparty_name: string | null;
     counterparty_nif: string | null;
+    suggested_classification_code: string | null;
+    classification_confidence: number | null;
   };
 
   details: Record<string, Json>;
@@ -95,6 +99,13 @@ export async function extractDocumentFields(opts: {
   contentBase64: string;
   mimeType: string;
   fileName: string;
+  /**
+   * The company's own classification taxonomy, passed through so Claude can
+   * suggest one for invoices. Optional — when omitted,
+   * suggested_classification_code always comes back null. Keep the list
+   * short: it is injected as plain text on every call.
+   */
+  classifications?: { code: string; label: string; nature: string }[];
 }): Promise<ClaudeExtractionResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -117,6 +128,19 @@ export async function extractDocumentFields(opts: {
           source: { type: "base64", media_type: opts.mimeType, data: opts.contentBase64 },
         };
 
+  const classificationBlock =
+    opts.classifications && opts.classifications.length
+      ? [
+          {
+            type: "text",
+            text:
+              `This company's available classifications (for invoices only — ignore this list for other document kinds):\n` +
+              opts.classifications.map((c) => `- ${c.code}: ${c.label} (${c.nature})`).join("\n") +
+              `\n\nIf this is an invoice, set core_fields.suggested_classification_code to the single best-matching code above (or null if none genuinely fit), and core_fields.classification_confidence to a 0-100 confidence. Never invent a code that isn't in this list.`,
+          },
+        ]
+      : [];
+
   const res = await fetch(ANTHROPIC_API_URL, {
     method: "POST",
     headers: {
@@ -134,6 +158,7 @@ export async function extractDocumentFields(opts: {
           content: [
             contentBlock,
             { type: "text", text: `File name: ${opts.fileName}\n\nExtract this document now.` },
+            ...classificationBlock,
           ],
         },
       ],

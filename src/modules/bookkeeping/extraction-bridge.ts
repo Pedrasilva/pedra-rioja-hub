@@ -138,6 +138,23 @@ export async function applyInvoiceExtractionCore(
     );
   }
 
+  // AI-suggested classification is only ever a prefill — classification_confirmed
+  // stays false until a human explicitly approves it in the review queue.
+  const suggestedCode = (core.suggested_classification_code as string | undefined) ?? null;
+  const classificationConfidence =
+    (core.classification_confidence as number | undefined) ?? null;
+  let classificationId: string | null = null;
+  if (suggestedCode) {
+    const { data: match } = await supabase
+      .from("financial_classifications")
+      .select("id")
+      .eq("company_id", data.companyId)
+      .eq("code", suggestedCode)
+      .maybeSingle();
+    classificationId = match?.id ?? null;
+  }
+
+
   const notesParts = [`Created from document extraction ${extraction.id}.`];
   if (counterpartyMatch === "no_match") {
     notesParts.push(
@@ -170,6 +187,12 @@ export async function applyInvoiceExtractionCore(
       due_date: (details.due_date as string | undefined) ?? null,
       currency: (core.currency as string | undefined) ?? company.base_currency,
       property_id: data.propertyId ?? null,
+      classification_id: classificationId,
+      classification_confidence_pct: classificationConfidence,
+      review_status: "pending",
+      counterparty_confirmed: false,
+      classification_confirmed: false,
+      direction_confirmed: directionConfirmed,
       document_id: extraction.document_id,
       source_type: "external_import",
       source_id: extraction.id,

@@ -19,7 +19,7 @@ const CLASSIFICATION_COLUMNS =
   "id, company_id, code, name_en, name_pt, nature, level, parent_id, cash_flow_category, is_active, default_vat_rate, default_vat_code, vat_recoverable, property_link_allowed, project_link_allowed, sort_order";
 
 const DOCUMENT_COLUMNS =
-  "id, direction, doc_type, series, document_number, atcud, issue_date, due_date, status, payment_state, currency, net_amount, vat_amount, gross_amount, withholding_amount, payable_amount, paid_amount, outstanding_amount, counterparty_id, counterparty_name, classification_id, property_id, project_id, period_id, notes";
+  "id, direction, doc_type, series, document_number, atcud, issue_date, due_date, status, payment_state, currency, net_amount, vat_amount, gross_amount, withholding_amount, payable_amount, paid_amount, outstanding_amount, counterparty_id, counterparty_name, classification_id, property_id, project_id, period_id, notes, review_status, counterparty_confirmed, classification_confirmed, direction_confirmed, classification_confidence_pct, review_rejected_reason, document_id";
 
 export const pedraRiojaData: BookkeepingDataAdapter = {
   async listCounterparties(companyId: string, query: CounterpartyQuery) {
@@ -60,6 +60,7 @@ export const pedraRiojaData: BookkeepingDataAdapter = {
       .order("issue_date", { ascending: false });
     if (filters.direction) q = q.eq("direction", filters.direction);
     if (filters.status) q = q.eq("status", filters.status);
+    if (filters.reviewStatus) q = q.eq("review_status", filters.reviewStatus);
     if (filters.paymentState) q = q.eq("payment_state", filters.paymentState);
     if (filters.counterpartyId) q = q.eq("counterparty_id", filters.counterpartyId);
     if (filters.classificationId) q = q.eq("classification_id", filters.classificationId);

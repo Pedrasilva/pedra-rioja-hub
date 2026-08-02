@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/use-workspace";
 import { resolveTab, validateWorkspaceSearch } from "@/lib/route-search";
+import { ReviewQueuePanel } from "@/modules/bookkeeping/components/review-queue-panel";
 import { PedraRiojaBookkeepingProvider } from "@/modules/bookkeeping/host/provider";
 import { capabilitiesFor } from "@/modules/bookkeeping/host/roles";
 import {
@@ -41,6 +42,7 @@ export const Route = createFileRoute("/_authenticated/bookkeeping")({
 });
 
 const BOOKKEEPING_TABS = [
+  "review-queue",
   "purchases",
   "sales",
   "counterparties",
@@ -59,9 +61,9 @@ function BookkeepingPage() {
 
 function BookkeepingWorkspace() {
   const { tab: tabParam } = Route.useSearch();
-  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "review-queue"));
   useEffect(() => {
-    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "review-queue"));
   }, [tabParam]);
   const { data: workspace, isLoading } = useWorkspace();
   const companyId = workspace?.company?.id;
@@ -97,6 +99,7 @@ function BookkeepingWorkspace() {
         ) : (
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
+              <TabsTrigger value="review-queue">Review queue</TabsTrigger>
               <TabsTrigger value="purchases">Purchases</TabsTrigger>
               <TabsTrigger value="sales">Sales</TabsTrigger>
               <TabsTrigger value="counterparties">Counterparties</TabsTrigger>
@@ -105,6 +108,9 @@ function BookkeepingWorkspace() {
               <TabsTrigger value="periods">Periods</TabsTrigger>
             </TabsList>
 
+            <TabsContent value="review-queue" className="mt-4">
+              <ReviewQueuePanel companyId={companyId} capabilities={capabilities} />
+            </TabsContent>
             <TabsContent value="purchases" className="mt-4">
               <DocumentsPanel
                 companyId={companyId}
@@ -112,6 +118,7 @@ function BookkeepingWorkspace() {
                 capabilities={capabilities}
               />
             </TabsContent>
+
             <TabsContent value="sales" className="mt-4">
               <DocumentsPanel
                 companyId={companyId}
