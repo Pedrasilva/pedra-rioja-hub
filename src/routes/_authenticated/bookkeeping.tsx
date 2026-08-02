@@ -61,9 +61,9 @@ function BookkeepingPage() {
 
 function BookkeepingWorkspace() {
   const { tab: tabParam } = Route.useSearch();
-  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+  const [tab, setTab] = useState(() => resolveTab(tabParam, BOOKKEEPING_TABS, "review-queue"));
   useEffect(() => {
-    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "purchases"));
+    setTab(resolveTab(tabParam, BOOKKEEPING_TABS, "review-queue"));
   }, [tabParam]);
   const { data: workspace, isLoading } = useWorkspace();
   const companyId = workspace?.company?.id;
