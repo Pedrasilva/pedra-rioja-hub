@@ -314,11 +314,55 @@ export function DocumentExtractionButton({
                 </div>
               ) : null}
 
-              <div className="flex justify-end gap-2">
+              <div className="flex flex-wrap items-center justify-end gap-2">
                 {leaseInstallments.length ? (
                   <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
                     <ListPlus className="size-4" /> Import instalments to financing schedule
                   </Button>
+                ) : null}
+                {result?.document_kind === "invoice" ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyInvoice.mutate()}
+                    disabled={!extraction || applyInvoice.isPending}
+                  >
+                    {applyInvoice.isPending ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <FileCheck2 className="size-4" />
+                    )}
+                    Create draft financial document
+                  </Button>
+                ) : null}
+                {result?.document_kind === "bank_statement" ? (
+                  <div className="flex items-center gap-2">
+                    <Select value={bankAccountId} onValueChange={setBankAccountId}>
+                      <SelectTrigger className="h-9 w-44">
+                        <SelectValue placeholder="Bank account" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(bankAccounts.data ?? []).map((a) => (
+                          <SelectItem key={a.id as string} value={a.id as string}>
+                            {a.name as string}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => applyBankStatement.mutate()}
+                      disabled={!extraction || !bankAccountId || applyBankStatement.isPending}
+                    >
+                      {applyBankStatement.isPending ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Landmark className="size-4" />
+                      )}
+                      Stage into bank account
+                    </Button>
+                  </div>
                 ) : null}
                 <Button
                   variant="outline"
@@ -334,6 +378,7 @@ export function DocumentExtractionButton({
                   Re-run
                 </Button>
               </div>
+
 
             </div>
           )}
