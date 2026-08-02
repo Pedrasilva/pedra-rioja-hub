@@ -98,6 +98,7 @@ function BookkeepingWorkspace() {
         ) : (
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
+              <TabsTrigger value="review-queue">Review queue</TabsTrigger>
               <TabsTrigger value="purchases">Purchases</TabsTrigger>
               <TabsTrigger value="sales">Sales</TabsTrigger>
               <TabsTrigger value="counterparties">Counterparties</TabsTrigger>
@@ -106,6 +107,9 @@ function BookkeepingWorkspace() {
               <TabsTrigger value="periods">Periods</TabsTrigger>
             </TabsList>
 
+            <TabsContent value="review-queue" className="mt-4">
+              <ReviewQueuePanel companyId={companyId} capabilities={capabilities} />
+            </TabsContent>
             <TabsContent value="purchases" className="mt-4">
               <DocumentsPanel
                 companyId={companyId}
@@ -113,6 +117,7 @@ function BookkeepingWorkspace() {
                 capabilities={capabilities}
               />
             </TabsContent>
+
             <TabsContent value="sales" className="mt-4">
               <DocumentsPanel
                 companyId={companyId}
