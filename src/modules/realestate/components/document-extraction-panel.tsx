@@ -405,7 +405,20 @@ export function DocumentExtractionButton({
           sourceLabel={form.title || "Document extraction"}
         />
       ) : null}
+      {stagedImportId ? (
+        <StatementImportDialog
+          accounts={(bankAccounts.data ?? []) as never}
+          defaultAccountId={bankAccountId}
+          initialImportId={stagedImportId}
+          open={statementDialogOpen}
+          onOpenChange={(next) => {
+            setStatementDialogOpen(next);
+            if (!next) setStagedImportId(null);
+          }}
+        />
+      ) : null}
     </>
+
 
   );
 }
