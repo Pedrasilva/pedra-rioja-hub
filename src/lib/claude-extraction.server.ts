@@ -99,6 +99,13 @@ export async function extractDocumentFields(opts: {
   contentBase64: string;
   mimeType: string;
   fileName: string;
+  /**
+   * The company's own classification taxonomy, passed through so Claude can
+   * suggest one for invoices. Optional — when omitted,
+   * suggested_classification_code always comes back null. Keep the list
+   * short: it is injected as plain text on every call.
+   */
+  classifications?: { code: string; label: string; nature: string }[];
 }): Promise<ClaudeExtractionResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
