@@ -7330,6 +7330,61 @@ export type Database = {
           },
         ]
       }
+      gmail_sync_state: {
+        Row: {
+          company_id: string
+          document_id: string | null
+          entity_id: string
+          entity_type: string
+          gmail_attachment_id: string
+          gmail_message_id: string
+          id: string
+          synced_at: string
+        }
+        Insert: {
+          company_id: string
+          document_id?: string | null
+          entity_id: string
+          entity_type: string
+          gmail_attachment_id: string
+          gmail_message_id: string
+          id?: string
+          synced_at?: string
+        }
+        Update: {
+          company_id?: string
+          document_id?: string | null
+          entity_id?: string
+          entity_type?: string
+          gmail_attachment_id?: string
+          gmail_message_id?: string
+          id?: string
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmail_sync_state_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gmail_sync_state_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "v_bookkeeping_overview"
+            referencedColumns: ["company_id"]
+          },
+          {
+            foreignKeyName: "gmail_sync_state_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       insurance_policies: {
         Row: {
           archive_reason: string | null
