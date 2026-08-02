@@ -88,7 +88,7 @@ export type ParsedStatementRow = z.infer<typeof statementRowSchema>;
 
 export const stageStatementSchema = z.object({
   bankAccountId: z.string().uuid(),
-  source: z.enum(["csv", "xlsx", "manual"]).default("csv"),
+  source: z.enum(["csv", "xlsx", "manual", "ai_extraction"]).default("csv"),
   fileName: z.string().optional(),
   documentId: z.string().uuid().nullable().optional(),
   periodStart: z.string().optional(),
