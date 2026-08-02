@@ -59,13 +59,23 @@ export function StatementImportDialog({
   accounts,
   defaultAccountId,
   disabled,
+  initialImportId,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
 }: {
   accounts: Account[];
   defaultAccountId?: string;
   disabled?: boolean;
+  /** When provided, the dialog opens straight into the review step for an import already staged elsewhere (e.g. from a document extraction), skipping the file-upload step entirely. */
+  initialImportId?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = openProp ?? internalOpen;
+  const setOpen = onOpenChangeProp ?? setInternalOpen;
   const [step, setStep] = useState<"input" | "review">("input");
+
   const [accountId, setAccountId] = useState(defaultAccountId ?? accounts[0]?.id ?? "");
   const [source, setSource] = useState<"csv" | "xlsx">("csv");
   const [fileName, setFileName] = useState<string>();
