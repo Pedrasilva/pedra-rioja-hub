@@ -6131,9 +6131,12 @@ export type Database = {
           cancellation_reason: string | null
           cancelled_at: string | null
           cancelled_by: string | null
+          classification_confidence_pct: number | null
+          classification_confirmed: boolean
           classification_id: string | null
           company_id: string
           corrects_document_id: string | null
+          counterparty_confirmed: boolean
           counterparty_id: string | null
           counterparty_name: string | null
           counterparty_nif: string | null
@@ -6142,6 +6145,7 @@ export type Database = {
           currency: string
           deleted_at: string | null
           direction: string
+          direction_confirmed: boolean
           doc_type: string
           document_id: string | null
           document_number: string | null
@@ -6160,6 +6164,8 @@ export type Database = {
           posted_by: string | null
           project_id: string | null
           property_id: string | null
+          review_rejected_reason: string | null
+          review_status: string
           series: string | null
           source_id: string | null
           source_type: string | null
@@ -6178,9 +6184,12 @@ export type Database = {
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
+          classification_confidence_pct?: number | null
+          classification_confirmed?: boolean
           classification_id?: string | null
           company_id: string
           corrects_document_id?: string | null
+          counterparty_confirmed?: boolean
           counterparty_id?: string | null
           counterparty_name?: string | null
           counterparty_nif?: string | null
@@ -6189,6 +6198,7 @@ export type Database = {
           currency?: string
           deleted_at?: string | null
           direction: string
+          direction_confirmed?: boolean
           doc_type?: string
           document_id?: string | null
           document_number?: string | null
@@ -6207,6 +6217,8 @@ export type Database = {
           posted_by?: string | null
           project_id?: string | null
           property_id?: string | null
+          review_rejected_reason?: string | null
+          review_status?: string
           series?: string | null
           source_id?: string | null
           source_type?: string | null
@@ -6225,9 +6237,12 @@ export type Database = {
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
+          classification_confidence_pct?: number | null
+          classification_confirmed?: boolean
           classification_id?: string | null
           company_id?: string
           corrects_document_id?: string | null
+          counterparty_confirmed?: boolean
           counterparty_id?: string | null
           counterparty_name?: string | null
           counterparty_nif?: string | null
@@ -6236,6 +6251,7 @@ export type Database = {
           currency?: string
           deleted_at?: string | null
           direction?: string
+          direction_confirmed?: boolean
           doc_type?: string
           document_id?: string | null
           document_number?: string | null
@@ -6254,6 +6270,8 @@ export type Database = {
           posted_by?: string | null
           project_id?: string | null
           property_id?: string | null
+          review_rejected_reason?: string | null
+          review_status?: string
           series?: string | null
           source_id?: string | null
           source_type?: string | null
