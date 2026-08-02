@@ -80,6 +80,8 @@ export type ClaudeExtractionResult = {
     currency: string | null;
     counterparty_name: string | null;
     counterparty_nif: string | null;
+    suggested_classification_code: string | null;
+    classification_confidence: number | null;
   };
 
   details: Record<string, Json>;
