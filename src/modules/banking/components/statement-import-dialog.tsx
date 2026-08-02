@@ -230,7 +230,12 @@ export function StatementImportDialog({
         }
       }}
     >
-      <Button variant="outline" disabled={disabled} onClick={() => setOpen(true)}>
+      <Button
+        variant="outline"
+        disabled={disabled}
+        onClick={() => setOpen(true)}
+        className={openProp !== undefined ? "hidden" : undefined}
+      >
         <FileSpreadsheet className="mr-2 h-4 w-4" />
         Import statement
       </Button>
