@@ -91,6 +91,18 @@ export function StatementImportDialog({
   const commit = useServerFn(commitStatementImport);
   const discard = useServerFn(discardStatementImport);
 
+  // Opened from an extraction: the import already exists, so jump the
+  // reviewer straight to the rows instead of asking for a file.
+  useEffect(() => {
+    if (open && initialImportId && !staged) {
+      setStaged({ importId: initialImportId, rows: [] });
+      setStep("review");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, initialImportId]);
+
+
+
   const account = accounts.find((a) => a.id === accountId);
   const currency = account?.currency ?? "EUR";
   // Once staged, the database rows are the truth: inclusion toggles are
