@@ -138,6 +138,23 @@ export async function applyInvoiceExtractionCore(
     );
   }
 
+  // AI-suggested classification is only ever a prefill — classification_confirmed
+  // stays false until a human explicitly approves it in the review queue.
+  const suggestedCode = (core.suggested_classification_code as string | undefined) ?? null;
+  const classificationConfidence =
+    (core.classification_confidence as number | undefined) ?? null;
+  let classificationId: string | null = null;
+  if (suggestedCode) {
+    const { data: match } = await supabase
+      .from("financial_classifications")
+      .select("id")
+      .eq("company_id", data.companyId)
+      .eq("code", suggestedCode)
+      .maybeSingle();
+    classificationId = match?.id ?? null;
+  }
+
+
   const notesParts = [`Created from document extraction ${extraction.id}.`];
   if (counterpartyMatch === "no_match") {
     notesParts.push(
