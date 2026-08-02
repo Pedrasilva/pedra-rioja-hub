@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { AlertTriangle, ListPlus, Loader2, Sparkles } from "lucide-react";
+import { AlertTriangle, FileCheck2, Landmark, ListPlus, Loader2, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   applyDocumentExtraction,
@@ -23,9 +30,16 @@ import {
   requestDocumentExtraction,
 } from "@/modules/realestate/extraction.functions";
 import {
+  applyBankStatementExtraction,
+  applyInvoiceExtraction,
+} from "@/modules/bookkeeping/extraction-bridge.functions";
+import { StatementImportDialog } from "@/modules/banking/components/statement-import-dialog";
+import { useBankAccountsList } from "@/modules/banking/queries";
+import {
   LeaseScheduleImportDialog,
   type ExtractedInstallment,
 } from "@/modules/realestate/components/lease-schedule-import-dialog";
+
 
 type Props = {
   companyId: string;
@@ -53,6 +67,11 @@ export function DocumentExtractionButton({
   disabled,
 }: Props) {
   const [importOpen, setImportOpen] = useState(false);
+  const [bankAccountId, setBankAccountId] = useState<string>("");
+  const [stagedImportId, setStagedImportId] = useState<string | null>(null);
+  const [statementDialogOpen, setStatementDialogOpen] = useState(false);
+  const bankAccounts = useBankAccountsList(companyId);
+
 
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -118,6 +137,58 @@ export function DocumentExtractionButton({
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const applyInvoiceFn = useServerFn(applyInvoiceExtraction);
+  const applyBankStatementFn = useServerFn(applyBankStatementExtraction);
+
+  const applyInvoice = useMutation({
+    mutationFn: () => {
+      if (!extraction) throw new Error("Nothing to apply yet");
+      return applyInvoiceFn({ data: { companyId, extractionId: extraction.id, propertyId } });
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["financial-documents"] });
+      queryClient.invalidateQueries({ queryKey: ["counterparties"] });
+      if (result.counterpartyMatch === "matched") {
+        toast.success(
+          `Draft financial document created — matched to ${result.counterpartyName ?? "existing counterparty"} by tax number.`,
+        );
+      } else if (result.counterpartyMatch === "no_match") {
+        toast.warning(
+          `Draft created, but no counterparty matched tax number ${result.counterpartyNif ?? "?"} — create or link one in Bookkeeping.`,
+        );
+      } else if (result.counterpartyMatch === "ambiguous") {
+        toast.warning(
+          "Draft created, but multiple counterparties share that tax number — resolve in Bookkeeping.",
+        );
+      } else {
+        toast.warning("Draft created, but no tax number was readable — set the counterparty manually.");
+      }
+      if (!result.directionConfirmed) {
+        toast.info('Direction defaulted to "inbound" — neither party matched this company\'s tax number.');
+      }
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const applyBankStatement = useMutation({
+    mutationFn: () => {
+      if (!extraction) throw new Error("Nothing to apply yet");
+      if (!bankAccountId) throw new Error("Choose a bank account first");
+      return applyBankStatementFn({
+        data: { companyId, extractionId: extraction.id, bankAccountId },
+      });
+    },
+    onSuccess: (result) => {
+      setStagedImportId(result.importId);
+      setStatementDialogOpen(true);
+      toast.success(
+        `${result.rowCount} line(s) staged${result.duplicateCount ? `, ${result.duplicateCount} suspected duplicate(s)` : ""} — review and confirm below.`,
+      );
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
   const result = (run.data ?? extraction?.extracted_json) as
     | {
@@ -243,11 +314,55 @@ export function DocumentExtractionButton({
                 </div>
               ) : null}
 
-              <div className="flex justify-end gap-2">
+              <div className="flex flex-wrap items-center justify-end gap-2">
                 {leaseInstallments.length ? (
                   <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
                     <ListPlus className="size-4" /> Import instalments to financing schedule
                   </Button>
+                ) : null}
+                {result?.document_kind === "invoice" ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyInvoice.mutate()}
+                    disabled={!extraction || applyInvoice.isPending}
+                  >
+                    {applyInvoice.isPending ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <FileCheck2 className="size-4" />
+                    )}
+                    Create draft financial document
+                  </Button>
+                ) : null}
+                {result?.document_kind === "bank_statement" ? (
+                  <div className="flex items-center gap-2">
+                    <Select value={bankAccountId} onValueChange={setBankAccountId}>
+                      <SelectTrigger className="h-9 w-44">
+                        <SelectValue placeholder="Bank account" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(bankAccounts.data ?? []).map((a) => (
+                          <SelectItem key={a.id as string} value={a.id as string}>
+                            {a.name as string}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => applyBankStatement.mutate()}
+                      disabled={!extraction || !bankAccountId || applyBankStatement.isPending}
+                    >
+                      {applyBankStatement.isPending ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Landmark className="size-4" />
+                      )}
+                      Stage into bank account
+                    </Button>
+                  </div>
                 ) : null}
                 <Button
                   variant="outline"
@@ -263,6 +378,7 @@ export function DocumentExtractionButton({
                   Re-run
                 </Button>
               </div>
+
 
             </div>
           )}
@@ -289,7 +405,20 @@ export function DocumentExtractionButton({
           sourceLabel={form.title || "Document extraction"}
         />
       ) : null}
+      {stagedImportId ? (
+        <StatementImportDialog
+          accounts={(bankAccounts.data ?? []) as never}
+          defaultAccountId={bankAccountId}
+          initialImportId={stagedImportId}
+          open={statementDialogOpen}
+          onOpenChange={(next) => {
+            setStatementDialogOpen(next);
+            if (!next) setStagedImportId(null);
+          }}
+        />
+      ) : null}
     </>
+
 
   );
 }

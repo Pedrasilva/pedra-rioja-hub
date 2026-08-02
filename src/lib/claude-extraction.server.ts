@@ -46,7 +46,8 @@ Read it carefully and respond with ONLY a single JSON object — no prose, no ma
     "expiry_date": "YYYY-MM-DD or null",
     "amount": number or null,
     "currency": "3-letter code or null",
-    "counterparty_name": "string or null"
+    "counterparty_name": "string or null",
+    "counterparty_nif": "the counterparty's tax number (NIF/VAT/EIN, whatever's printed) or null"
   },
   "details": { ... kind-specific fields, see below ... },
   "raw_text": "a faithful plain-text transcription of the document's key content (not necessarily every word, but every figure, date, name and clause that matters)"
@@ -57,8 +58,10 @@ Kind-specific "details" shapes:
 - lease_schedule: { "tenant_name": string|null, "landlord_name": string|null, "property_reference": string|null, "rent_amount": number|null, "frequency": string|null, "start_date": date|null, "end_date": date|null, "installments": [ { "due_date": date, "amount": number, "description": string|null } ] }
 - deed: { "property_address": string|null, "seller": string|null, "buyer": string|null, "sale_price": number|null, "registration_number": string|null, "signing_date": date|null, "notary": string|null }
 - loan_agreement: { "lender": string|null, "borrower": string|null, "principal": number|null, "annual_rate_pct": number|null, "term_months": number|null, "start_date": date|null, "repayment_type": string|null, "monthly_payment": number|null, "collateral_property": string|null }
-- invoice: { "vendor": string|null, "invoice_number": string|null, "invoice_date": date|null, "due_date": date|null, "total_amount": number|null, "vat_amount": number|null, "line_items": [ { "description": string, "amount": number } ] }
+- invoice: { "vendor": string|null, "vendor_nif": string|null, "buyer_name": string|null, "buyer_nif": string|null, "invoice_number": string|null, "invoice_date": date|null, "due_date": date|null, "total_amount": number|null, "vat_amount": number|null, "line_items": [ { "description": string, "amount": number } ] }
 - other: { "notes": string }
+
+For invoices, read BOTH the issuing party's and the billed party's tax numbers whenever the document shows both — this is what lets the app work out automatically whether the document is money going out or money coming in, so don't skip one just because the other is more prominent on the page.
 
 If a field is unreadable or absent, use null — never invent a value. If the document is low quality (blurry scan, cut-off page), say so in "summary" and set "confidence" to "low".`;
 
@@ -74,7 +77,9 @@ export type ClaudeExtractionResult = {
     amount: number | null;
     currency: string | null;
     counterparty_name: string | null;
+    counterparty_nif: string | null;
   };
+
   details: Record<string, Json>;
   raw_text: string;
 };

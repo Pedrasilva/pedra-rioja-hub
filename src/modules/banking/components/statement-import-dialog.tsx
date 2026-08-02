@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -59,13 +59,23 @@ export function StatementImportDialog({
   accounts,
   defaultAccountId,
   disabled,
+  initialImportId,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
 }: {
   accounts: Account[];
   defaultAccountId?: string;
   disabled?: boolean;
+  /** When provided, the dialog opens straight into the review step for an import already staged elsewhere (e.g. from a document extraction), skipping the file-upload step entirely. */
+  initialImportId?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = openProp ?? internalOpen;
+  const setOpen = onOpenChangeProp ?? setInternalOpen;
   const [step, setStep] = useState<"input" | "review">("input");
+
   const [accountId, setAccountId] = useState(defaultAccountId ?? accounts[0]?.id ?? "");
   const [source, setSource] = useState<"csv" | "xlsx">("csv");
   const [fileName, setFileName] = useState<string>();
@@ -80,6 +90,18 @@ export function StatementImportDialog({
   const stage = useServerFn(stageStatementImport);
   const commit = useServerFn(commitStatementImport);
   const discard = useServerFn(discardStatementImport);
+
+  // Opened from an extraction: the import already exists, so jump the
+  // reviewer straight to the rows instead of asking for a file.
+  useEffect(() => {
+    if (open && initialImportId && !staged) {
+      setStaged({ importId: initialImportId, rows: [] });
+      setStep("review");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, initialImportId]);
+
+
 
   const account = accounts.find((a) => a.id === accountId);
   const currency = account?.currency ?? "EUR";
@@ -208,7 +230,12 @@ export function StatementImportDialog({
         }
       }}
     >
-      <Button variant="outline" disabled={disabled} onClick={() => setOpen(true)}>
+      <Button
+        variant="outline"
+        disabled={disabled}
+        onClick={() => setOpen(true)}
+        className={openProp !== undefined ? "hidden" : undefined}
+      >
         <FileSpreadsheet className="mr-2 h-4 w-4" />
         Import statement
       </Button>
