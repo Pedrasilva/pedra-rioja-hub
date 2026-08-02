@@ -102,6 +102,15 @@ export type FinancialDocument = {
   project_id: string | null;
   period_id: string | null;
   notes: string | null;
+  // Review queue: two independent human checkpoints (supplier, classification)
+  // plus a direction check. All orthogonal to `status`.
+  review_status: string;
+  counterparty_confirmed: boolean;
+  classification_confirmed: boolean;
+  direction_confirmed: boolean;
+  classification_confidence_pct: number | null;
+  review_rejected_reason: string | null;
+  document_id: string | null;
 };
 
 export type FinancialDocumentDetail = FinancialDocument & {
