@@ -128,6 +128,19 @@ export async function extractDocumentFields(opts: {
           source: { type: "base64", media_type: opts.mimeType, data: opts.contentBase64 },
         };
 
+  const classificationBlock =
+    opts.classifications && opts.classifications.length
+      ? [
+          {
+            type: "text",
+            text:
+              `This company's available classifications (for invoices only — ignore this list for other document kinds):\n` +
+              opts.classifications.map((c) => `- ${c.code}: ${c.label} (${c.nature})`).join("\n") +
+              `\n\nIf this is an invoice, set core_fields.suggested_classification_code to the single best-matching code above (or null if none genuinely fit), and core_fields.classification_confidence to a 0-100 confidence. Never invent a code that isn't in this list.`,
+          },
+        ]
+      : [];
+
   const res = await fetch(ANTHROPIC_API_URL, {
     method: "POST",
     headers: {
@@ -145,6 +158,7 @@ export async function extractDocumentFields(opts: {
           content: [
             contentBlock,
             { type: "text", text: `File name: ${opts.fileName}\n\nExtract this document now.` },
+            ...classificationBlock,
           ],
         },
       ],
