@@ -67,6 +67,11 @@ export function DocumentExtractionButton({
   disabled,
 }: Props) {
   const [importOpen, setImportOpen] = useState(false);
+  const [bankAccountId, setBankAccountId] = useState<string>("");
+  const [stagedImportId, setStagedImportId] = useState<string | null>(null);
+  const [statementDialogOpen, setStatementDialogOpen] = useState(false);
+  const bankAccounts = useBankAccountsList(companyId);
+
 
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
