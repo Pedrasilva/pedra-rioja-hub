@@ -22,7 +22,7 @@ export const requestDocumentExtraction = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => requestExtractionSchema.parse(data))
   .handler(async ({ data, context }) => {
     const { runDocumentExtraction } = await import("@/modules/realestate/extraction-core");
-    return runDocumentExtraction(context.supabase, data);
+    return runDocumentExtraction(context.supabase, { ...data, userId: context.userId });
   });
 
 /** Latest extraction attempt for a document, if any. */
