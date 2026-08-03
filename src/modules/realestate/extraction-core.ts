@@ -10,7 +10,7 @@ import type { Json } from "@/integrations/supabase/types";
 
 export async function runDocumentExtraction(
   supabase: SupabaseClient,
-  data: { companyId: string; documentId: string },
+  data: { companyId: string; documentId: string; userId?: string | null },
 ) {
   const { downloadFile } = await import("@/lib/drive.server");
   const { extractDocumentFields, isExtractableMimeType } = await import(
@@ -76,6 +76,25 @@ export async function runDocumentExtraction(
       })
       .eq("id", row.id);
     if (updateError) throw new Error(updateError.message);
+
+    // Without this, a completed extraction sat in document_extractions until
+    // someone opened that exact document and clicked "Create draft financial
+    // document" — nothing reached the review queue on its own. The two
+    // review checkpoints still gate anything that posts.
+    if (result.document_kind === "invoice") {
+      try {
+        const { applyInvoiceExtractionCore } = await import(
+          "@/modules/bookkeeping/extraction-bridge"
+        );
+        await applyInvoiceExtractionCore(
+          supabase,
+          { companyId: data.companyId, extractionId: row.id as string },
+          data.userId ?? null,
+        );
+      } catch (bridgeErr) {
+        console.error("Auto-apply to bookkeeping review queue failed:", bridgeErr);
+      }
+    }
 
     return { extractionId: row.id as string, ...result };
   } catch (err) {
